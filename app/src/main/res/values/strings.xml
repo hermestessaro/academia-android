@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Fitness Hall</string>
+
+    <!--Presentation screen-->
+    <string name="presentation">Bem vindo! Quem está usando o app?</string>
+    <string name="name1_test">Renato Portaluppi</string>
+    <string name="name2_test">Roger Guardiola</string>
+    <string name="name3_test">Papito</string>
+    <string name="name4_test">Abel Braga</string>
+    <string name="name5_test">Joel Santana</string>
+    <string name="name6_test">Big Phil</string>
+
+
+    <!--Initial Screen-->
+    <string name="welcome">Olá professor</string>
+    <string name="create_treino">Criar treino</string>
+    <string name="see_alunos">Ver alunos</string>
+</resources>
