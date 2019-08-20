@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_item_one"
+        android:icon="@android:drawable/ic_info"
+        android:title="@string/meus_alunos"/>
+
+    <item
+        android:id="@+id/nav_item_two"
+        android:icon="@android:drawable/ic_info"
+        android:title="@string/exercicios"
+    />
+
+    <item
+        android:id="@+id/nav_item_three"
+        android:icon="@android:drawable/ic_info"
+        android:title="@string/criar_treino"
+    />
+
+    <item
+            android:id="@+id/nav_item_four"
+            android:icon="@android:drawable/ic_info"
+            android:title="@string/outros_professores"
+    />
+
+    <item
+            android:id="@+id/nav_item_five"
+            android:icon="@android:drawable/ic_info"
+            android:title="@string/ver_aparelhos"
+    />
+</menu>

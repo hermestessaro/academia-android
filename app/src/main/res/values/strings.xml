@@ -2,17 +2,31 @@
     <string name="app_name">Fitness Hall</string>
 
     <!--Presentation screen-->
-    <string name="presentation">Bem vindo! Quem está usando o app?</string>
-    <string name="name1_test">Renato Portaluppi</string>
-    <string name="name2_test">Roger Guardiola</string>
-    <string name="name3_test">Papito</string>
-    <string name="name4_test">Abel Braga</string>
-    <string name="name5_test">Joel Santana</string>
-    <string name="name6_test">Big Phil</string>
+    <string name="presentation">Olá Professor! Escolha seu nome na lista abaixo</string>
+
+    <string-array name="prof_list_test">
+        <item>Renato Portaluppi</item>
+        <item>Roger Guardiola</item>
+        <item>Papito</item>
+        <item>Abel Braga</item>
+        <item>Joel Santana</item>
+        <item>Big Phil</item>
+    </string-array>
 
 
     <!--Initial Screen-->
     <string name="welcome">Olá professor</string>
     <string name="create_treino">Criar treino</string>
     <string name="see_alunos">Ver alunos</string>
+    <string name="primaryName">Fitness Hall Academia</string>
+    <string name="meus_alunos">Meus Alunos</string>
+    <string name="exercicios">Exercícios</string>
+    <string name="criar_treino">Criar Treino</string>
+    <string name="outros_professores">Outros Professores</string>
+    <string name="ver_aparelhos">Ver Aparelhos</string>
+
+    <string name="open_drawer">Abrir</string>
+    <string name="close_drawer">Fechar</string>
+    <string name="fazer_login">Favor fazer login</string>
+    <string name="ok">OK</string>
 </resources>

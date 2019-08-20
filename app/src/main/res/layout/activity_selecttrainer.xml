@@ -8,12 +8,44 @@
         tools:context=".SelectTrainer">
 
     <TextView
+            android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Hello World!"
+            android:text="@string/presentation"
+            android:textSize="35sp"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimaryDark"
+            android:padding="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.068"/>
+
+    <Spinner
+            android:id="@+id/prof_list"
+            app:layout_constraintTop_toBottomOf="@id/title"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="20dp"
+            android:layout_height="wrap_content"
+            android:layout_width="300dp"
+            android:entries="@array/prof_list_test"
+    />
+
+    <Button
+            android:id="@+id/button_prof"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginBottom="100dp"
+            android:text="@string/ok"
+
+
+    />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
