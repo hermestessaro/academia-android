@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/two_line_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:minHeight="@dimen/list_card_two_line_vertical_dimen"
+        android:paddingEnd="?listPreferredItemPaddingRight"
+        android:paddingLeft="?listPreferredItemPaddingLeft"
+        android:paddingRight="?listPreferredItemPaddingRight"
+        android:paddingStart="?listPreferredItemPaddingLeft" >
+
+    <ImageView
+            android:id="@+id/aluno_foto"
+            android:layout_width="@dimen/list_card_two_line_img_dimen"
+            android:layout_height="@dimen/list_card_two_line_img_dimen"
+            android:layout_marginTop="@dimen/list_card_two_line_padding_inside"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_person_grey_40dp" />
+
+    <LinearLayout
+            android:id="@+id/lines_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignWithParentIfMissing="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/list_card_two_line_padding_inside"
+            android:layout_marginRight="@dimen/list_card_two_line_padding_inside"
+            android:layout_toEndOf="@+id/aluno_foto"
+            android:layout_toLeftOf="@+id/arrow"
+            android:layout_toRightOf="@+id/aluno_foto"
+            android:layout_toStartOf="@+id/arrow"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/list_card_two_line_padding_inside"
+            android:paddingTop="@dimen/list_card_two_line_padding_inside">
+
+        <TextView
+                android:id="@+id/first_text_view"
+                style="@style/TextAppearance.AppCompat.Body2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="Aluno 1" />
+
+        <TextView
+                android:id="@+id/second_text_view"
+                style="@style/TextAppearance.AppCompat.Body1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="Prof: Prof 1" />
+    </LinearLayout>
+
+    <!-- Can be replaced by a widget -->
+    <ImageView
+            android:id="@+id/arrow"
+            android:layout_width="@dimen/list_card_two_line_img_dimen"
+            android:layout_height="@dimen/list_card_two_line_img_dimen"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="@dimen/list_card_two_line_padding_inside"
+            android:layout_marginStart="@dimen/list_card_two_line_padding_inside"
+            android:layout_marginTop="@dimen/list_card_two_line_padding_inside"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_keyboard_arrow_right_grey_24dp"/>
+</RelativeLayout>

@@ -7,7 +7,8 @@ import kotlinx.android.parcel.Parcelize
 class AlunoModel(val id: Int,
                  val nome: String,
                  val dataNascimento: String,
-            val dorPeitoAtividades: Boolean,
+                 val prof: String
+            /*val dorPeitoAtividades: Boolean,
             val dorPeitoUltimoMes: Boolean,
             val perdaConsciencia: Boolean,
             val problemaArticular: Boolean,
@@ -18,5 +19,5 @@ class AlunoModel(val id: Int,
             val observacoes: String,
             val treinoEspecifico: String,
             val dataInclusao: String,
-            val indicadorAtivo: Boolean
+            val indicadorAtivo: Boolean*/
 ) : Parcelable

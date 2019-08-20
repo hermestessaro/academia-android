@@ -4,14 +4,6 @@
     <!--Presentation screen-->
     <string name="presentation">Olá Professor! Escolha seu nome na lista abaixo</string>
 
-    <string-array name="prof_list_test">
-        <item>Renato Portaluppi</item>
-        <item>Roger Guardiola</item>
-        <item>Papito</item>
-        <item>Abel Braga</item>
-        <item>Joel Santana</item>
-        <item>Big Phil</item>
-    </string-array>
 
 
     <!--Initial Screen-->
@@ -29,4 +21,44 @@
     <string name="close_drawer">Fechar</string>
     <string name="fazer_login">Favor fazer login</string>
     <string name="ok">OK</string>
+
+
+
+    <!--Offline tests-->
+    <string-array name="prof_list_test">
+        <item>Renato Portaluppi</item>
+        <item>Roger Guardiola</item>
+        <item>Papito</item>
+        <item>Abel Braga</item>
+        <item>Joel Santana</item>
+        <item>Big Phil</item>
+    </string-array>
+
+    <string-array name="alunos1">
+        <item>Grohe</item>
+        <item>Edilson</item>
+        <item>Geromel</item>
+        <item>Kannemann</item>
+        <item>Cortez</item>
+        <item>Michel</item>
+        <item>Arthur</item>
+        <item>Ramiro</item>
+        <item>Luan</item>
+        <item>Fernando</item>
+        <item>Barrios</item>
+    </string-array>
+
+    <string-array name="alunos2">
+        <item>Danilo</item>
+        <item>William</item>
+        <item>Ernando</item>
+        <item>Paulão</item>
+        <item>Geferson</item>
+        <item>Dogado</item>
+        <item>Andrigo</item>
+        <item>Valdívia</item>
+        <item>Seijas</item>
+        <item>Vitinho</item>
+        <item>Nico</item>
+    </string-array>
 </resources>

@@ -18,6 +18,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.multidex.MultiDex
 import androidx.multidex.MultiDexApplication
 import com.example.academia.R
+import com.example.academia.controllers.AlunosLista.AlunosListaFragment
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.toolbar.*
@@ -30,6 +31,7 @@ class MainActivity : AppCompatActivity(){
     lateinit var toolbar_layout: androidx.appcompat.widget.Toolbar
     private val DB_NAME = "database.db"
     private val DB_VERSION = 1
+
 
     override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
@@ -53,6 +55,13 @@ class MainActivity : AppCompatActivity(){
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
 
+        val alunosFragment = AlunosListaFragment()
+        val manager = supportFragmentManager
+        val transaction = manager.beginTransaction()
+        transaction.replace(R.id.content_frame, alunosFragment)
+        transaction.addToBackStack(null)
+        transaction.commit()
+
         navView.setNavigationItemSelectedListener { menuItem ->
             when(menuItem.itemId){
                 R.id.nav_item_one -> Toast.makeText(this, "alunos", Toast.LENGTH_LONG).show()
@@ -61,7 +70,6 @@ class MainActivity : AppCompatActivity(){
                 R.id.nav_item_four -> Toast.makeText(this, "profs", Toast.LENGTH_LONG).show()
                 R.id.nav_item_five -> Toast.makeText(this, "aparelhos", Toast.LENGTH_LONG).show()
             }
-            
             drawerLayout.closeDrawer(GravityCompat.START)
             true
         }

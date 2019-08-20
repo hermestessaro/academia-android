@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <dimen name="list_card_two_line_vertical_dimen">72dp</dimen>
+    <dimen name="list_card_two_line_padding_inside">16dp</dimen>
+    <dimen name="list_card_two_line_img_dimen">40dp</dimen>
+    <dimen name="list_card_two_line_text1_baseline">32</dimen>
+    <dimen name="list_card_two_line_text2_baseline">20</dimen>
+</resources>
