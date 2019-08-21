@@ -1,27 +1,14 @@
 package com.example.academia
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.database.sqlite.SQLiteDatabase
-import android.database.sqlite.SQLiteOpenHelper
 import android.os.Bundle
-import android.util.Log
-import android.view.MenuItem
-import android.view.View
 import android.widget.Toast
-import android.widget.Toolbar
-import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.multidex.MultiDex
-import androidx.multidex.MultiDexApplication
-import com.example.academia.R
-import com.example.academia.controllers.AlunosLista.AlunosListaFragment
-import com.google.android.material.navigation.NavigationView
+import com.example.academia.AlunosLista.AlunosListaFragment
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.toolbar.*
 import kotlinx.android.synthetic.main.toolbar.toolbar
 
 class MainActivity : AppCompatActivity(){

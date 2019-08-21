@@ -8,14 +8,18 @@
 
     <!--Initial Screen-->
     <string name="welcome">Olá professor</string>
-    <string name="create_treino">Criar treino</string>
-    <string name="see_alunos">Ver alunos</string>
     <string name="primaryName">Fitness Hall Academia</string>
+
+
+    <string name="create_treino">Criar treino</string>
+    <string name="see_alunos">Ver todos os alunos</string>
+    <string name="new_aluno">Novo aluno</string>
     <string name="meus_alunos">Meus Alunos</string>
     <string name="exercicios">Exercícios</string>
     <string name="criar_treino">Criar Treino</string>
     <string name="outros_professores">Outros Professores</string>
-    <string name="ver_aparelhos">Ver Aparelhos</string>
+    <string name="ver_aparelhos">Aparelhos</string>
+    <string name="ver_grupos">Grupos e Exercícios</string>
 
     <string name="open_drawer">Abrir</string>
     <string name="close_drawer">Fechar</string>
