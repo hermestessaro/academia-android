@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity(){
         navView.setNavigationItemSelectedListener { menuItem ->
             when(menuItem.itemId){
                 R.id.nav_item_one -> changesFragment(alunosFragment)
-                R.id.nav_item_two -> Toast.makeText(this, "exercicios", Toast.LENGTH_LONG).show()
+                R.id.nav_item_two -> startActivity(Intent(this, NewAluno::class.java))
                 R.id.nav_item_three -> Toast.makeText(this, "treino", Toast.LENGTH_LONG).show()
                 R.id.nav_item_four -> Toast.makeText(this, "profs", Toast.LENGTH_LONG).show()
                 R.id.nav_item_five -> Toast.makeText(this, "aparelhos", Toast.LENGTH_LONG).show()

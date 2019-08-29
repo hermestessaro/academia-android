@@ -25,7 +25,8 @@
     <string name="close_drawer">Fechar</string>
     <string name="fazer_login">Favor fazer login</string>
     <string name="ok">OK</string>
-
+    <string name="name">Nome</string>
+    <string name="data">Data de Nascimento</string>
 
 
     <!--Offline tests-->
