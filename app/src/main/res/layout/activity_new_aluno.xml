@@ -22,7 +22,6 @@
                 app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
 
-
     <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/nome_tl"
             android:layout_width="200dp"
@@ -51,6 +50,292 @@
                     android:hint="@string/data"/>
         </com.google.android.material.textfield.TextInputLayout>
 
+        <TextView
+            android:id="@+id/dorPeito_tv"
+            android:text="@string/dorPeitoAtividades"
+            style="@style/TvNewAluno"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="20dp"
+            app:layout_constraintTop_toBottomOf="@id/data_tl"
+            app:layout_constraintStart_toStartOf="parent"
+        />
+
+        <RadioGroup
+            android:id="@+id/dorPeito_rg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/dorPeito_tv">
+            <RadioButton
+                android:id="@+id/dorPeitoSim"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/sim"
+                android:layout_marginLeft="10dp"/>
+            <RadioButton
+                android:id="@+id/dorPeitoNao"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/nao"
+                android:layout_marginLeft="10dp"/>
+        </RadioGroup>
+
+        <TextView
+                android:id="@+id/dorPeitoMes_tv"
+                android:text="@string/dorPeitoMes"
+                style="@style/TvNewAluno"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="20dp"
+                app:layout_constraintTop_toBottomOf="@id/dorPeito_rg"
+                app:layout_constraintStart_toStartOf="parent"
+        />
+
+        <RadioGroup
+                android:id="@+id/dorPeitoMes_rg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/dorPeitoMes_tv">
+            <RadioButton
+                    android:id="@+id/dorPeitoMesSim"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sim"
+                    android:layout_marginLeft="10dp"/>
+            <RadioButton
+                    android:id="@+id/dorPeitoMesNao"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/nao"
+                    android:layout_marginLeft="10dp"/>
+        </RadioGroup>
+
+        <TextView
+                android:id="@+id/consciencia_tv"
+                android:text="@string/perdaConsciencia"
+                style="@style/TvNewAluno"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="20dp"
+                app:layout_constraintTop_toBottomOf="@id/dorPeitoMes_rg"
+                app:layout_constraintStart_toStartOf="parent"
+        />
+
+        <RadioGroup
+                android:id="@+id/consciencia_rg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/consciencia_tv">
+            <RadioButton
+                    android:id="@+id/conscienciaSim"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sim"
+                    android:layout_marginLeft="10dp"/>
+            <RadioButton
+                    android:id="@+id/conscienciaNao"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/nao"
+                    android:layout_marginLeft="10dp"/>
+        </RadioGroup>
+
+        <TextView
+                android:id="@+id/osseo_tv"
+                android:text="@string/problemaOsseo"
+                style="@style/TvNewAluno"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="20dp"
+                app:layout_constraintTop_toBottomOf="@id/consciencia_rg"
+                app:layout_constraintStart_toStartOf="parent"
+        />
+
+        <RadioGroup
+                android:id="@+id/osseo_rg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/osseo_tv">
+            <RadioButton
+                    android:id="@+id/osseoSim"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sim"
+                    android:layout_marginLeft="10dp"/>
+            <RadioButton
+                    android:id="@+id/osseoNao"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/nao"
+                    android:layout_marginLeft="10dp"/>
+        </RadioGroup>
+
+        <TextView
+                android:id="@+id/tabagista_tv"
+                android:text="@string/tabagista"
+                style="@style/TvNewAluno"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="20dp"
+                app:layout_constraintTop_toBottomOf="@id/osseo_rg"
+                app:layout_constraintStart_toStartOf="parent"
+        />
+
+        <RadioGroup
+                android:id="@+id/tabagista_rg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tabagista_tv">
+            <RadioButton
+                    android:id="@+id/tabagistaSim"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sim"
+                    android:layout_marginLeft="10dp"/>
+            <RadioButton
+                    android:id="@+id/tabagistaNao"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/nao"
+                    android:layout_marginLeft="10dp"/>
+        </RadioGroup>
+
+        <TextView
+                android:id="@+id/diabetico_tv"
+                android:text="@string/diabetico"
+                style="@style/TvNewAluno"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="20dp"
+                app:layout_constraintTop_toBottomOf="@id/tabagista_rg"
+                app:layout_constraintStart_toStartOf="parent"
+        />
+
+        <RadioGroup
+                android:id="@+id/diabetico_rg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/diabetico_tv">
+            <RadioButton
+                    android:id="@+id/diabeticoSim"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sim"
+                    android:layout_marginLeft="10dp"/>
+            <RadioButton
+                    android:id="@+id/diabeticoNao"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/nao"
+                    android:layout_marginLeft="10dp"/>
+        </RadioGroup>
+
+        <TextView
+                android:id="@+id/cardiaco_tv"
+                android:text="@string/cardiaco"
+                style="@style/TvNewAluno"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="20dp"
+                app:layout_constraintTop_toBottomOf="@id/diabetico_rg"
+                app:layout_constraintStart_toStartOf="parent"
+        />
+
+        <RadioGroup
+                android:id="@+id/cardiaco_rg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cardiaco_tv">
+            <RadioButton
+                    android:id="@+id/cardiacoSim"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sim"
+                    android:layout_marginLeft="10dp"/>
+            <RadioButton
+                    android:id="@+id/cardiacoNao"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/nao"
+                    android:layout_marginLeft="10dp"/>
+        </RadioGroup>
+
+        <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/lesoes_tl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/cardiaco_rg"
+                app:layout_constraintLeft_toLeftOf="parent"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="20dp">
+            <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/lesoes"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/obs_tl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/lesoes_tl"
+                app:layout_constraintLeft_toLeftOf="parent"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="20dp">
+            <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/observacoes"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/button_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/button_goto_training"
+            app:layout_constraintTop_toBottomOf="@id/obs_tl"
+            app:layout_constraintBottom_toBottomOf="parent"
+        />
+        <Button
+            android:id="@+id/button_goto_training"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@id/button_save"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/obs_tl"
+            app:layout_constraintBottom_toBottomOf="parent"
+        />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

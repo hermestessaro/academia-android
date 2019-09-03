@@ -25,8 +25,20 @@
     <string name="close_drawer">Fechar</string>
     <string name="fazer_login">Favor fazer login</string>
     <string name="ok">OK</string>
+    <string name="sim">Sim</string>
+    <string name="nao">Não</string>
     <string name="name">Nome</string>
     <string name="data">Data de Nascimento</string>
+
+    <string name="dorPeitoAtividades">Você tem dor no peito provocada por atividades físicas?</string>
+    <string name="dorPeitoMes">Você sentiu dor no peito no último mês?</string>
+    <string name="perdaConsciencia">Você já perdeu a consciência em alguma ocasião ou sofreu alguma queda em virtude de tontura?</string>
+    <string name="problemaOsseo">Você tem algum problema ósseo ou articular que poderia agravar-se com a prática de atividades físicas?</string>
+    <string name="tabagista">Tabagista?</string>
+    <string name="diabetico">Diabético?</string>
+    <string name="cardiaco">Histórico familiar de ataque cardíaco? (Pai ou irmão de 55 anos ou mãe ou irmã antes dos 65 anos)</string>
+    <string name="lesoes">Lesões</string>
+    <string name="observacoes">Observações</string>
 
 
     <!--Offline tests-->
