@@ -39,6 +39,18 @@
     <string name="cardiaco">Histórico familiar de ataque cardíaco? (Pai ou irmão de 55 anos ou mãe ou irmã antes dos 65 anos)</string>
     <string name="lesoes">Lesões</string>
     <string name="observacoes">Observações</string>
+    <string name="disponibilidade">Disponibilidade</string>
+    <string name="save">Salvar</string>
+    <string name="save_training">Treino</string>
+
+    <string name="segunda">Seg</string>
+    <string name="terca">Ter</string>
+    <string name="quarta">Qua</string>
+    <string name="quinta">Qui</string>
+    <string name="sexta">Sex</string>
+    <string name="sabado">Sab</string>
+    <string name="domingo">Dom</string>
+
 
 
     <!--Offline tests-->

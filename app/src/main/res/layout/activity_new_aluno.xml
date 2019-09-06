@@ -318,22 +318,87 @@
                     android:hint="@string/observacoes"/>
         </com.google.android.material.textfield.TextInputLayout>
 
+        <LinearLayout
+            android:id="@+id/disp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@id/obs_tl"
+            app:layout_constraintStart_toStartOf="parent">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/disponibilidade"
+                android:layout_marginLeft="10dp"/>
+            <LinearLayout
+                android:id="@+id/checkbox_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <CheckBox
+                    android:id="@+id/check_segunda"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/segunda"
+                    android:onClick="onCheckboxClicked"/>
+                <CheckBox
+                        android:id="@+id/check_terca"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/terca"
+                        android:onClick="onCheckboxClicked"/>
+                <CheckBox
+                        android:id="@+id/check_quarta"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/quarta"
+                        android:onClick="onCheckboxClicked"/>
+                <CheckBox
+                        android:id="@+id/check_quinta"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/quinta"
+                        android:onClick="onCheckboxClicked"/>
+                <CheckBox
+                        android:id="@+id/check_sexta"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/sexta"
+                        android:onClick="onCheckboxClicked"/>
+                <CheckBox
+                        android:id="@+id/check_sabado"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/sabado"
+                        android:onClick="onCheckboxClicked"/>
+                <CheckBox
+                        android:id="@+id/check_domingo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/domingo"
+                        android:onClick="onCheckboxClicked"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
         <Button
             android:id="@+id/button_save"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@string/save"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/button_goto_training"
-            app:layout_constraintTop_toBottomOf="@id/obs_tl"
+            app:layout_constraintTop_toBottomOf="@id/disp"
             app:layout_constraintBottom_toBottomOf="parent"
         />
         <Button
             android:id="@+id/button_goto_training"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@string/save_training"
             app:layout_constraintStart_toEndOf="@id/button_save"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/obs_tl"
+            app:layout_constraintTop_toBottomOf="@id/disp"
             app:layout_constraintBottom_toBottomOf="parent"
         />
 

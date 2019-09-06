@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import android.widget.ListAdapter
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.academia.DatabaseHelper
+import com.example.academia.MainActivity
 import com.example.academia.R
 import com.example.academia.models.AlunoModel
 import kotlinx.android.synthetic.main.fragment_alunos_lista.*
@@ -15,7 +17,7 @@ import kotlinx.android.synthetic.main.fragment_alunos_lista.*
 class AlunosListaFragment : Fragment() {
 
     //for tests only
-    private val mAlunos = listOf(
+    /*private val mAlunos = listOf(
         AlunoModel(0,"Grohe","02/02/70", "Renato"),
         AlunoModel(1,"Edilson","02/02/70", "Renato"),
         AlunoModel(2,"Geromel","02/02/70", "Renato"),
@@ -28,9 +30,15 @@ class AlunosListaFragment : Fragment() {
         AlunoModel(9,"Fernando","02/02/70", "Renato"),
         AlunoModel(10,"Barrios","02/02/70", "Renato")
 
-    )
+    )*/
+        lateinit var dbHelper: DatabaseHelper
+        lateinit var mAlunos: MutableList<AlunoModel>
 
-
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        dbHelper = DatabaseHelper(activity)
+        mAlunos = dbHelper.getAllAlunos()
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         retainInstance = true

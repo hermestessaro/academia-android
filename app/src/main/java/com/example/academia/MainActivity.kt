@@ -10,16 +10,15 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import com.example.academia.controllers.AlunosLista.AlunosListaFragment
 import com.example.academia.controllers.GruposLista.GruposListaFragment
+import com.example.academia.models.AlunoModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.toolbar.toolbar
 
 class MainActivity : AppCompatActivity(){
 
-    lateinit var db: DatabaseHelper
+
     lateinit var drawerLayout: DrawerLayout
     lateinit var toolbar_layout: androidx.appcompat.widget.Toolbar
-    private val DB_NAME = "database.db"
-    private val DB_VERSION = 1
     val manager = supportFragmentManager
 
 
@@ -27,12 +26,17 @@ class MainActivity : AppCompatActivity(){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         initView()
-
-        db = DatabaseHelper(applicationContext, DB_NAME, null, DB_VERSION)
-
+        //val profName = intent.getStringExtra("PROF")
+        val profName = "Renato"
         //TODO: SYNC
+        val dbHelper = DatabaseHelper(this)
 
-        val profName = intent.getStringExtra("PROF")
+        val aluno = AlunoModel("Geromel","11/12/83",profName,false,
+            false,false, false, false, false,
+            false,"sdfs","asd", "sfasd")
+        //dbHelper.createAluno(aluno)
+
+
 
     }
 
