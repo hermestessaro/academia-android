@@ -1,13 +1,19 @@
 package com.example.academia
 
+import android.app.PendingIntent.getActivity
+import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.provider.ContactsContract
+import android.util.Log
+import com.example.academia.models.AlunoModel
+import com.example.academia.models.AparelhoModel
+import com.example.academia.models.GrupoModel
 import com.example.academia.models.ProfessorModel
 
-class DatabaseHelper(context: Context?, name: String?, factory: SQLiteDatabase.CursorFactory?, version: Int) :
-    SQLiteOpenHelper(context, name, factory, version) {
+class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION) {
 
     //Table names
     private val TABLE_ALUNO = "Aluno"
@@ -21,6 +27,7 @@ class DatabaseHelper(context: Context?, name: String?, factory: SQLiteDatabase.C
     private val TABLE_GRUPO = "Grupo"
 
     //Common column names
+    private val ID = "id"
     private val KEY_NAME = "Nome"
     private val KEY_ACTIVE = "IndicadorAtivo"
     private val KEY_DATA_INC = "DataInclusao"
@@ -30,6 +37,7 @@ class DatabaseHelper(context: Context?, name: String?, factory: SQLiteDatabase.C
     private val ID_ALUNO = "IdAluno"
     private val ID_INCL = "IdUsuarioInclusao"
     private val KEY_NASCIMENTO = "DataNascimento"
+    private val KEY_PROF = "Professor"
     private val KEY_IND_1 = "IndicadorDorPeitoAtividadeFisicas"
     private val KEY_IND_2 = "IndicadorDorPeitoUltimoMes"
     private val KEY_IND_3 = "IndicadorPerdaConscienciaTontura"
@@ -73,15 +81,15 @@ class DatabaseHelper(context: Context?, name: String?, factory: SQLiteDatabase.C
     private val ID_GRUPO = "IdGrupo"
 
     //Table create statements
-    private val CREATE_TABLE_ALUNO = "CREATE TABLE $TABLE_ALUNO ($ID_ALUNO int NOT NULL, " +
-            "$KEY_NAME varchar(100), $KEY_NASCIMENTO date, $KEY_IND_1 varchar(1), " +
+    private val CREATE_TABLE_ALUNO = "CREATE TABLE $TABLE_ALUNO ($ID_ALUNO INTEGER PRIMARY KEY, " +
+            "$KEY_NAME varchar(100), $KEY_NASCIMENTO date, $KEY_PROF varchar(100), $KEY_IND_1 varchar(1), " +
             "$KEY_IND_2 varchar(1), $KEY_IND_3 varchar(1), $KEY_IND_4 varchar(1), " +
             "$KEY_IND_5 varchar(1), $KEY_IND_6 varchar(1), $KEY_IND_7 varchar(1), " +
-            "$KEY_LESOES varchar(200) NULL, $KEY_OBS varchar(200) NULL, $KEY_TREINO_ESP varchar(200) NULL, " +
-            "$KEY_DATA_INC date, $KEY_DATA_ULT datetime, $KEY_ACTIVE varchar(1), PRIMARY KEY ($ID_ALUNO));"
+            "$KEY_LESOES varchar(200) NULL, $KEY_OBS varchar(200) NULL, $KEY_TREINO_ESP varchar(200) NULL);"
+            //"$KEY_DATA_INC date, $KEY_DATA_ULT datetime, $KEY_ACTIVE varchar(1));"
 
-    private val CREATE_TABLE_ALUNO_DISP = "CREATE TABLE $TABLE_ALUNO_DISP ($ID_ALUNO_DISP int NOT NULL, " +
-            "$ID_ALUNO int, $ID_DISP int, PRIMARY KEY($ID_ALUNO_DISP), " +
+    private val CREATE_TABLE_ALUNO_DISP = "CREATE TABLE $TABLE_ALUNO_DISP ($ID_ALUNO_DISP INTEGER PRIMARY KEY, " +
+            "$ID_ALUNO int, $ID_DISP int, " +
             "FOREIGN KEY($ID_ALUNO) REFERENCES $TABLE_ALUNO($ID_ALUNO), " +
             "FOREIGN KEY($ID_DISP) REFERENCES $TABLE_DISP($ID_DISP));"
 
@@ -108,12 +116,12 @@ class DatabaseHelper(context: Context?, name: String?, factory: SQLiteDatabase.C
             "FOREIGN KEY($ID_TREINO) REFERENCES $TABLE_TREINO($ID_TREINO)," +
             "FOREIGN KEY($ID_APARELHO) REFERENCES $TABLE_APARELHO($ID_APARELHO));"
 
-    private val CREATE_TABLE_APARELHO = "CREATE TABLE $TABLE_APARELHO ($ID_APARELHO int NOT NULL, " +
+    private val CREATE_TABLE_APARELHO = "CREATE TABLE $TABLE_APARELHO ($ID_APARELHO INTEGER PRIMARY KEY, " +
             "$ID_GRUPO int, $KEY_NAME varchar(45), " +
             "FOREIGN KEY($ID_GRUPO) REFERENCES $TABLE_GRUPO($ID_GRUPO));"
 
-    private val CREATE_TABLE_GRUPO = "CREATE TABLE $TABLE_GRUPO ($ID_GRUPO int NOT NULL, " +
-            "$KEY_NAME varchar(20), PRIMARY KEY($ID_GRUPO));"
+    private val CREATE_TABLE_GRUPO = "CREATE TABLE $TABLE_GRUPO ($ID INTEGER PRIMARY KEY, " +
+            "$KEY_NAME varchar(20));"
 
 
     override fun onCreate(db: SQLiteDatabase) {
@@ -145,16 +153,10 @@ class DatabaseHelper(context: Context?, name: String?, factory: SQLiteDatabase.C
         onCreate(db)
     }
 
-    fun closeDB() {
-        val db = this.readableDatabase
-        if (db != null && db.isOpen) {
-            db.close()
-        }
-    }
 
 
     fun getProfessor(idProf: Int) : ProfessorModel {
-        val db : SQLiteDatabase = this.readableDatabase
+        val db = this.readableDatabase
         val selectQuery : String = "SELECT * FROM $TABLE_PROF WHERE $ID_PROF = $idProf;"
         val c: Cursor = db.rawQuery(selectQuery, null)
         if(c != null){
@@ -169,13 +171,12 @@ class DatabaseHelper(context: Context?, name: String?, factory: SQLiteDatabase.C
             c.getString(c.getColumnIndex(KEY_DATA_ULT)),
             c.getString(c.getColumnIndex(KEY_ACTIVE))!!.toBoolean()
         )
-        closeDB()
         return prof
 
     }
 
     fun getAllProfessors() : MutableList<ProfessorModel> {
-        val db : SQLiteDatabase = this.readableDatabase
+        val db = this.readableDatabase
         val selectQuery : String = "SELECT * FROM $TABLE_PROF;"
         val c: Cursor = db.rawQuery(selectQuery, null)
 
@@ -192,7 +193,139 @@ class DatabaseHelper(context: Context?, name: String?, factory: SQLiteDatabase.C
                 professorList.add(prof)
             }while(c.moveToNext())
         }
-        closeDB()
         return professorList
+    }
+
+    fun createAluno(aluno: AlunoModel){
+        val db = this.writableDatabase
+        val values: ContentValues = ContentValues()
+        values.put(KEY_NAME, aluno.nome)
+        values.put(KEY_NASCIMENTO, aluno.dataNascimento)
+        values.put(KEY_PROF, "Renato")
+        values.put(KEY_IND_1, aluno.dorPeitoAtividades)
+        values.put(KEY_IND_2, aluno.dorPeitoUltimoMes)
+        values.put(KEY_IND_3, aluno.perdaConsciencia)
+        values.put(KEY_IND_4, aluno.problemaArticular)
+        values.put(KEY_IND_5, aluno.tabagista)
+        values.put(KEY_IND_6, aluno.diabetico)
+        values.put(KEY_IND_7, aluno.familiarCardiaco)
+        values.put(KEY_LESOES, aluno.lesoes)
+        values.put(KEY_OBS, aluno.observacoes)
+        values.put(KEY_TREINO_ESP, aluno.treinoEspecifico)
+        //values.put(KEY_DATA_INC, aluno.dataInclusao)
+        //values.put(KEY_ACTIVE, 1)
+
+        db.insert(TABLE_ALUNO, null, values)
+
+    }
+
+    fun getAllAlunos() : MutableList<AlunoModel> {
+        val db = this.readableDatabase
+        Log.d("primeiro", "passou")
+        val selectQuery : String = "SELECT * FROM $TABLE_ALUNO;"
+        val c: Cursor = db.rawQuery(selectQuery, null)
+
+        val alunosList : MutableList<AlunoModel> = ArrayList()
+        if(c.moveToFirst()){
+            do {
+                val ind1 = c.getString(c.getColumnIndex(KEY_IND_1))
+                val ind2 = c.getString(c.getColumnIndex(KEY_IND_2))
+                val ind3 = c.getString(c.getColumnIndex(KEY_IND_3))
+                val ind4 = c.getString(c.getColumnIndex(KEY_IND_4))
+                val ind5 = c.getString(c.getColumnIndex(KEY_IND_5))
+                val ind6 = c.getString(c.getColumnIndex(KEY_IND_6))
+                val ind7 = c.getString(c.getColumnIndex(KEY_IND_7))
+                val aluno = AlunoModel(c.getString(c.getColumnIndex(KEY_NAME)),
+                    c.getString(c.getColumnIndex(KEY_NASCIMENTO)),
+                    c.getString(c.getColumnIndex(KEY_PROF)),
+                    ind1.toBoolean(),
+                    ind2.toBoolean(),
+                    ind3.toBoolean(),
+                    ind4.toBoolean(),
+                    ind5.toBoolean(),
+                    ind6.toBoolean(),
+                    ind7.toBoolean(),
+                    c.getString(c.getColumnIndex(KEY_LESOES)),
+                    c.getString(c.getColumnIndex(KEY_OBS)),
+                    c.getString(c.getColumnIndex(KEY_TREINO_ESP)))
+                    //c.getString(c.getColumnIndex(KEY_DATA_INC)),
+                    //c.getString(c.getColumnIndex(KEY_ACTIVE))!!.toBoolean())
+                alunosList.add(aluno)
+
+
+
+            }while(c.moveToNext())
+        }
+
+        return alunosList
+    }
+
+    fun createGrupo(nomeGrupo: String){
+        val db = this.writableDatabase
+        val values: ContentValues = ContentValues()
+        values.put(KEY_NAME, nomeGrupo)
+        val rowInserted = db.insert(TABLE_GRUPO, null, values)
+        Log.d("teste", rowInserted.toString())
+    }
+
+    fun getAllGrupos() : MutableList<GrupoModel>{
+        val db = this.readableDatabase
+        val selectQuery : String = "SELECT * FROM $TABLE_GRUPO;"
+        val c: Cursor = db.rawQuery(selectQuery, null)
+        val gruposList: MutableList<GrupoModel> = ArrayList()
+        if(c.moveToFirst()){
+            do {
+                val grupo = GrupoModel(c.getInt(c.getColumnIndex(ID)),
+                            c.getString(c.getColumnIndex(KEY_NAME)))
+                gruposList.add(grupo)
+            }while (c.moveToNext())
+        }
+        return gruposList
+    }
+
+    fun getGrupoByName(nomeGrupo: String): GrupoModel{
+        val db = this.readableDatabase
+        val selectQuery : String = "SELECT * FROM $TABLE_GRUPO WHERE $KEY_NAME = '$nomeGrupo';"
+        val c: Cursor = db.rawQuery(selectQuery, null)
+        c.moveToFirst()
+        val grupo = GrupoModel(c.getInt(c.getColumnIndex(ID)),
+                    c.getString(c.getColumnIndex(KEY_NAME)))
+        return grupo
+    }
+
+    fun createAparelho(nomeAparelho:String, nomeGrupo:String){
+        val grupo = getGrupoByName(nomeGrupo)
+        Log.d("grupoNome", grupo.nome)
+        val db = this.writableDatabase
+        val values: ContentValues = ContentValues()
+        values.put(ID_GRUPO, grupo.id)
+        values.put(KEY_NAME, nomeAparelho)
+        val rowInserted = db.insert(TABLE_APARELHO, null, values)
+        Log.d("testeAparelho", rowInserted.toString())
+    }
+
+    fun getAparelhosByGrupo(nomeGrupo: String): MutableList<AparelhoModel>{
+        val grupo = getGrupoByName(nomeGrupo)
+        val db = this.readableDatabase
+        val aparelhos: MutableList<AparelhoModel> = ArrayList()
+        val idGrupo = grupo.id
+        val selectQuery : String = "SELECT * FROM $TABLE_APARELHO WHERE $ID_GRUPO = '$idGrupo'"
+        val c: Cursor = db.rawQuery(selectQuery, null)
+        if(c.moveToFirst()) {
+            do {
+                val aparelho = AparelhoModel(c.getInt(c.getColumnIndex(ID_GRUPO)),
+                                c.getString(c.getColumnIndex(KEY_NAME)))
+                aparelhos.add(aparelho)
+
+            } while (c.moveToNext())
+        }
+
+        return aparelhos
+    }
+
+    companion object {
+        private val DB_NAME = "database.db"
+        private val DB_VERSION = 1
+
     }
 }

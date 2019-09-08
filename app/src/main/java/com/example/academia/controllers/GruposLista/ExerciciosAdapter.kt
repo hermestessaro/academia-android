@@ -10,7 +10,7 @@ import android.widget.TextView
 import com.example.academia.R
 import org.w3c.dom.Text
 
-class ExerciciosAdapter internal constructor(private val context: Context, private val titleList: List<String>, private val dataList: HashMap<String, List<String>>)
+class ExerciciosAdapter internal constructor(private val context: Context, private val titleList: List<String>, private val dataList: HashMap<String, MutableList<String>>)
     : BaseExpandableListAdapter(){
     override fun getGroup(listPosition: Int): Any {
         return this.titleList[listPosition]
