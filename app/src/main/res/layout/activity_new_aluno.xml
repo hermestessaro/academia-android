@@ -31,6 +31,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginTop="20dp">
         <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/nome_et"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="@string/name"/>
@@ -45,6 +46,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="20dp">
             <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/data_et"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:hint="@string/data"/>
@@ -298,6 +300,7 @@
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="20dp">
             <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/lesoes_et"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:hint="@string/lesoes"/>
@@ -313,6 +316,7 @@
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="20dp">
             <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/obs_et"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:hint="@string/observacoes"/>

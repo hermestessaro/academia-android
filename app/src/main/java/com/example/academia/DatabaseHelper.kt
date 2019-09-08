@@ -9,11 +9,11 @@ import android.database.sqlite.SQLiteOpenHelper
 import android.provider.ContactsContract
 import android.util.Log
 import com.example.academia.models.AlunoModel
+import com.example.academia.models.AparelhoModel
+import com.example.academia.models.GrupoModel
 import com.example.academia.models.ProfessorModel
 
 class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION) {
-
-    var idAluno = 0
 
     //Table names
     private val TABLE_ALUNO = "Aluno"
@@ -27,6 +27,7 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
     private val TABLE_GRUPO = "Grupo"
 
     //Common column names
+    private val ID = "id"
     private val KEY_NAME = "Nome"
     private val KEY_ACTIVE = "IndicadorAtivo"
     private val KEY_DATA_INC = "DataInclusao"
@@ -87,8 +88,8 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
             "$KEY_LESOES varchar(200) NULL, $KEY_OBS varchar(200) NULL, $KEY_TREINO_ESP varchar(200) NULL);"
             //"$KEY_DATA_INC date, $KEY_DATA_ULT datetime, $KEY_ACTIVE varchar(1));"
 
-    private val CREATE_TABLE_ALUNO_DISP = "CREATE TABLE $TABLE_ALUNO_DISP ($ID_ALUNO_DISP int NOT NULL, " +
-            "$ID_ALUNO int, $ID_DISP int, PRIMARY KEY($ID_ALUNO_DISP), " +
+    private val CREATE_TABLE_ALUNO_DISP = "CREATE TABLE $TABLE_ALUNO_DISP ($ID_ALUNO_DISP INTEGER PRIMARY KEY, " +
+            "$ID_ALUNO int, $ID_DISP int, " +
             "FOREIGN KEY($ID_ALUNO) REFERENCES $TABLE_ALUNO($ID_ALUNO), " +
             "FOREIGN KEY($ID_DISP) REFERENCES $TABLE_DISP($ID_DISP));"
 
@@ -115,12 +116,12 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
             "FOREIGN KEY($ID_TREINO) REFERENCES $TABLE_TREINO($ID_TREINO)," +
             "FOREIGN KEY($ID_APARELHO) REFERENCES $TABLE_APARELHO($ID_APARELHO));"
 
-    private val CREATE_TABLE_APARELHO = "CREATE TABLE $TABLE_APARELHO ($ID_APARELHO int NOT NULL, " +
+    private val CREATE_TABLE_APARELHO = "CREATE TABLE $TABLE_APARELHO ($ID_APARELHO INTEGER PRIMARY KEY, " +
             "$ID_GRUPO int, $KEY_NAME varchar(45), " +
             "FOREIGN KEY($ID_GRUPO) REFERENCES $TABLE_GRUPO($ID_GRUPO));"
 
-    private val CREATE_TABLE_GRUPO = "CREATE TABLE $TABLE_GRUPO ($ID_GRUPO int NOT NULL, " +
-            "$KEY_NAME varchar(20), PRIMARY KEY($ID_GRUPO));"
+    private val CREATE_TABLE_GRUPO = "CREATE TABLE $TABLE_GRUPO ($ID INTEGER PRIMARY KEY, " +
+            "$KEY_NAME varchar(20));"
 
 
     override fun onCreate(db: SQLiteDatabase) {
@@ -215,7 +216,7 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
         //values.put(KEY_ACTIVE, 1)
 
         db.insert(TABLE_ALUNO, null, values)
-        idAluno++
+
     }
 
     fun getAllAlunos() : MutableList<AlunoModel> {
@@ -257,6 +258,69 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
         }
 
         return alunosList
+    }
+
+    fun createGrupo(nomeGrupo: String){
+        val db = this.writableDatabase
+        val values: ContentValues = ContentValues()
+        values.put(KEY_NAME, nomeGrupo)
+        val rowInserted = db.insert(TABLE_GRUPO, null, values)
+        Log.d("teste", rowInserted.toString())
+    }
+
+    fun getAllGrupos() : MutableList<GrupoModel>{
+        val db = this.readableDatabase
+        val selectQuery : String = "SELECT * FROM $TABLE_GRUPO;"
+        val c: Cursor = db.rawQuery(selectQuery, null)
+        val gruposList: MutableList<GrupoModel> = ArrayList()
+        if(c.moveToFirst()){
+            do {
+                val grupo = GrupoModel(c.getInt(c.getColumnIndex(ID)),
+                            c.getString(c.getColumnIndex(KEY_NAME)))
+                gruposList.add(grupo)
+            }while (c.moveToNext())
+        }
+        return gruposList
+    }
+
+    fun getGrupoByName(nomeGrupo: String): GrupoModel{
+        val db = this.readableDatabase
+        val selectQuery : String = "SELECT * FROM $TABLE_GRUPO WHERE $KEY_NAME = '$nomeGrupo';"
+        val c: Cursor = db.rawQuery(selectQuery, null)
+        c.moveToFirst()
+        val grupo = GrupoModel(c.getInt(c.getColumnIndex(ID)),
+                    c.getString(c.getColumnIndex(KEY_NAME)))
+        return grupo
+    }
+
+    fun createAparelho(nomeAparelho:String, nomeGrupo:String){
+        val grupo = getGrupoByName(nomeGrupo)
+        Log.d("grupoNome", grupo.nome)
+        val db = this.writableDatabase
+        val values: ContentValues = ContentValues()
+        values.put(ID_GRUPO, grupo.id)
+        values.put(KEY_NAME, nomeAparelho)
+        val rowInserted = db.insert(TABLE_APARELHO, null, values)
+        Log.d("testeAparelho", rowInserted.toString())
+    }
+
+    fun getAparelhosByGrupo(nomeGrupo: String): MutableList<AparelhoModel>{
+        val grupo = getGrupoByName(nomeGrupo)
+        val db = this.readableDatabase
+        val aparelhos: MutableList<AparelhoModel> = ArrayList()
+        val idGrupo = grupo.id
+        val selectQuery : String = "SELECT * FROM $TABLE_APARELHO WHERE $ID_GRUPO = '$idGrupo'"
+        val c: Cursor = db.rawQuery(selectQuery, null)
+        if(c.moveToFirst()) {
+            do {
+                val aparelho = AparelhoModel(c.getInt(c.getColumnIndex(ID_GRUPO)),
+                                c.getString(c.getColumnIndex(KEY_NAME)))
+                aparelhos.add(aparelho)
+
+            } while (c.moveToNext())
+        }
+
+        return aparelhos
     }
 
     companion object {

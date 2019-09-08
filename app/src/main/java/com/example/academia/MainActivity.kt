@@ -31,10 +31,24 @@ class MainActivity : AppCompatActivity(){
         //TODO: SYNC
         val dbHelper = DatabaseHelper(this)
 
-        val aluno = AlunoModel("Geromel","11/12/83",profName,false,
-            false,false, false, false, false,
-            false,"sdfs","asd", "sfasd")
-        //dbHelper.createAluno(aluno)
+        dbHelper.createGrupo("Peito")
+        dbHelper.createGrupo("Costas")
+        dbHelper.createGrupo("Triceps")
+        dbHelper.createGrupo("Biceps")
+        dbHelper.createGrupo("Ombros")
+        dbHelper.createGrupo("Pernas")
+        dbHelper.createGrupo("Abdomen")
+
+        val grupos = dbHelper.getAllGrupos()
+
+        dbHelper.createAparelho("Supino", "Peito")
+        dbHelper.createAparelho("Puxada Frontal", "Costas")
+        dbHelper.createAparelho("Corda", "Triceps")
+        dbHelper.createAparelho("Barra reta", "Biceps")
+        dbHelper.createAparelho("Desenvolvimento", "Ombros")
+        dbHelper.createAparelho("Leg Press", "Pernas")
+        dbHelper.createAparelho("Obliquo", "Abdomen")
+
 
 
 

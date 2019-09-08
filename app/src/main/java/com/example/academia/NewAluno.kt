@@ -31,8 +31,8 @@ class NewAluno : AppCompatActivity() {
 
     fun saveAluno(){
         val dbHelper = DatabaseHelper(this)
-        val nome = R.id.nome_tl.toString()
-        val data = R.id.data_tl.toString()
+        val nome = nome_et.text.toString()
+        val data = data_et.text.toString()
         val dorPeitoAtividades = dorPeito_rg.checkedRadioButtonId == R.id.dorPeitoSim
         val dorPeitoMes = dorPeitoMes_rg.checkedRadioButtonId == R.id.dorPeitoMesSim
         val perdaConsciencia = consciencia_rg.checkedRadioButtonId == R.id.conscienciaSim
@@ -40,8 +40,8 @@ class NewAluno : AppCompatActivity() {
         val tabagista = tabagista_rg.checkedRadioButtonId == R.id.tabagistaSim
         val diabetico = diabetico_rg.checkedRadioButtonId == R.id.diabeticoSim
         val cardiaco = cardiaco_rg.checkedRadioButtonId == R.id.cardiacoSim
-        val lesoes = lesoes_tl.toString()
-        val observacoes = obs_tl.toString()
+        val lesoes = lesoes_et.text.toString()
+        val observacoes = obs_et.text.toString()
 
         val aluno = AlunoModel(nome, data, "prof", dorPeitoAtividades, dorPeitoMes, perdaConsciencia,
                                 problemaOsseo, tabagista, diabetico, cardiaco, lesoes, observacoes, "")

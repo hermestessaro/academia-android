@@ -3,7 +3,6 @@ package com.example.academia.models
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
-@Parcelize
 class TreinoModel(val id: Int,
                   val idProf: Int,
                   val idAluno: Int,
@@ -12,4 +11,4 @@ class TreinoModel(val id: Int,
                   val dataInc: String,
                   val dataUlt: String,
                   val indicadorAtivo: Boolean
-) : Parcelable
+)
