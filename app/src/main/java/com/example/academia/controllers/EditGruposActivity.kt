@@ -1,11 +1,15 @@
 package com.example.academia.controllers
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.academia.DatabaseHelper
 import com.example.academia.R
+import com.example.academia.controllers.GruposLista.GruposListaFragment
 import kotlinx.android.synthetic.main.activity_edit_grupos.*
 
 class EditGruposActivity : AppCompatActivity(){
@@ -18,8 +22,6 @@ class EditGruposActivity : AppCompatActivity(){
         setContentView(R.layout.activity_edit_grupos)
 
         initView()
-
-
 
     }
 
@@ -42,5 +44,26 @@ class EditGruposActivity : AppCompatActivity(){
         toolbar.setNavigationOnClickListener {
             finish()
         }
+
+        salvar_exercicio.setOnClickListener {
+            saveExercicio()
+        }
+    }
+
+    fun saveExercicio(){
+        val exercicio_nome = insira_nome_et.text.toString()
+        val grupo_nome = grupos_spinner.selectedItem.toString()
+        val intent = Intent()
+        if(dbHelper.createAparelho(exercicio_nome, grupo_nome)!= -1) {
+            Toast.makeText(this, getString(R.string.salvo_succ), Toast.LENGTH_SHORT).show()
+            intent.putExtra("changed", 1)
+            setResult(RESULT_OK, intent)
+        }
+        else{
+            Toast.makeText(this, "Já existe um aparelho com esse nome!", Toast.LENGTH_SHORT).show()
+            intent.putExtra("changed", 0)
+            setResult(RESULT_CANCELED, intent)
+        }
+        finish()
     }
 }

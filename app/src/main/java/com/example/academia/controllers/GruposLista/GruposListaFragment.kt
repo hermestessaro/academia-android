@@ -1,6 +1,8 @@
 package com.example.academia.controllers.GruposLista
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,6 +14,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.academia.DatabaseHelper
 import com.example.academia.R
+import com.example.academia.controllers.EditGruposActivity
 import com.example.academia.models.GrupoModel
 import kotlinx.android.synthetic.*
 import kotlinx.android.synthetic.main.fragment_grupos.*
@@ -21,7 +24,7 @@ class GruposListaFragment : Fragment() {
     lateinit var dbHelper: DatabaseHelper
     lateinit var grupos: MutableList<GrupoModel>
     lateinit var data: HashMap<String, MutableList<String>>
-
+    lateinit var adapter: ExerciciosAdapter
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
@@ -29,8 +32,8 @@ class GruposListaFragment : Fragment() {
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        retainInstance = true
         data = createList()
+        //adapter.notifyDataSetChanged()
     }
 
     fun createList(): HashMap<String, MutableList<String>> {
@@ -48,50 +51,6 @@ class GruposListaFragment : Fragment() {
             listData[item.nome] = aparelhosListNames
         }
 
-
-        /*val peitoExercicios = ArrayList<String>()
-        peitoExercicios.add("Supino vertical")
-        peitoExercicios.add("Crucifixo inclinado")
-        peitoExercicios.add("Voador")
-        peitoExercicios.add("Supino horizontal")
-        peitoExercicios.add("Crossover")
-
-        val costasExercicios = ArrayList<String>()
-        costasExercicios.add("Puxada frontal")
-        costasExercicios.add("Remada")
-        costasExercicios.add("Serrote")
-        costasExercicios.add("Pull Down")
-
-        val tricepsExercicios = ArrayList<String>()
-        tricepsExercicios.add("Testa com barra")
-        tricepsExercicios.add("Roldana com corda")
-        tricepsExercicios.add("Francesa")
-
-        val bicepsExercicios = ArrayList<String>()
-        bicepsExercicios.add("Rosca Direta")
-        bicepsExercicios.add("Rosca Alternada")
-        bicepsExercicios.add("Concentrado")
-
-        val ombrosExercicios = ArrayList<String>()
-        ombrosExercicios.add("Elevação Lateral")
-        ombrosExercicios.add("Elevação Frontal")
-        ombrosExercicios.add("Desenvolvimento")
-        ombrosExercicios.add("Remada Alta")
-
-        val pernasExercicios = ArrayList<String>()
-        pernasExercicios.add("Agachamento na barra")
-        pernasExercicios.add("Leg Press")
-        pernasExercicios.add("Flexora")
-        pernasExercicios.add("Extensora")
-        pernasExercicios.add("Adutora")
-        pernasExercicios.add("Abdutora")
-
-        listData[grupos.component1().nome] = peitoExercicios
-        listData[grupos.component2().nome] = costasExercicios
-        listData[grupos.component3().nome] = tricepsExercicios
-        listData[grupos.component4().nome] = bicepsExercicios
-        listData[grupos.component5().nome] = ombrosExercicios*/
-
         return listData
 
     }
@@ -103,18 +62,32 @@ class GruposListaFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if(groups_lv != null){
+            setUpList()
+        }
+        editar_grupos.setOnClickListener {
+            val intent = Intent(context, EditGruposActivity::class.java)
+            this.startActivityForResult(intent, 1)
+        }
+    }
 
-            //TEST
-            val listData = createList()
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(1 == requestCode){
+                if(Activity.RESULT_OK == resultCode){
+                    setUpList()
+                }
+        }
+    }
 
-            val titleList = ArrayList(listData.keys)
-            val adapter = ExerciciosAdapter(context!!, titleList, listData)
-            groups_lv.setAdapter(adapter)
-            groups_lv.setOnChildClickListener { parent, v, groupPosition, childPosition, id ->
-                Toast.makeText(context!!, "Clicked: " + titleList[groupPosition] + " -> " + listData[titleList[groupPosition]]!!.get(childPosition), Toast.LENGTH_SHORT).show()
-                false
-            }
+    fun setUpList(){
+        val listData = createList()
 
+        val titleList = ArrayList(listData.keys)
+        adapter = ExerciciosAdapter(context!!, titleList, listData)
+        groups_lv.setAdapter(adapter)
+        groups_lv.setOnChildClickListener { parent, v, groupPosition, childPosition, id ->
+            Toast.makeText(context!!, "Clicked: " + titleList[groupPosition] + " -> " + listData[titleList[groupPosition]]!!.get(childPosition), Toast.LENGTH_SHORT).show()
+            false
         }
     }
 

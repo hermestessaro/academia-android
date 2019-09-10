@@ -2,6 +2,7 @@ package com.example.academia
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -29,6 +30,7 @@ class MainActivity : AppCompatActivity(){
         //val profName = intent.getStringExtra("PROF")
         val profName = "Renato"
         //TODO: SYNC
+        //this.deleteDatabase("database.db")
         val dbHelper = DatabaseHelper(this)
 
         dbHelper.createGrupo("Peito")
@@ -40,14 +42,16 @@ class MainActivity : AppCompatActivity(){
         dbHelper.createGrupo("Abdomen")
 
         val grupos = dbHelper.getAllGrupos()
-
-        dbHelper.createAparelho("Supino", "Peito")
+        for(item in grupos){
+            Log.d("nomesgrupos", item.nome+item.id.toString())
+        }
+        /*dbHelper.createAparelho("Supino", "Peito")
         dbHelper.createAparelho("Puxada Frontal", "Costas")
         dbHelper.createAparelho("Corda", "Triceps")
         dbHelper.createAparelho("Barra reta", "Biceps")
         dbHelper.createAparelho("Desenvolvimento", "Ombros")
         dbHelper.createAparelho("Leg Press", "Pernas")
-        dbHelper.createAparelho("Obliquo", "Abdomen")
+        dbHelper.createAparelho("Obliquo", "Abdomen")*/
 
 
 
@@ -97,6 +101,7 @@ class MainActivity : AppCompatActivity(){
             super.onBackPressed()
         }
     }
+
 
 
     companion object {

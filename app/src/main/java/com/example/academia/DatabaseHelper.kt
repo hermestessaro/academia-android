@@ -8,10 +8,12 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.provider.ContactsContract
 import android.util.Log
+import android.widget.Toast
 import com.example.academia.models.AlunoModel
 import com.example.academia.models.AparelhoModel
 import com.example.academia.models.GrupoModel
 import com.example.academia.models.ProfessorModel
+import java.lang.Exception
 
 class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION) {
 
@@ -117,23 +119,34 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
             "FOREIGN KEY($ID_APARELHO) REFERENCES $TABLE_APARELHO($ID_APARELHO));"
 
     private val CREATE_TABLE_APARELHO = "CREATE TABLE $TABLE_APARELHO ($ID_APARELHO INTEGER PRIMARY KEY, " +
-            "$ID_GRUPO int, $KEY_NAME varchar(45), " +
+            "$ID_GRUPO int, $KEY_NAME varchar(45) UNIQUE, " +
             "FOREIGN KEY($ID_GRUPO) REFERENCES $TABLE_GRUPO($ID_GRUPO));"
 
     private val CREATE_TABLE_GRUPO = "CREATE TABLE $TABLE_GRUPO ($ID INTEGER PRIMARY KEY, " +
-            "$KEY_NAME varchar(20));"
+            "$KEY_NAME varchar(20) UNIQUE);"
 
 
     override fun onCreate(db: SQLiteDatabase) {
-        db.execSQL(CREATE_TABLE_ALUNO)
-        db.execSQL(CREATE_TABLE_ALUNO_DISP)
-        db.execSQL(CREATE_TABLE_DISP)
-        db.execSQL(CREATE_TABLE_PROFESSOR)
-        db.execSQL(CREATE_TABLE_TREINO)
-        db.execSQL(CREATE_TABLE_FREQ)
-        db.execSQL(CREATE_TABLE_EXERCICIO)
-        db.execSQL(CREATE_TABLE_APARELHO)
-        db.execSQL(CREATE_TABLE_GRUPO)
+        db.run {
+            execSQL("DROP TABLE IF EXISTS $TABLE_ALUNO")
+            execSQL("DROP TABLE IF EXISTS $TABLE_ALUNO_DISP")
+            execSQL("DROP TABLE IF EXISTS $TABLE_DISP")
+            execSQL("DROP TABLE IF EXISTS $TABLE_PROF")
+            execSQL("DROP TABLE IF EXISTS $TABLE_TREINO")
+            execSQL("DROP TABLE IF EXISTS $TABLE_FREQ")
+            execSQL("DROP TABLE IF EXISTS $TABLE_EXERCICIO")
+            execSQL("DROP TABLE IF EXISTS $TABLE_APARELHO")
+            execSQL("DROP TABLE IF EXISTS $TABLE_GRUPO")
+            execSQL(CREATE_TABLE_ALUNO)
+            execSQL(CREATE_TABLE_ALUNO_DISP)
+            execSQL(CREATE_TABLE_DISP)
+            execSQL(CREATE_TABLE_PROFESSOR)
+            execSQL(CREATE_TABLE_TREINO)
+            execSQL(CREATE_TABLE_FREQ)
+            execSQL(CREATE_TABLE_EXERCICIO)
+            execSQL(CREATE_TABLE_APARELHO)
+            execSQL(CREATE_TABLE_GRUPO)
+        }
 
     }
 
@@ -198,20 +211,21 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
 
     fun createAluno(aluno: AlunoModel){
         val db = this.writableDatabase
-        val values: ContentValues = ContentValues()
-        values.put(KEY_NAME, aluno.nome)
-        values.put(KEY_NASCIMENTO, aluno.dataNascimento)
-        values.put(KEY_PROF, "Renato")
-        values.put(KEY_IND_1, aluno.dorPeitoAtividades)
-        values.put(KEY_IND_2, aluno.dorPeitoUltimoMes)
-        values.put(KEY_IND_3, aluno.perdaConsciencia)
-        values.put(KEY_IND_4, aluno.problemaArticular)
-        values.put(KEY_IND_5, aluno.tabagista)
-        values.put(KEY_IND_6, aluno.diabetico)
-        values.put(KEY_IND_7, aluno.familiarCardiaco)
-        values.put(KEY_LESOES, aluno.lesoes)
-        values.put(KEY_OBS, aluno.observacoes)
-        values.put(KEY_TREINO_ESP, aluno.treinoEspecifico)
+        val values = ContentValues().apply {
+            put(KEY_NAME, aluno.nome)
+            put(KEY_NASCIMENTO, aluno.dataNascimento)
+            put(KEY_PROF, "Renato")
+            put(KEY_IND_1, aluno.dorPeitoAtividades)
+            put(KEY_IND_2, aluno.dorPeitoUltimoMes)
+            put(KEY_IND_3, aluno.perdaConsciencia)
+            put(KEY_IND_4, aluno.problemaArticular)
+            put(KEY_IND_5, aluno.tabagista)
+            put(KEY_IND_6, aluno.diabetico)
+            put(KEY_IND_7, aluno.familiarCardiaco)
+            put(KEY_LESOES, aluno.lesoes)
+            put(KEY_OBS, aluno.observacoes)
+            put(KEY_TREINO_ESP, aluno.treinoEspecifico)
+        }
         //values.put(KEY_DATA_INC, aluno.dataInclusao)
         //values.put(KEY_ACTIVE, 1)
 
@@ -264,8 +278,12 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
         val db = this.writableDatabase
         val values: ContentValues = ContentValues()
         values.put(KEY_NAME, nomeGrupo)
-        val rowInserted = db.insert(TABLE_GRUPO, null, values)
-        Log.d("teste", rowInserted.toString())
+        try {
+            db.insertOrThrow(TABLE_GRUPO, null, values)
+        }catch (e:Exception){
+            e.printStackTrace()
+        }
+
     }
 
     fun getAllGrupos() : MutableList<GrupoModel>{
@@ -293,7 +311,7 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
         return grupo
     }
 
-    fun createAparelho(nomeAparelho:String, nomeGrupo:String){
+    fun createAparelho(nomeAparelho:String, nomeGrupo:String): Int{
         val grupo = getGrupoByName(nomeGrupo)
         Log.d("grupoNome", grupo.nome)
         val db = this.writableDatabase
@@ -301,7 +319,7 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
         values.put(ID_GRUPO, grupo.id)
         values.put(KEY_NAME, nomeAparelho)
         val rowInserted = db.insert(TABLE_APARELHO, null, values)
-        Log.d("testeAparelho", rowInserted.toString())
+        return rowInserted.toInt()
     }
 
     fun getAparelhosByGrupo(nomeGrupo: String): MutableList<AparelhoModel>{
