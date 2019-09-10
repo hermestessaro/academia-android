@@ -27,6 +27,8 @@
     <string name="ok">OK</string>
     <string name="sim">Sim</string>
     <string name="nao">Não</string>
+
+    <!--New aluno-->
     <string name="name">Nome</string>
     <string name="data">Data de Nascimento</string>
 
@@ -51,6 +53,14 @@
     <string name="sabado">Sab</string>
     <string name="domingo">Dom</string>
     <string name="editar">Editar</string>
+
+
+
+    <!--Edit grupos-->
+    <string name="insira_exercicio">Insira o nome do exercício:</string>
+    <string name="exercicio">Exercício</string>
+    <string name="grupo_muscular">Escolha o grupo muscular a qual o exercício pertence:</string>
+    <string name="salvar">Salvar</string>
 
 
     <!--Offline tests-->
