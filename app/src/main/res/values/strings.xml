@@ -27,6 +27,8 @@
     <string name="ok">OK</string>
     <string name="sim">Sim</string>
     <string name="nao">Não</string>
+
+    <!--New aluno-->
     <string name="name">Nome</string>
     <string name="data">Data de Nascimento</string>
 
@@ -53,6 +55,15 @@
     <string name="editar">Editar</string>
 
 
+
+    <!--Edit grupos-->
+    <string name="insira_exercicio">Insira o nome do exercício:</string>
+    <string name="exercicio">Exercício</string>
+    <string name="grupo_muscular">Escolha o grupo muscular a qual o exercício pertence:</string>
+    <string name="salvar">Salvar</string>
+    <string name="salvo_succ">Salvo com sucesso</string>
+
+
     <!--Offline tests-->
     <string-array name="prof_list_test">
         <item>Renato Portaluppi</item>
@@ -61,33 +72,5 @@
         <item>Abel Braga</item>
         <item>Joel Santana</item>
         <item>Big Phil</item>
-    </string-array>
-
-    <string-array name="alunos1">
-        <item>Grohe</item>
-        <item>Edilson</item>
-        <item>Geromel</item>
-        <item>Kannemann</item>
-        <item>Cortez</item>
-        <item>Michel</item>
-        <item>Arthur</item>
-        <item>Ramiro</item>
-        <item>Luan</item>
-        <item>Fernando</item>
-        <item>Barrios</item>
-    </string-array>
-
-    <string-array name="alunos2">
-        <item>Danilo</item>
-        <item>William</item>
-        <item>Ernando</item>
-        <item>Paulão</item>
-        <item>Geferson</item>
-        <item>Dogado</item>
-        <item>Andrigo</item>
-        <item>Valdívia</item>
-        <item>Seijas</item>
-        <item>Vitinho</item>
-        <item>Nico</item>
     </string-array>
 </resources>

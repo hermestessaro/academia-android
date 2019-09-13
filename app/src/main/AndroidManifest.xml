@@ -24,6 +24,8 @@
         </activity>
         <activity android:name=".NewAluno">
         </activity>
+        <activity android:name=".controllers.EditGruposActivity">
+        </activity>
     </application>
 
 </manifest>
