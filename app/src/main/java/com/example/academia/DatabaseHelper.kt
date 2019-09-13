@@ -322,6 +322,12 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
         return rowInserted.toInt()
     }
 
+    fun deleteAparelho(nomeAparelho: String): Int{
+        val db = this.writableDatabase
+        val whereClause = "$KEY_NAME=?"
+        return db.delete(TABLE_APARELHO, whereClause, arrayOf(nomeAparelho))
+    }
+
     fun getAparelhosByGrupo(nomeGrupo: String): MutableList<AparelhoModel>{
         val grupo = getGrupoByName(nomeGrupo)
         val db = this.readableDatabase

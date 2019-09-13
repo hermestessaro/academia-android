@@ -11,12 +11,15 @@ import android.view.ViewGroup
 import android.widget.ExpandableListAdapter
 import android.widget.ExpandableListView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import com.example.academia.DatabaseHelper
 import com.example.academia.R
 import com.example.academia.controllers.EditGruposActivity
 import com.example.academia.models.GrupoModel
 import kotlinx.android.synthetic.*
+import kotlinx.android.synthetic.main.exercicio_list_item.*
+import kotlinx.android.synthetic.main.exercicio_list_item.view.*
 import kotlinx.android.synthetic.main.fragment_grupos.*
 
 class GruposListaFragment : Fragment() {
@@ -86,9 +89,32 @@ class GruposListaFragment : Fragment() {
         adapter = ExerciciosAdapter(context!!, titleList, listData)
         groups_lv.setAdapter(adapter)
         groups_lv.setOnChildClickListener { parent, v, groupPosition, childPosition, id ->
-            Toast.makeText(context!!, "Clicked: " + titleList[groupPosition] + " -> " + listData[titleList[groupPosition]]!!.get(childPosition), Toast.LENGTH_SHORT).show()
+            v.delete_img.setOnClickListener {
+                val name = v.expandedGrupoListItem.text.toString()
+                deleteAparelho(name)
+            }
+            //Toast.makeText(context!!, "Clicked: " + titleList[groupPosition] + " -> " + listData[titleList[groupPosition]]!!.get(childPosition), Toast.LENGTH_SHORT).show()
             false
         }
+    }
+
+    fun deleteAparelho(nomeAparelho : String){
+        val builder = AlertDialog.Builder(context!!)
+        builder.setTitle("Atenção!")
+        builder.setMessage("Tem certeza que deseja deletar o exercício $nomeAparelho?")
+        builder.setPositiveButton("Sim"){dialog, which ->
+            if(dbHelper.deleteAparelho(nomeAparelho)>0){
+                Toast.makeText(context!!, "Deletado com sucesso", Toast.LENGTH_LONG).show()
+                setUpList()
+            }
+            else { Toast.makeText(context!!, "Erro ao deletar", Toast.LENGTH_LONG).show() }
+        }
+        builder.setNegativeButton("Não"){_,_ ->
+            Toast.makeText(context!!, "Cancelado", Toast.LENGTH_LONG).show()
+        }
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
+
     }
 
 
