@@ -9,10 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper
 import android.provider.ContactsContract
 import android.util.Log
 import android.widget.Toast
-import com.example.academia.models.AlunoModel
-import com.example.academia.models.AparelhoModel
-import com.example.academia.models.GrupoModel
-import com.example.academia.models.ProfessorModel
+import com.example.academia.models.*
 import java.lang.Exception
 
 class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION) {
@@ -56,6 +53,14 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
 
     //Disponibilidade column names
     private val ID_DISP = "IdDisponibilidade"
+    private val KEY_SEG = "Segunda"
+    private val KEY_TER = "Terca"
+    private val KEY_QUA = "Quarta"
+    private val KEY_QUI = "Quinta"
+    private val KEY_SEX = "Sexta"
+    private val KEY_SAB = "Sabado"
+    private val KEY_DOM = "Domingo"
+
 
     //Professor column names
     private val ID_PROF = "IdProfessor"
@@ -95,8 +100,11 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
             "FOREIGN KEY($ID_ALUNO) REFERENCES $TABLE_ALUNO($ID_ALUNO), " +
             "FOREIGN KEY($ID_DISP) REFERENCES $TABLE_DISP($ID_DISP));"
 
-    private val CREATE_TABLE_DISP = "CREATE TABLE $TABLE_DISP ($ID_DISP int NOT NULL, " +
-            "$KEY_NAME varchar(7), PRIMARY KEY($ID_DISP));"
+    private val CREATE_TABLE_DISP = "CREATE TABLE $TABLE_DISP ($ID_DISP INTEGER PRIMARY KEY, " +
+            "$KEY_SEG BOOLEAN, $KEY_TER BOOLEAN, $KEY_QUA BOOLEAN, "+
+            "$KEY_QUI BOOLEAN, $KEY_SEX BOOLEAN, $KEY_SAB BOOLEAN, "+
+            "$KEY_DOM BOOLEAN, $ID_ALUNO INTEGER UNIQUE, "+
+            "FOREIGN KEY($ID_ALUNO) REFERENCES $TABLE_ALUNO($ID_ALUNO));"
 
     private val CREATE_TABLE_PROFESSOR = "CREATE TABLE $TABLE_PROF ($ID_PROF int NOT NULL, " +
             "$KEY_NAME varchar(100), $KEY_EMAIL varchar(45), $KEY_SENHA varchar(255), " +
@@ -233,6 +241,14 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
 
     }
 
+    fun getIdAlunoByName(name: String): Int {
+        val db = this.readableDatabase
+        val selectQuery = "SELECT * FROM $TABLE_ALUNO WHERE $KEY_NAME = '$name';"
+        val c: Cursor = db.rawQuery(selectQuery, null)
+        c.moveToLast()
+        return c.getInt(c.getColumnIndex(ID_ALUNO))
+    }
+
     fun getAllAlunos() : MutableList<AlunoModel> {
         val db = this.readableDatabase
         Log.d("primeiro", "passou")
@@ -345,6 +361,22 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
         }
 
         return aparelhos
+    }
+
+    fun saveDisp(disp: DispModel): Int{
+        val db = this.writableDatabase
+        val values: ContentValues = ContentValues()
+        values.put(KEY_SEG, disp.seg)
+        values.put(KEY_TER, disp.ter)
+        values.put(KEY_QUA, disp.qua)
+        values.put(KEY_QUI, disp.qui)
+        values.put(KEY_SEX, disp.sex)
+        values.put(KEY_SAB, disp.sab)
+        values.put(KEY_DOM, disp.dom)
+        values.put(ID_ALUNO, disp.idAluno)
+        val rowInserted = db.insert(TABLE_DISP, null, values)
+        return rowInserted.toInt()
+
     }
 
     companion object {

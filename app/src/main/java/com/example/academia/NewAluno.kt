@@ -3,15 +3,15 @@ package com.example.academia
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.academia.models.AlunoModel
+import com.example.academia.models.DispModel
 import kotlinx.android.synthetic.main.activity_new_aluno.*
 
 
 class NewAluno : AppCompatActivity() {
-    private val DB_NAME = "database.db"
-    private val DB_VERSION = 1
 
     override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
@@ -29,6 +29,8 @@ class NewAluno : AppCompatActivity() {
         }
     }
 
+
+
     fun saveAluno(){
         val dbHelper = DatabaseHelper(this)
         val nome = nome_et.text.toString()
@@ -43,9 +45,26 @@ class NewAluno : AppCompatActivity() {
         val lesoes = lesoes_et.text.toString()
         val observacoes = obs_et.text.toString()
 
+
+
         val aluno = AlunoModel(nome, data, "prof", dorPeitoAtividades, dorPeitoMes, perdaConsciencia,
                                 problemaOsseo, tabagista, diabetico, cardiaco, lesoes, observacoes, "")
         dbHelper.createAluno(aluno)
+
+        val disp = getDisp(dbHelper.getIdAlunoByName(nome))
+
+        val teste = dbHelper.saveDisp(disp)
+        Log.d("savedisp", teste.toString())
+
+    }
+
+    fun getDisp(id: Int): DispModel{
+        val disp = DispModel(check_segunda.isChecked, check_terca.isChecked,
+            check_quarta.isChecked, check_quinta.isChecked,
+            check_sexta.isChecked, check_sabado.isChecked,
+            check_domingo.isChecked, id)
+
+        return disp
 
     }
 

@@ -343,44 +343,37 @@
                     android:id="@+id/check_segunda"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/segunda"
-                    android:onClick="onCheckboxClicked"/>
+                    android:text="@string/segunda"/>
                 <CheckBox
-                        android:id="@+id/check_terca"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/terca"
-                        android:onClick="onCheckboxClicked"/>
+                    android:id="@+id/check_terca"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/terca"/>
                 <CheckBox
-                        android:id="@+id/check_quarta"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/quarta"
-                        android:onClick="onCheckboxClicked"/>
+                    android:id="@+id/check_quarta"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/quarta"/>
                 <CheckBox
-                        android:id="@+id/check_quinta"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/quinta"
-                        android:onClick="onCheckboxClicked"/>
+                    android:id="@+id/check_quinta"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/quinta"/>
                 <CheckBox
-                        android:id="@+id/check_sexta"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/sexta"
-                        android:onClick="onCheckboxClicked"/>
+                    android:id="@+id/check_sexta"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sexta"/>
                 <CheckBox
-                        android:id="@+id/check_sabado"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/sabado"
-                        android:onClick="onCheckboxClicked"/>
+                    android:id="@+id/check_sabado"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sabado"/>
                 <CheckBox
-                        android:id="@+id/check_domingo"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/domingo"
-                        android:onClick="onCheckboxClicked"/>
+                    android:id="@+id/check_domingo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/domingo"/>
             </LinearLayout>
 
         </LinearLayout>
