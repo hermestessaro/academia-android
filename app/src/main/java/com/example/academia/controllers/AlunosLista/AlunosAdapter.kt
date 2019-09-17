@@ -2,10 +2,11 @@ package com.example.academia.controllers.AlunosLista
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.AdapterView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.academia.models.AlunoModel
 
-class AlunosAdapter(private val list: List<AlunoModel>):
+class AlunosAdapter(private val list: List<AlunoModel>, val alunoListFrag: AlunosListaFragment):
     RecyclerView.Adapter<AlunosListaViewHolder>(){
 
 
@@ -16,7 +17,7 @@ class AlunosAdapter(private val list: List<AlunoModel>):
 
     override fun onBindViewHolder(holder: AlunosListaViewHolder, position: Int) {
         val aluno: AlunoModel = list[position]
-        holder.bind(aluno)
+        holder.bind(aluno, alunoListFrag)
     }
 
     override fun getItemCount(): Int {

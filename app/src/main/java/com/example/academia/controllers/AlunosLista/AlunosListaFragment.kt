@@ -5,16 +5,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ListAdapter
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.academia.DatabaseHelper
 import com.example.academia.MainActivity
 import com.example.academia.R
+import com.example.academia.controllers.AlunoDetail.AlunoDetailFragment
 import com.example.academia.models.AlunoModel
 import kotlinx.android.synthetic.main.fragment_alunos_lista.*
 
-class AlunosListaFragment : Fragment() {
+class AlunosListaFragment : Fragment(), AlunoClick {
 
     //for tests only
     /*private val mAlunos = listOf(
@@ -31,8 +33,10 @@ class AlunosListaFragment : Fragment() {
         AlunoModel(10,"Barrios","02/02/70", "Renato")
 
     )*/
-        lateinit var dbHelper: DatabaseHelper
-        lateinit var mAlunos: MutableList<AlunoModel>
+    lateinit var dbHelper: DatabaseHelper
+    lateinit var mAlunos: MutableList<AlunoModel>
+    val frag = this
+
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
@@ -52,9 +56,14 @@ class AlunosListaFragment : Fragment() {
 
         alunosRecyclerView.apply {
             layoutManager = LinearLayoutManager(activity)
-            adapter = AlunosAdapter(mAlunos)
+            adapter = AlunosAdapter(mAlunos, frag)
 
         }
+    }
+
+    override fun onAlunoClicked(aluno: AlunoModel) {
+        val main = activity as MainActivity
+        main.changesFragment(AlunoDetailFragment(), aluno)
     }
 
     companion object {

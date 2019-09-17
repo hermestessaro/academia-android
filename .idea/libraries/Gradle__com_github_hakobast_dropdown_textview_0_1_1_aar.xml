@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: com.github.hakobast:dropdown-textview:0.1.1@aar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/7bea134a5e5fc43f0e6e897e5edc7bd7/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/7bea134a5e5fc43f0e6e897e5edc7bd7/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.hakobast/dropdown-textview/0.1.1/95e2418e7d7358e79a7cf4fe073300195706b8e3/dropdown-textview-0.1.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
