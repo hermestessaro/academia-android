@@ -77,23 +77,20 @@ class MainActivity : AppCompatActivity(){
 
         navView.setNavigationItemSelectedListener { menuItem ->
             when(menuItem.itemId){
-                R.id.nav_item_one -> changesFragment(alunosFragment, null)
+                R.id.nav_item_one -> changesFragment(alunosFragment)
                 R.id.nav_item_two -> startActivity(Intent(this, NewAluno::class.java))
                 R.id.nav_item_three -> Toast.makeText(this, "treino", Toast.LENGTH_LONG).show()
                 R.id.nav_item_four -> Toast.makeText(this, "profs", Toast.LENGTH_LONG).show()
                 R.id.nav_item_five -> Toast.makeText(this, "aparelhos", Toast.LENGTH_LONG).show()
-                R.id.nav_item_six -> changesFragment(gruposFragment, null)
+                R.id.nav_item_six -> changesFragment(gruposFragment)
             }
             drawerLayout.closeDrawer(GravityCompat.START)
             true
         }
     }
 
-    fun changesFragment(fragment: Fragment, aluno: AlunoModel?){
+    fun changesFragment(fragment: Fragment){
         manager.beginTransaction().replace(R.id.content_frame, fragment).addToBackStack(null).commit()
-        if((aluno != null) and (fragment == AlunoDetailFragment())){
-            AlunoDetailFragment().setAlunoDetail(aluno!!)
-        }
     }
 
     override fun onBackPressed() {

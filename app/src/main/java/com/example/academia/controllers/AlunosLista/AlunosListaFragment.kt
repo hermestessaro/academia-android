@@ -63,7 +63,8 @@ class AlunosListaFragment : Fragment(), AlunoClick {
 
     override fun onAlunoClicked(aluno: AlunoModel) {
         val main = activity as MainActivity
-        main.changesFragment(AlunoDetailFragment(), aluno)
+        val frag = AlunoDetailFragment.newInstance(aluno)
+        main.supportFragmentManager.beginTransaction().replace(R.id.content_frame, frag).addToBackStack(null).commit()
     }
 
     companion object {

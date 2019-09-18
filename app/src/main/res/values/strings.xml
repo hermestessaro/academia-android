@@ -42,8 +42,10 @@
     <string name="lesoes">Lesões</string>
     <string name="observacoes">Observações</string>
     <string name="disponibilidade">Disponibilidade</string>
+    <string name="treinoEsp">Treino Específico</string>
     <string name="save">Salvar</string>
     <string name="save_training">Treino</string>
+    <string name="marcadores">Outros marcadores</string>
 
     <string name="segunda">Seg</string>
     <string name="terca">Ter</string>

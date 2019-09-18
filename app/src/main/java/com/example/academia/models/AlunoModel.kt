@@ -1,5 +1,10 @@
 package com.example.academia.models
 
+import android.os.Parcel
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
 class AlunoModel(
     val nome: String,
     val dataNascimento: String,
@@ -16,6 +21,4 @@ class AlunoModel(
     val treinoEspecifico: String
     //val dataInclusao: String,
     //val indicadorAtivo: Boolean
-) {
-
-}
+) : Parcelable
