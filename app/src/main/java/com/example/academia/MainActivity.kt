@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity(){
         setContentView(R.layout.activity_main)
         initView()
         //val profName = intent.getStringExtra("PROF")
-        val profName = "Renato"
+        val profName = "Prof. Renato"
         //TODO: SYNC
         //this.deleteDatabase("database.db")
         val dbHelper = DatabaseHelper(this)

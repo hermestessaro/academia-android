@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:padding="10dp">
+
+    
+    <RelativeLayout 
+        android:layout_width="wrap_content" 
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/circle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/round_identifier_orange"/>
+        <TextView
+            android:id="@+id/tipo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/circle"
+            android:layout_alignTop="@id/circle"
+            android:layout_alignRight="@+id/circle"
+            android:layout_alignBottom="@+id/circle"
+            android:layout_margin="1dp"
+            android:gravity="center"
+            android:textColor="@color/colorBlack"
+            android:textSize="20sp"
+            tools:text="A"/>
+    </RelativeLayout>
+    <TextView
+            android:id="@+id/expandedTreinoListItem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="6dp"
+            android:textSize="16sp"
+            tools:text = "treino treino"/>
+</LinearLayout>

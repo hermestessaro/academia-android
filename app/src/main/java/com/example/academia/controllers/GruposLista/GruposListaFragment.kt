@@ -8,8 +8,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ExpandableListAdapter
-import android.widget.ExpandableListView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
@@ -17,9 +15,7 @@ import com.example.academia.DatabaseHelper
 import com.example.academia.R
 import com.example.academia.controllers.EditGruposActivity
 import com.example.academia.models.GrupoModel
-import kotlinx.android.synthetic.*
-import kotlinx.android.synthetic.main.exercicio_list_item.*
-import kotlinx.android.synthetic.main.exercicio_list_item.view.*
+import kotlinx.android.synthetic.main.aparelho_list_item.view.*
 import kotlinx.android.synthetic.main.fragment_grupos.*
 
 class GruposListaFragment : Fragment() {
@@ -27,7 +23,7 @@ class GruposListaFragment : Fragment() {
     lateinit var dbHelper: DatabaseHelper
     lateinit var grupos: MutableList<GrupoModel>
     lateinit var data: HashMap<String, MutableList<String>>
-    lateinit var adapter: ExerciciosAdapter
+    lateinit var adapter: AparelhosAdapter
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
@@ -40,7 +36,6 @@ class GruposListaFragment : Fragment() {
     }
 
     fun createList(): HashMap<String, MutableList<String>> {
-        //for tests only
         grupos = dbHelper.getAllGrupos()
         val listData = HashMap<String, MutableList<String>>()
 
@@ -86,7 +81,7 @@ class GruposListaFragment : Fragment() {
         val listData = createList()
 
         val titleList = ArrayList(listData.keys)
-        adapter = ExerciciosAdapter(context!!, titleList, listData)
+        adapter = AparelhosAdapter(context!!, titleList, listData)
         groups_lv.setAdapter(adapter)
         groups_lv.setOnChildClickListener { parent, v, groupPosition, childPosition, id ->
             v.delete_img.setOnClickListener {

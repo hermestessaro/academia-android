@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:paddingHorizontal="16dp"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <Spinner
+        android:id="@+id/alunos_spinner"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="20dp"
+    />
+
+    <TextView
+        android:id="@+id/nome_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/alunos_spinner"
+        android:layout_marginTop="20dp"
+        android:text="@string/name"
+        android:textColor="@color/colorBlack"
+        android:textSize="18sp"
+    />
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/nome_tl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/nome_tv"
+        app:layout_constraintTop_toBottomOf="@id/alunos_spinner"
+        android:layout_marginLeft="10dp">
+        <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/nome_et"
+                android:layout_width="200dp"
+                android:layout_height="match_parent"
+                android:hint="Ex.: Peito e Costas"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <TextView
+            android:id="@+id/tipo_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/nome_tv"
+            android:layout_marginTop="34dp"
+            android:text="@string/tipo"
+            android:textColor="@color/colorBlack"
+            android:textSize="18sp"
+    />
+    <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tipo_tl"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@id/tipo_tv"
+            app:layout_constraintTop_toBottomOf="@id/nome_tl"
+            android:layout_marginLeft="23dp">
+        <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tipo_et"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Ex.: A"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/exerciciosRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tipo_tl"
+        android:layout_marginTop="10dp"/>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

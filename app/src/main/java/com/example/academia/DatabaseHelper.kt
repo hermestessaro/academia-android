@@ -70,6 +70,7 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
     //Treino column names
     private val ID_TREINO = "IdTreino"
     private val KEY_OBJETIVOS = "Objetivos"
+    private val KEY_TIPO = "Identificador"
 
     //Frequencia column names
     private val ID_FREQ = "IdFrequencia"
@@ -110,9 +111,9 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
             "$KEY_NAME varchar(100), $KEY_EMAIL varchar(45), $KEY_SENHA varchar(255), " +
             "$KEY_DATA_INC date, $KEY_DATA_ULT datetime, $KEY_ACTIVE varchar(1), PRIMARY KEY ($ID_PROF));"
 
-    private val CREATE_TABLE_TREINO = "CREATE TABLE $TABLE_TREINO ($ID_TREINO int NOT NULL, " +
-            "$ID_PROF int, $ID_ALUNO int, $KEY_NAME varchar(45) NULL, $KEY_OBJETIVOS varchar(200) NULL, " +
-            "$KEY_DATA_INC date, $KEY_DATA_ULT datetime, $KEY_ACTIVE varchar(1), PRIMARY KEY ($ID_TREINO)" +
+    private val CREATE_TABLE_TREINO = "CREATE TABLE $TABLE_TREINO ($ID_TREINO INTEGER PRIMARY KEY, " +
+            "$ID_PROF int, $ID_ALUNO int, $KEY_TIPO varchar (2), $KEY_NAME varchar(45) NULL," +
+            //" $KEY_OBJETIVOS varchar(200) NULL, $KEY_DATA_INC date, $KEY_DATA_ULT datetime, $KEY_ACTIVE varchar(1)" +
             "FOREIGN KEY($ID_PROF) REFERENCES $TABLE_PROF($ID_PROF), " +
             "FOREIGN KEY($ID_ALUNO) REFERENCES $TABLE_ALUNO($ID_ALUNO));"
 
@@ -120,9 +121,9 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
             "$ID_TREINO int, $DATA_FREQ datetime," +
             "FOREIGN KEY($ID_TREINO) REFERENCES $TABLE_TREINO($ID_TREINO));"
 
-    private val CREATE_TABLE_EXERCICIO = "CREATE TABLE $TABLE_EXERCICIO ($ID_EXERCICIO int NOT NULL, " +
-            "$ID_TREINO int, $ID_APARELHO int, $KEY_SERIES int, $KEY_REPS int, $KEY_PESO varchar(3), " +
-            "$KEY_DATA_ULT datetime, $KEY_ACTIVE varchar(1), PRIMARY KEY($ID_EXERCICIO), " +
+    private val CREATE_TABLE_EXERCICIO = "CREATE TABLE $TABLE_EXERCICIO ($ID_EXERCICIO INTEGER PRIMARY KEY, " +
+            "$ID_TREINO int, $ID_APARELHO int, $KEY_SERIES int, $KEY_REPS int, $KEY_PESO int, " +
+            //"$KEY_DATA_ULT datetime, $KEY_ACTIVE varchar(1)" +
             "FOREIGN KEY($ID_TREINO) REFERENCES $TABLE_TREINO($ID_TREINO)," +
             "FOREIGN KEY($ID_APARELHO) REFERENCES $TABLE_APARELHO($ID_APARELHO));"
 
@@ -377,6 +378,20 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
         val rowInserted = db.insert(TABLE_DISP, null, values)
         return rowInserted.toInt()
 
+    }
+
+    fun  getDisp(idAluno: Int): DispModel{
+        val db = this.readableDatabase
+        val selectQuery = "SELECT * FROM $TABLE_DISP WHERE $ID_ALUNO = '$idAluno'"
+        val c: Cursor = db.rawQuery(selectQuery, null)
+        c.moveToFirst()
+        val disp = DispModel(
+            c.getInt(c.getColumnIndex(KEY_SEG)) > 0,
+            c.getInt(c.getColumnIndex(KEY_TER))> 0,c.getInt(c.getColumnIndex(KEY_QUA))> 0,
+            c.getInt(c.getColumnIndex(KEY_QUI))> 0,c.getInt(c.getColumnIndex(KEY_SEX))> 0,
+            c.getInt(c.getColumnIndex(KEY_SAB))> 0,c.getInt(c.getColumnIndex(KEY_DOM))> 0,idAluno)
+
+        return disp
     }
 
     companion object {

@@ -29,8 +29,8 @@
     <string name="nao">Não</string>
 
     <!--New aluno-->
-    <string name="name">Nome</string>
-    <string name="data">Data de Nascimento</string>
+    <string name="name">Nome:</string>
+    <string name="data">Data de Nascimento:</string>
 
     <string name="dorPeitoAtividades">Você tem dor no peito provocada por atividades físicas?</string>
     <string name="dorPeitoMes">Você sentiu dor no peito no último mês?</string>
@@ -64,6 +64,10 @@
     <string name="grupo_muscular">Escolha o grupo muscular a qual o exercício pertence:</string>
     <string name="salvar">Salvar</string>
     <string name="salvo_succ">Salvo com sucesso</string>
+    <string name="series">Séries</string>
+    <string name="repeticoes">Repetições</string>
+    <string name="carga">Carga</string>
+    <string name="tipo">Tipo:</string>
 
 
     <!--Offline tests-->

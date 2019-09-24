@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" xmlns:tools="http://schemas.android.com/tools"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+    <TextView
+        android:id="@+id/nome_exercicio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:textColor="@color/colorBlack"
+        tools:text="Nome do Exercício"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/colorGrey"/>
+    <LinearLayout
+        android:id="@+id/layout_series"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        >
+        <TextView
+            android:layout_width="115dp"
+            android:layout_height="wrap_content"
+            android:text="@string/series"
+            android:textSize="22sp"
+            android:textColor="@color/colorBlack"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/series_tl"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp">
+            <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/series_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <ImageView
+            android:id="@+id/adding_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_add_circle_grey_40dp"/>
+        <ImageView
+            android:id="@+id/sub_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_remove_circle_grey_40dp"/>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+            android:id="@+id/layout_reps"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+        <TextView
+                android:layout_width="115dp"
+                android:layout_height="wrap_content"
+                android:text="@string/repeticoes"
+                android:textSize="22sp"
+                android:textColor="@color/colorBlack"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/reps_tl"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp">
+            <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/reps_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <ImageView
+                android:id="@+id/adding_button_reps"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_add_circle_grey_40dp"/>
+        <ImageView
+                android:id="@+id/sub_button_reps"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_remove_circle_grey_40dp"/>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+            android:id="@+id/layout_carga"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+    >
+        <TextView
+                android:layout_width="115dp"
+                android:layout_height="wrap_content"
+                android:text="@string/carga"
+                android:textSize="22sp"
+                android:textColor="@color/colorBlack"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/carga_tl"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp">
+            <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/carga_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <ImageView
+                android:id="@+id/adding_button_carga"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_add_circle_grey_40dp"/>
+        <ImageView
+                android:id="@+id/sub_button_carga"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_remove_circle_grey_40dp"/>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/ok"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/ok"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="114dp"
+    />
+
+</LinearLayout>

@@ -3,12 +3,10 @@ package com.example.academia.models
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
-class ExercicioModel(val id: Int,
-                     val idTreino: Int,
+class ExercicioModel(val idTreino: Int,
                      val idAparelho: Int,
+                     val nome: String,
                      val series: Int,
                      val repeticoes: Int,
-                     val peso: Int,
-                     val dataUlt: String,
-                     val indicadorAtivo: Boolean
+                     val peso: Int
 )

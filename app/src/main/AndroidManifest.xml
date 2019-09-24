@@ -26,6 +26,8 @@
         </activity>
         <activity android:name=".controllers.EditGruposActivity">
         </activity>
+        <activity android:name=".controllers.NewTreino.NewTreino">
+        </activity>
     </application>
 
 </manifest>
