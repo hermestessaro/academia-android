@@ -45,7 +45,16 @@ class AlunosListaFragment : Fragment(), AlunoClick {
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        retainInstance = true
+    }
+
+    override fun onResume() {
+        mAlunos = dbHelper.getAllAlunos()
+        alunosRecyclerView.apply {
+            layoutManager = LinearLayoutManager(activity)
+            adapter = AlunosAdapter(mAlunos, frag)
+
+        }
+        super.onResume()
     }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_alunos_lista, container, false)

@@ -12,12 +12,6 @@
     />
 
     <item
-        android:id="@+id/nav_item_three"
-        android:icon="@android:drawable/ic_info"
-        android:title="@string/see_alunos"
-    />
-
-    <item
             android:id="@+id/nav_item_four"
             android:icon="@android:drawable/ic_info"
             android:title="@string/create_treino"

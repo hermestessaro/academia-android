@@ -64,10 +64,14 @@
     <string name="grupo_muscular">Escolha o grupo muscular a qual o exercício pertence:</string>
     <string name="salvar">Salvar</string>
     <string name="salvo_succ">Salvo com sucesso</string>
+    <string name="ver_treino">Ver treino</string>
     <string name="series">Séries</string>
     <string name="repeticoes">Repetições</string>
     <string name="carga">Carga</string>
     <string name="tipo">Tipo:</string>
+    <string name="excluir_aluno">Excluir aluno</string>
+    <string name="editar_aluno">Editar aluno</string>
+    <string name="mostrar_frequencia">Mostrar frequência</string>
 
 
     <!--Offline tests-->

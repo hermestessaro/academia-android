@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/excluir_aluno_detail"
+        android:title="@string/excluir_aluno"
+    />
+    <item
+        android:id="@+id/editar_aluno_detail"
+        android:title="@string/editar_aluno"
+    />
+    <item
+        android:id="@+id/calendario_aluno_detail"
+        android:title="@string/mostrar_frequencia"
+    />
+</menu>

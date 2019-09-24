@@ -96,10 +96,10 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
             "$KEY_LESOES varchar(200) NULL, $KEY_OBS varchar(200) NULL, $KEY_TREINO_ESP varchar(200) NULL);"
             //"$KEY_DATA_INC date, $KEY_DATA_ULT datetime, $KEY_ACTIVE varchar(1));"
 
-    private val CREATE_TABLE_ALUNO_DISP = "CREATE TABLE $TABLE_ALUNO_DISP ($ID_ALUNO_DISP INTEGER PRIMARY KEY, " +
+    /*private val CREATE_TABLE_ALUNO_DISP = "CREATE TABLE $TABLE_ALUNO_DISP ($ID_ALUNO_DISP INTEGER PRIMARY KEY, " +
             "$ID_ALUNO int, $ID_DISP int, " +
             "FOREIGN KEY($ID_ALUNO) REFERENCES $TABLE_ALUNO($ID_ALUNO), " +
-            "FOREIGN KEY($ID_DISP) REFERENCES $TABLE_DISP($ID_DISP));"
+            "FOREIGN KEY($ID_DISP) REFERENCES $TABLE_DISP($ID_DISP));"*/
 
     private val CREATE_TABLE_DISP = "CREATE TABLE $TABLE_DISP ($ID_DISP INTEGER PRIMARY KEY, " +
             "$KEY_SEG BOOLEAN, $KEY_TER BOOLEAN, $KEY_QUA BOOLEAN, "+
@@ -147,7 +147,6 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
             execSQL("DROP TABLE IF EXISTS $TABLE_APARELHO")
             execSQL("DROP TABLE IF EXISTS $TABLE_GRUPO")
             execSQL(CREATE_TABLE_ALUNO)
-            execSQL(CREATE_TABLE_ALUNO_DISP)
             execSQL(CREATE_TABLE_DISP)
             execSQL(CREATE_TABLE_PROFESSOR)
             execSQL(CREATE_TABLE_TREINO)
@@ -289,6 +288,34 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
         }
 
         return alunosList
+    }
+
+    fun deleteAluno(idAluno: Int) {
+        val db = this.writableDatabase
+        val whereClause = "$ID_ALUNO=?"
+        db.delete(TABLE_ALUNO, whereClause, arrayOf(idAluno.toString()))
+        db.delete(TABLE_DISP, whereClause, arrayOf(idAluno.toString()))
+        //db.delete(TABLE_TREINO, whereClause, arrayOf(idAluno.toString()))
+    }
+
+    fun updateAluno(aluno: AlunoModel, idAluno: Int){
+        val db = this.writableDatabase
+        val values = ContentValues().apply {
+            put(KEY_NAME, aluno.nome)
+            put(KEY_NASCIMENTO, aluno.dataNascimento)
+            put(KEY_PROF, "Renato")
+            put(KEY_IND_1, aluno.dorPeitoAtividades)
+            put(KEY_IND_2, aluno.dorPeitoUltimoMes)
+            put(KEY_IND_3, aluno.perdaConsciencia)
+            put(KEY_IND_4, aluno.problemaArticular)
+            put(KEY_IND_5, aluno.tabagista)
+            put(KEY_IND_6, aluno.diabetico)
+            put(KEY_IND_7, aluno.familiarCardiaco)
+            put(KEY_LESOES, aluno.lesoes)
+            put(KEY_OBS, aluno.observacoes)
+            put(KEY_TREINO_ESP, aluno.treinoEspecifico)
+        }
+        db.update(TABLE_ALUNO, values, "$ID_ALUNO = ?", arrayOf(idAluno.toString()))
     }
 
     fun createGrupo(nomeGrupo: String){
