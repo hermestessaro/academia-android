@@ -2,15 +2,16 @@ package com.example.academia.controllers.GruposLista
 
 import android.content.Context
 import android.graphics.Typeface
+import android.media.Image
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseExpandableListAdapter
+import android.widget.ImageView
 import android.widget.TextView
 import com.example.academia.R
-import org.w3c.dom.Text
 
-class ExerciciosAdapter internal constructor(private val context: Context, private val titleList: List<String>, private val dataList: HashMap<String, MutableList<String>>)
+class AparelhosAdapter internal constructor(private val context: Context, private val titleList: List<String>, private val dataList: HashMap<String, MutableList<String>>)
     : BaseExpandableListAdapter(){
     override fun getGroup(listPosition: Int): Any {
         return this.titleList[listPosition]
@@ -29,9 +30,9 @@ class ExerciciosAdapter internal constructor(private val context: Context, priva
         val listTitle = getGroup(listPosition) as String
         if(convertView == null){
             val layoutInflater = this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            convertView = layoutInflater.inflate(R.layout.exercicio_list_group, null)
+            convertView = layoutInflater.inflate(R.layout.aparelho_list_group, null)
         }
-        val listTitleTextView = convertView!!.findViewById<TextView>(R.id.exerciciosListTitle)
+        val listTitleTextView = convertView!!.findViewById<TextView>(R.id.aparelhoListTitle)
         listTitleTextView.text = listTitle
         listTitleTextView.setTypeface(null, Typeface.BOLD)
         return convertView
@@ -54,7 +55,7 @@ class ExerciciosAdapter internal constructor(private val context: Context, priva
         val expandedListText = getChild(listPosition, expandedListPosition) as String
         if(convertView == null){
             val layoutInflater = this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            convertView = layoutInflater.inflate(R.layout.exercicio_list_item, null)
+            convertView = layoutInflater.inflate(R.layout.aparelho_list_item, null)
         }
         val expandedListTextView = convertView!!.findViewById<TextView>(R.id.expandedGrupoListItem)
         expandedListTextView.text = expandedListText
