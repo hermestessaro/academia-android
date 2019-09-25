@@ -10,10 +10,12 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.academia.DatabaseHelper
 import com.example.academia.R
+import com.example.academia.controllers.GruposLista.GruposListaFragment
+import com.example.academia.controllers.NewTreino.NewTreino
 import com.example.academia.models.ExercicioModel
 import kotlinx.android.synthetic.main.fragment_visualize_treino.*
 
-class VisualizeTreinoFragment : Fragment(), ExercicioClick {
+class VisualizeTreinoFragment(newTreino: Boolean) : Fragment(), ExercicioClick {
 
     lateinit var dbHelper: DatabaseHelper
     //lateinit var mExercicios: MutableList<ExercicioModel>
@@ -50,7 +52,8 @@ class VisualizeTreinoFragment : Fragment(), ExercicioClick {
 
     override fun onExercicioClicked(exercicio: ExercicioModel){
         if(exercicio.nome.equals("Adicionar Exercício")){
-            Toast.makeText(context, "PEI DOS GURI", Toast.LENGTH_LONG).show()
+            val main = activity as NewTreino
+            main.supportFragmentManager.beginTransaction().replace(R.id.content_frame, GruposListaFragment(true)).addToBackStack(null).commit()
         }
         else{
             Toast.makeText(context, "não é o pei dos guri", Toast.LENGTH_LONG).show()

@@ -16,11 +16,15 @@ class NewTreino : AppCompatActivity() {
         setContentView(R.layout.activity_new_treino)
 
         val new = intent.getBooleanExtra("NEW_TREINO", false)
-        val visualizeTreinofrag = VisualizeTreinoFragment()
+        val visualizeTreinofrag = VisualizeTreinoFragment(new)
         val transaction = manager.beginTransaction()
         transaction.replace(R.id.content_frame, visualizeTreinofrag)
         transaction.addToBackStack(null)
         transaction.commit()
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
     }
 
 

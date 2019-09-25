@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity(){
         toggle.syncState()
 
         val alunosFragment = AlunosListaFragment()
-        val gruposFragment = GruposListaFragment()
+        val gruposFragment = GruposListaFragment(false)
         val transaction = manager.beginTransaction()
         transaction.replace(R.id.content_frame, alunosFragment)
         transaction.addToBackStack(null)
@@ -98,7 +98,7 @@ class MainActivity : AppCompatActivity(){
         }
         else
         {
-            super.onBackPressed()
+            //super.onBackPressed()
         }
     }
 

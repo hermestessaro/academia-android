@@ -15,10 +15,11 @@ import com.example.academia.DatabaseHelper
 import com.example.academia.R
 import com.example.academia.controllers.EditGruposActivity
 import com.example.academia.models.GrupoModel
+import kotlinx.android.synthetic.main.aparelho_list_item.*
 import kotlinx.android.synthetic.main.aparelho_list_item.view.*
 import kotlinx.android.synthetic.main.fragment_grupos.*
 
-class GruposListaFragment : Fragment() {
+class GruposListaFragment(val selectingExercises: Boolean) : Fragment() {
 
     lateinit var dbHelper: DatabaseHelper
     lateinit var grupos: MutableList<GrupoModel>
@@ -83,13 +84,26 @@ class GruposListaFragment : Fragment() {
         val titleList = ArrayList(listData.keys)
         adapter = AparelhosAdapter(context!!, titleList, listData)
         groups_lv.setAdapter(adapter)
-        groups_lv.setOnChildClickListener { parent, v, groupPosition, childPosition, id ->
-            v.delete_img.setOnClickListener {
-                val name = v.expandedGrupoListItem.text.toString()
-                deleteAparelho(name)
+        if(selectingExercises){
+            groups_lv.setOnChildClickListener{ parent, v, groupPosition, childPosition, id ->
+                v.delete_img.setOnClickListener {
+                    val name = v.expandedGrupoListItem.text.toString()
+                    deleteAparelho(name)
+                }
+                //aqui vai mandar começar o popup
+                Toast.makeText(context!!, "BAUSGURIClicked: " + titleList[groupPosition] + " -> " + listData[titleList[groupPosition]]!!.get(childPosition), Toast.LENGTH_SHORT).show()
+                false
             }
-            //Toast.makeText(context!!, "Clicked: " + titleList[groupPosition] + " -> " + listData[titleList[groupPosition]]!!.get(childPosition), Toast.LENGTH_SHORT).show()
-            false
+        }
+        else {
+            groups_lv.setOnChildClickListener { parent, v, groupPosition, childPosition, id ->
+                v.delete_img.setOnClickListener {
+                    val name = v.expandedGrupoListItem.text.toString()
+                    deleteAparelho(name)
+                }
+                //Toast.makeText(context!!, "Clicked: " + titleList[groupPosition] + " -> " + listData[titleList[groupPosition]]!!.get(childPosition), Toast.LENGTH_SHORT).show()
+                false
+            }
         }
     }
 
