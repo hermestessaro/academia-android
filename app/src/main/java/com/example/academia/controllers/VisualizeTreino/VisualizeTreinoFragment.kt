@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.academia.DatabaseHelper
 import com.example.academia.R
 import com.example.academia.controllers.GruposLista.GruposListaFragment
+import com.example.academia.controllers.NewTreino.AddExercicioDialogFragment
 import com.example.academia.controllers.NewTreino.NewTreino
 import com.example.academia.models.ExercicioModel
 import kotlinx.android.synthetic.main.fragment_visualize_treino.*
@@ -59,4 +60,5 @@ class VisualizeTreinoFragment(newTreino: Boolean) : Fragment(), ExercicioClick {
             Toast.makeText(context, "não é o pei dos guri", Toast.LENGTH_LONG).show()
         }
     }
+
 }

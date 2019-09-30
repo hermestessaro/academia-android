@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import com.example.academia.DatabaseHelper
 import com.example.academia.R
 import com.example.academia.controllers.EditGruposActivity
+import com.example.academia.controllers.NewTreino.NewTreino
 import com.example.academia.models.GrupoModel
 import kotlinx.android.synthetic.main.aparelho_list_item.*
 import kotlinx.android.synthetic.main.aparelho_list_item.view.*
@@ -90,7 +91,8 @@ class GruposListaFragment(val selectingExercises: Boolean) : Fragment() {
                     val name = v.expandedGrupoListItem.text.toString()
                     deleteAparelho(name)
                 }
-                //aqui vai mandar começar o popup
+                val newTreino = activity as NewTreino
+                newTreino.callExercicioDetail()
                 Toast.makeText(context!!, "BAUSGURIClicked: " + titleList[groupPosition] + " -> " + listData[titleList[groupPosition]]!!.get(childPosition), Toast.LENGTH_SHORT).show()
                 false
             }

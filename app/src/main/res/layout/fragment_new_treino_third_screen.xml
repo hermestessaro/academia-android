@@ -45,12 +45,12 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <ImageView
-            android:id="@+id/adding_button"
+            android:id="@+id/adding_button_series"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_add_circle_grey_40dp"/>
         <ImageView
-            android:id="@+id/sub_button"
+            android:id="@+id/sub_button_series"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_remove_circle_grey_40dp"/>

@@ -27,6 +27,11 @@ class NewTreino : AppCompatActivity() {
         super.onBackPressed()
     }
 
+    fun callExercicioDetail(){
+        val fragExercicioDetail = AddExercicioDialogFragment().newInstance("pei")
+        fragExercicioDetail.show(manager.beginTransaction(), "dialog")
+    }
+
 
     companion object {
         fun start(context: Context, new: Boolean): Intent {
