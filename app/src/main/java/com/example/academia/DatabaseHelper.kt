@@ -123,7 +123,7 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
             "FOREIGN KEY($ID_TREINO) REFERENCES $TABLE_TREINO($ID_TREINO));"
 
     private val CREATE_TABLE_EXERCICIO = "CREATE TABLE $TABLE_EXERCICIO ($ID_EXERCICIO INTEGER PRIMARY KEY, " +
-            "$ID_TREINO int, $KEY_APARELHO_NAME varchar(45), $KEY_SERIES int, $KEY_REPS int, $KEY_PESO int, " +
+            "$ID_TREINO int, $ID_ALUNO int, $KEY_APARELHO_NAME varchar(45), $KEY_SERIES int, $KEY_REPS int, $KEY_PESO int, " +
             //"$KEY_DATA_ULT datetime, $KEY_ACTIVE varchar(1)" +
             "FOREIGN KEY($ID_TREINO) REFERENCES $TABLE_TREINO($ID_TREINO)," +
             "FOREIGN KEY($KEY_APARELHO_NAME) REFERENCES $TABLE_APARELHO($KEY_NAME));"
@@ -291,6 +291,37 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
         return alunosList
     }
 
+    fun getAlunoById(idAluno: Int): AlunoModel{
+        val db = this.readableDatabase
+        val selectQuery = "SELECT * FROM $TABLE_ALUNO WHERE $ID_ALUNO = $idAluno;"
+        val c: Cursor = db.rawQuery(selectQuery, null)
+        c.moveToFirst()
+        val ind1 = c.getString(c.getColumnIndex(KEY_IND_1))
+        val ind2 = c.getString(c.getColumnIndex(KEY_IND_2))
+        val ind3 = c.getString(c.getColumnIndex(KEY_IND_3))
+        val ind4 = c.getString(c.getColumnIndex(KEY_IND_4))
+        val ind5 = c.getString(c.getColumnIndex(KEY_IND_5))
+        val ind6 = c.getString(c.getColumnIndex(KEY_IND_6))
+        val ind7 = c.getString(c.getColumnIndex(KEY_IND_7))
+        val aluno = AlunoModel(c.getString(c.getColumnIndex(KEY_NAME)),
+            c.getString(c.getColumnIndex(KEY_NASCIMENTO)),
+            c.getString(c.getColumnIndex(KEY_PROF)),
+            ind1.toBoolean(),
+            ind2.toBoolean(),
+            ind3.toBoolean(),
+            ind4.toBoolean(),
+            ind5.toBoolean(),
+            ind6.toBoolean(),
+            ind7.toBoolean(),
+            c.getString(c.getColumnIndex(KEY_LESOES)),
+            c.getString(c.getColumnIndex(KEY_OBS)),
+            c.getString(c.getColumnIndex(KEY_TREINO_ESP)))
+        //c.getString(c.getColumnIndex(KEY_DATA_INC)),
+        //c.getString(c.getColumnIndex(KEY_ACTIVE))!!.toBoolean())
+
+        return aluno
+    }
+
     fun deleteAluno(idAluno: Int) {
         val db = this.writableDatabase
         val whereClause = "$ID_ALUNO=?"
@@ -424,7 +455,7 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
 
     fun getTreinosByIdAluno(idAluno: Int) : MutableList<TreinoModel>{
         val db = this.readableDatabase
-        val selectQuery = "SELECT * FROM $TABLE_TREINO WHERE $ID_ALUNO = '$idAluno'"
+        val selectQuery = "SELECT * FROM $TABLE_TREINO WHERE $ID_ALUNO = $idAluno"
         val treinos: MutableList<TreinoModel> = ArrayList()
         val c: Cursor = db.rawQuery(selectQuery, null)
         if(c.moveToFirst()) {
@@ -443,14 +474,15 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
         return treinos
     }
 
-    fun getExerciciosByIdTreino(id: Int): MutableList<ExercicioModel>{
+    fun getExerciciosByIdTreino(id: Int, idAluno: Int): MutableList<ExercicioModel>{
         val db = this.readableDatabase
-        val selectQuery = "SELECT * FROM $TABLE_EXERCICIO WHERE $ID_TREINO = $id"
+        val selectQuery = "SELECT * FROM $TABLE_EXERCICIO WHERE $ID_TREINO = $id AND $ID_ALUNO = $idAluno"
         val exercicios: MutableList<ExercicioModel> = ArrayList()
         val c: Cursor = db.rawQuery(selectQuery, null)
         if(c.moveToFirst()) {
             do {
                 val exercicio = ExercicioModel(c.getInt(c.getColumnIndex(ID_TREINO)),
+                    c.getInt(c.getColumnIndex(ID_ALUNO)),
                     c.getString(c.getColumnIndex(KEY_APARELHO_NAME)),
                     //c.getString(c.getColumnIndex(KEY_NAME)),
                     c.getInt(c.getColumnIndex(KEY_SERIES)),
@@ -470,13 +502,27 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
         val db = this.writableDatabase
         val values = ContentValues()
         values.put(ID_TREINO, exercicio.idTreino)
+        values.put(ID_ALUNO, exercicio.idAluno)
         values.put(KEY_APARELHO_NAME, exercicio.nomeAparelho)
         values.put(KEY_SERIES, exercicio.series)
         values.put(KEY_REPS, exercicio.repeticoes)
         values.put(KEY_PESO, exercicio.peso)
         val row = db.insert(TABLE_EXERCICIO, null, values)
-        Log.d("row", row.toString())
+        Log.d("rowExercicio", row.toString())
     }
+
+    fun saveTreino(treino: TreinoModel){
+        val db = this.writableDatabase
+        val values = ContentValues()
+        values.put(ID_TREINO, treino.idTreino)
+        values.put(ID_PROF, treino.idProf)
+        values.put(ID_ALUNO, treino.idAluno)
+        values.put(KEY_TIPO, treino.tipo)
+        values.put(KEY_NAME, treino.nome)
+        val row = db.insert(TABLE_TREINO, null, values)
+        Log.d("rowTreino", row.toString())
+    }
+
 
     companion object {
         private val DB_NAME = "database.db"

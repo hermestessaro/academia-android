@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,9 +16,10 @@ import com.example.academia.controllers.GruposLista.GruposListaFragment
 import com.example.academia.controllers.NewTreino.AddExercicioDialogFragment
 import com.example.academia.controllers.NewTreino.NewTreino
 import com.example.academia.models.ExercicioModel
+import com.example.academia.models.TreinoModel
 import kotlinx.android.synthetic.main.fragment_visualize_treino.*
 
-class VisualizeTreinoFragment(val newTreino: Boolean, val idTreino: Int, val idAluno: Int) : Fragment(), ExercicioClick {
+class VisualizeTreinoFragment(val newTreino: Boolean, val idTreino: Int, val idAluno: Int?) : Fragment(), ExercicioClick {
 
     lateinit var dbHelper: DatabaseHelper
     var mExercicios: MutableList<ExercicioModel> = ArrayList()
@@ -30,8 +32,8 @@ class VisualizeTreinoFragment(val newTreino: Boolean, val idTreino: Int, val idA
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d("idTreino", idTreino.toString())
-        mExercicios = dbHelper.getExerciciosByIdTreino(idTreino)
-        mExercicios.add(ExercicioModel(-1, "Adicionar Exercício", -1, -1, -1))
+        mExercicios = dbHelper.getExerciciosByIdTreino(idTreino, idAluno!!)
+        mExercicios.add(ExercicioModel(-1, -1,"Adicionar Exercício", -1, -1, -1))
         super.onCreate(savedInstanceState)
     }
 
@@ -42,6 +44,22 @@ class VisualizeTreinoFragment(val newTreino: Boolean, val idTreino: Int, val idA
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val spinner = alunos_spinner
+        val alunos_names = ArrayList<String>()
+        if(idAluno != null){
+            val aluno = dbHelper.getAlunoById(idAluno)
+            alunos_names.add(aluno.nome)
+        }
+        else{
+            val alunos = dbHelper.getAllAlunos()
+            for(item in alunos){
+                alunos_names.add(item.nome)
+            }
+        }
+
+        val spinner_adapter = ArrayAdapter(context!!, android.R.layout.simple_spinner_dropdown_item, alunos_names)
+        spinner.adapter = spinner_adapter
+
         exerciciosRecyclerView.apply {
             layoutManager = LinearLayoutManager(activity)
             adapter = ExerciciosAdapter(mExercicios, frag)
@@ -49,21 +67,30 @@ class VisualizeTreinoFragment(val newTreino: Boolean, val idTreino: Int, val idA
 
         salvar_treino.setOnClickListener {
             saveTreino()
+            activity!!.finish()
         }
     }
 
     fun saveTreino(){
-        /*val idTreino: Int,
-        val idProf: Int,
-        val idAluno: Int,
-        val nome: String,
-        val tipo: String*/
+        val aluno_nome = alunos_spinner.selectedItem.toString()
+        val treino_nome = nome_et.text.toString()
+        val tipo_treino = tipo_et.text.toString()
+        var auxIdAluno = -1
+        if(idAluno==null){
+            auxIdAluno = dbHelper.getIdAlunoByName(aluno_nome)
+        }
+        else{
+            auxIdAluno = idAluno
+        }
+
+        val treino = TreinoModel(idTreino, 0, auxIdAluno, treino_nome, tipo_treino)
+        dbHelper.saveTreino(treino)
     }
 
     override fun onExercicioClicked(exercicio: ExercicioModel){
         if(exercicio.nomeAparelho.equals("Adicionar Exercício")){
             val main = activity as NewTreino
-            main.supportFragmentManager.beginTransaction().replace(R.id.content_frame, GruposListaFragment(true, idTreino)).addToBackStack(null).commit()
+            main.supportFragmentManager.beginTransaction().replace(R.id.content_frame, GruposListaFragment(true, idTreino, idAluno)).addToBackStack(null).commit()
         }
         else{
             Toast.makeText(context, "não é o pei dos guri", Toast.LENGTH_LONG).show()

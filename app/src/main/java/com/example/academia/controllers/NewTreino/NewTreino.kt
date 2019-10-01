@@ -18,12 +18,13 @@ class NewTreino : AppCompatActivity() {
 
         val new = intent.getBooleanExtra("NEW_TREINO", false)
         val size = intent.getIntExtra("treinosSize", -1)
+        val id = intent.getIntExtra("idAluno", -1)
         Log.d("qte treinos", size.toString())
 
         //idTreino é igual a size porque não quero idTreino que seja 0, se não houver nenhum, vai ser 1
         //vai ser usado pra criação do treino no banco de dados
         val idTreino = size
-        val visualizeTreinofrag = VisualizeTreinoFragment(new, idTreino)
+        val visualizeTreinofrag = VisualizeTreinoFragment(new, idTreino, id)
         val transaction = manager.beginTransaction()
         transaction.replace(R.id.content_frame, visualizeTreinofrag)
         transaction.addToBackStack(null)
@@ -34,17 +35,18 @@ class NewTreino : AppCompatActivity() {
         super.onBackPressed()
     }
 
-    fun callExercicioDetail(nome: String, idTreino: Int){
-        val fragExercicioDetail = AddExercicioDialogFragment().newInstance(nome, idTreino)
+    fun callExercicioDetail(nome: String, idTreino: Int, idAluno: Int?){
+        val fragExercicioDetail = AddExercicioDialogFragment().newInstance(nome, idTreino, idAluno)
         fragExercicioDetail.show(manager.beginTransaction(), "dialog")
     }
 
 
     companion object {
-        fun start(context: Context, new: Boolean, treinosSize: Int): Intent {
+        fun start(context: Context, new: Boolean, treinosSize: Int, idAluno: Int): Intent {
             val intent = Intent(context, NewTreino::class.java)
             intent.putExtra("NEW_TREINO", new)
             intent.putExtra("treinosSize", treinosSize)
+            intent.putExtra("idAluno", idAluno)
             return intent
         }
     }

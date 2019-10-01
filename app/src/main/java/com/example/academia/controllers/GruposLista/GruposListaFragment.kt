@@ -20,7 +20,7 @@ import kotlinx.android.synthetic.main.aparelho_list_item.*
 import kotlinx.android.synthetic.main.aparelho_list_item.view.*
 import kotlinx.android.synthetic.main.fragment_grupos.*
 
-class GruposListaFragment(val selectingExercises: Boolean, val idTreino: Int) : Fragment() {
+class GruposListaFragment(val selectingExercises: Boolean, val idTreino: Int, val idAluno: Int?) : Fragment() {
 
     lateinit var dbHelper: DatabaseHelper
     lateinit var grupos: MutableList<GrupoModel>
@@ -47,7 +47,7 @@ class GruposListaFragment(val selectingExercises: Boolean, val idTreino: Int) : 
             for(aparelho in aparelhosList){
                 aparelhosListNames.add(aparelho.nome)
             }
-            Log.d("names", item.nome)
+            //Log.d("names", item.nome)
             listData[item.nome] = aparelhosListNames
         }
 
@@ -92,7 +92,7 @@ class GruposListaFragment(val selectingExercises: Boolean, val idTreino: Int) : 
                     deleteAparelho(name)
                 }
                 val newTreino = activity as NewTreino
-                newTreino.callExercicioDetail(v.expandedGrupoListItem.text.toString(), idTreino)
+                newTreino.callExercicioDetail(v.expandedGrupoListItem.text.toString(), idTreino, idAluno)
                 Toast.makeText(context!!, "BAUSGURIClicked: " + titleList[groupPosition] + " -> " + listData[titleList[groupPosition]]!!.get(childPosition), Toast.LENGTH_SHORT).show()
                 false
             }

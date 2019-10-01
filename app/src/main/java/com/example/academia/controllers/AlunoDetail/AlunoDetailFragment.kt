@@ -41,6 +41,7 @@ class AlunoDetailFragment() : Fragment() {
             this.aluno = arguments!!.getParcelable("alunoClicked")!!
         }
         Log.d("nome", this.aluno.nome)
+        idAluno = dbHelper.getIdAlunoByName(this.aluno.nome)
 
 
     }
@@ -88,7 +89,7 @@ class AlunoDetailFragment() : Fragment() {
         val dropdownTreino = dropdown_treino_esp
         val dropdownLesoes = dropdown_lesoes
 
-        idAluno = dbHelper.getIdAlunoByName(aluno.nome)
+        //idAluno = dbHelper.getIdAlunoByName(aluno.nome)
         val disp = dbHelper.getDisp(idAluno)
 
         if(disp.seg) { day_1.setBackgroundColor(resources.getColor(R.color.colorGreen)) }
@@ -136,7 +137,7 @@ class AlunoDetailFragment() : Fragment() {
             if(childPosition == lastIndex){
                 new = true
             }
-            val intent = NewTreino.start(context!!, new, listData.size)
+            val intent = NewTreino.start(context!!, new, listData.size, idAluno)
             startActivity(intent)
             Toast.makeText(context!!, "Clicked: " + titleList[groupPosition] + " -> " + listData[titleList[groupPosition]]!!.get(childPosition), Toast.LENGTH_SHORT).show()
             false

@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity(){
         //val profName = intent.getStringExtra("PROF")
         val profName = "Prof. Renato"
         //TODO: SYNC
-        //this.deleteDatabase("database.db")
+        this.deleteDatabase("database.db")
         val dbHelper = DatabaseHelper(this)
 
         dbHelper.createGrupo("Peito")
@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity(){
         toggle.syncState()
 
         val alunosFragment = AlunosListaFragment()
-        val gruposFragment = GruposListaFragment(false, -1)
+        val gruposFragment = GruposListaFragment(false, -1, null)
         val transaction = manager.beginTransaction()
         transaction.replace(R.id.content_frame, alunosFragment)
         transaction.addToBackStack(null)

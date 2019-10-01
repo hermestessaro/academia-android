@@ -23,11 +23,13 @@ class AddExercicioDialogFragment : DialogFragment() {
     lateinit var dbHelper: DatabaseHelper
     var nome: String? = ""
     var idTreino: Int? = -1
+    var idAluno: Int? = -1
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         nome = arguments?.getString("nome")
         idTreino = arguments?.getInt("idTreino")
+        idAluno = arguments?.getInt("idAluno")
         val style = DialogFragment.STYLE_NO_FRAME
         val theme = R.style.ExercicioDialogFrag
         setStyle(style, theme)
@@ -75,19 +77,22 @@ class AddExercicioDialogFragment : DialogFragment() {
 
     fun saveExercicio(s: Int, r: Int, c: Int){
 
-        val exercicio = ExercicioModel(idTreino!!, nome!!, s, r, c)
+        val exercicio = ExercicioModel(idTreino!!, idAluno!!, nome!!, s, r, c)
         dbHelper.saveExercicio(exercicio)
         val main = activity as NewTreino
-        main.supportFragmentManager.beginTransaction().replace(R.id.content_frame, VisualizeTreinoFragment(true, idTreino!!)).addToBackStack(null).commit()
+        main.supportFragmentManager.beginTransaction().replace(R.id.content_frame, VisualizeTreinoFragment(true, idTreino!!, idAluno)).addToBackStack(null).commit()
         dismiss()
     }
 
-    fun newInstance(content: String, id: Int): AddExercicioDialogFragment {
+    fun newInstance(content: String, id: Int, aluno: Int?): AddExercicioDialogFragment {
         val frag = AddExercicioDialogFragment()
 
         val args = Bundle()
         args.putString("nome", content)
         args.putInt("idTreino", id)
+        if(aluno != null) {
+            args.putInt("idAluno", aluno)
+        }
         frag.arguments = args
 
         return frag
