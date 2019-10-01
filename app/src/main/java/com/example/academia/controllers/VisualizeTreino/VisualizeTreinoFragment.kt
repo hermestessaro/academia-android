@@ -2,6 +2,7 @@ package com.example.academia.controllers.VisualizeTreino
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,24 +17,21 @@ import com.example.academia.controllers.NewTreino.NewTreino
 import com.example.academia.models.ExercicioModel
 import kotlinx.android.synthetic.main.fragment_visualize_treino.*
 
-class VisualizeTreinoFragment(newTreino: Boolean) : Fragment(), ExercicioClick {
+class VisualizeTreinoFragment(val newTreino: Boolean, val idTreino: Int, val idAluno: Int) : Fragment(), ExercicioClick {
 
     lateinit var dbHelper: DatabaseHelper
-    //lateinit var mExercicios: MutableList<ExercicioModel>
+    var mExercicios: MutableList<ExercicioModel> = ArrayList()
     val frag = this
 
-    //tests
-    private val mExercicios = listOf(
-        ExercicioModel(1,1, "Supino vertical", 4, 8, 30),
-        ExercicioModel(1, 2, "Supino inclinado", 4, 8, 20),
-        ExercicioModel(-1, -1, "Adicionar Exercício", -1, -1, -1)
-    )
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
         dbHelper = DatabaseHelper(activity)
     }
     override fun onCreate(savedInstanceState: Bundle?) {
+        Log.d("idTreino", idTreino.toString())
+        mExercicios = dbHelper.getExerciciosByIdTreino(idTreino)
+        mExercicios.add(ExercicioModel(-1, "Adicionar Exercício", -1, -1, -1))
         super.onCreate(savedInstanceState)
     }
 
@@ -47,14 +45,25 @@ class VisualizeTreinoFragment(newTreino: Boolean) : Fragment(), ExercicioClick {
         exerciciosRecyclerView.apply {
             layoutManager = LinearLayoutManager(activity)
             adapter = ExerciciosAdapter(mExercicios, frag)
+        }
 
+        salvar_treino.setOnClickListener {
+            saveTreino()
         }
     }
 
+    fun saveTreino(){
+        /*val idTreino: Int,
+        val idProf: Int,
+        val idAluno: Int,
+        val nome: String,
+        val tipo: String*/
+    }
+
     override fun onExercicioClicked(exercicio: ExercicioModel){
-        if(exercicio.nome.equals("Adicionar Exercício")){
+        if(exercicio.nomeAparelho.equals("Adicionar Exercício")){
             val main = activity as NewTreino
-            main.supportFragmentManager.beginTransaction().replace(R.id.content_frame, GruposListaFragment(true)).addToBackStack(null).commit()
+            main.supportFragmentManager.beginTransaction().replace(R.id.content_frame, GruposListaFragment(true, idTreino)).addToBackStack(null).commit()
         }
         else{
             Toast.makeText(context, "não é o pei dos guri", Toast.LENGTH_LONG).show()

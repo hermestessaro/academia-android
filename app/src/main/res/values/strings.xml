@@ -72,6 +72,7 @@
     <string name="excluir_aluno">Excluir aluno</string>
     <string name="editar_aluno">Editar aluno</string>
     <string name="mostrar_frequencia">Mostrar frequência</string>
+    <string name="salvar_treino">Salvar Treino</string>
 
 
     <!--Offline tests-->

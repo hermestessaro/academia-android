@@ -14,6 +14,7 @@ import com.example.academia.R
 import com.example.academia.controllers.NewTreino.NewTreino
 import com.example.academia.controllers.VisualizeTreino.ExerciciosAdapter
 import com.example.academia.models.AlunoModel
+import com.example.academia.models.TreinoModel
 import kotlinx.android.synthetic.main.detail_header.view.*
 import kotlinx.android.synthetic.main.fragment_aluno_detail.*
 import kotlinx.android.synthetic.main.fragment_aluno_detail.view.*
@@ -107,13 +108,14 @@ class AlunoDetailFragment() : Fragment() {
 
     }
 
-    fun createList(): HashMap<String, MutableList<String>> {
-        val listData = HashMap<String, MutableList<String>>()
+    fun createList(): HashMap<String, MutableList<TreinoModel>> {
+        val listData = HashMap<String, MutableList<TreinoModel>>()
+        val data = dbHelper.getTreinosByIdAluno(idAluno)
 
-        val data = mutableListOf<String>("Peitos e triceps", "Costas e biceps", "Pernas e biceps")
+
 
         //mesmo fora de testes, isso vai continuar aqui
-        data.add("Criar rotina")
+        data.add(TreinoModel(-1, 0, idAluno, "Criar rotina", ""))
         lastIndex = data.lastIndex
 
 
@@ -134,7 +136,7 @@ class AlunoDetailFragment() : Fragment() {
             if(childPosition == lastIndex){
                 new = true
             }
-            val intent = NewTreino.start(context!!, new)
+            val intent = NewTreino.start(context!!, new, listData.size)
             startActivity(intent)
             Toast.makeText(context!!, "Clicked: " + titleList[groupPosition] + " -> " + listData[titleList[groupPosition]]!!.get(childPosition), Toast.LENGTH_SHORT).show()
             false

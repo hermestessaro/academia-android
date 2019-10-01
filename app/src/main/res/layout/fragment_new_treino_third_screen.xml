@@ -39,9 +39,11 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp">
             <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/series_et"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
+                android:id="@+id/series_et"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="number"
+            />
         </com.google.android.material.textfield.TextInputLayout>
 
         <ImageView
@@ -79,7 +81,8 @@
             <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/reps_et"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="match_parent"
+                    android:inputType="number" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <ImageView
@@ -118,7 +121,8 @@
             <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/carga_et"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="match_parent"
+                    android:inputType="number" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <ImageView

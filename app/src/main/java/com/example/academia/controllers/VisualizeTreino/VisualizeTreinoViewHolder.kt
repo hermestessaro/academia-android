@@ -19,8 +19,11 @@ RecyclerView.ViewHolder(inflater.inflate(R.layout.exercicio_lista_view, parent, 
     }
 
     fun bind(exercicio: ExercicioModel, visualizeTreinoFrag: VisualizeTreinoFragment) {
-        mNameView?.text = exercicio.nome
-        val infoText = "Séries: ${exercicio.series} Reps: ${exercicio.repeticoes} Carga: ${exercicio.peso}"
+        mNameView?.text = exercicio.nomeAparelho
+        var infoText = ""
+        if(exercicio.nomeAparelho != "Adicionar Exercício"){
+            infoText = "Séries: ${exercicio.series} Reps: ${exercicio.repeticoes} Carga: ${exercicio.peso}"
+        }
         mInfoView?.text = infoText
         itemView.setOnClickListener{
             visualizeTreinoFrag.onExercicioClicked(exercicio)

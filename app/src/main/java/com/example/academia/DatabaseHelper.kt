@@ -71,6 +71,7 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
     private val ID_TREINO = "IdTreino"
     private val KEY_OBJETIVOS = "Objetivos"
     private val KEY_TIPO = "Identificador"
+    private val KEY_APARELHO_NAME = "NomeAparelho"
 
     //Frequencia column names
     private val ID_FREQ = "IdFrequencia"
@@ -111,7 +112,7 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
             "$KEY_NAME varchar(100), $KEY_EMAIL varchar(45), $KEY_SENHA varchar(255), " +
             "$KEY_DATA_INC date, $KEY_DATA_ULT datetime, $KEY_ACTIVE varchar(1), PRIMARY KEY ($ID_PROF));"
 
-    private val CREATE_TABLE_TREINO = "CREATE TABLE $TABLE_TREINO ($ID_TREINO INTEGER PRIMARY KEY, " +
+    private val CREATE_TABLE_TREINO = "CREATE TABLE $TABLE_TREINO ($ID_TREINO INTEGER, " +
             "$ID_PROF int, $ID_ALUNO int, $KEY_TIPO varchar (2), $KEY_NAME varchar(45) NULL," +
             //" $KEY_OBJETIVOS varchar(200) NULL, $KEY_DATA_INC date, $KEY_DATA_ULT datetime, $KEY_ACTIVE varchar(1)" +
             "FOREIGN KEY($ID_PROF) REFERENCES $TABLE_PROF($ID_PROF), " +
@@ -122,10 +123,10 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
             "FOREIGN KEY($ID_TREINO) REFERENCES $TABLE_TREINO($ID_TREINO));"
 
     private val CREATE_TABLE_EXERCICIO = "CREATE TABLE $TABLE_EXERCICIO ($ID_EXERCICIO INTEGER PRIMARY KEY, " +
-            "$ID_TREINO int, $ID_APARELHO int, $KEY_SERIES int, $KEY_REPS int, $KEY_PESO int, " +
+            "$ID_TREINO int, $KEY_APARELHO_NAME varchar(45), $KEY_SERIES int, $KEY_REPS int, $KEY_PESO int, " +
             //"$KEY_DATA_ULT datetime, $KEY_ACTIVE varchar(1)" +
             "FOREIGN KEY($ID_TREINO) REFERENCES $TABLE_TREINO($ID_TREINO)," +
-            "FOREIGN KEY($ID_APARELHO) REFERENCES $TABLE_APARELHO($ID_APARELHO));"
+            "FOREIGN KEY($KEY_APARELHO_NAME) REFERENCES $TABLE_APARELHO($KEY_NAME));"
 
     private val CREATE_TABLE_APARELHO = "CREATE TABLE $TABLE_APARELHO ($ID_APARELHO INTEGER PRIMARY KEY, " +
             "$ID_GRUPO int, $KEY_NAME varchar(45) UNIQUE, " +
@@ -419,6 +420,62 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
             c.getInt(c.getColumnIndex(KEY_SAB))> 0,c.getInt(c.getColumnIndex(KEY_DOM))> 0,idAluno)
 
         return disp
+    }
+
+    fun getTreinosByIdAluno(idAluno: Int) : MutableList<TreinoModel>{
+        val db = this.readableDatabase
+        val selectQuery = "SELECT * FROM $TABLE_TREINO WHERE $ID_ALUNO = '$idAluno'"
+        val treinos: MutableList<TreinoModel> = ArrayList()
+        val c: Cursor = db.rawQuery(selectQuery, null)
+        if(c.moveToFirst()) {
+            do {
+                val treino = TreinoModel(c.getInt(c.getColumnIndex(ID_TREINO)),
+                    c.getInt(c.getColumnIndex(ID_PROF)),
+                    c.getInt(c.getColumnIndex(ID_ALUNO)),
+                    c.getString(c.getColumnIndex(KEY_NAME)),
+                    c.getString(c.getColumnIndex(KEY_TIPO))
+                )
+                treinos.add(treino)
+
+            } while (c.moveToNext())
+        }
+
+        return treinos
+    }
+
+    fun getExerciciosByIdTreino(id: Int): MutableList<ExercicioModel>{
+        val db = this.readableDatabase
+        val selectQuery = "SELECT * FROM $TABLE_EXERCICIO WHERE $ID_TREINO = $id"
+        val exercicios: MutableList<ExercicioModel> = ArrayList()
+        val c: Cursor = db.rawQuery(selectQuery, null)
+        if(c.moveToFirst()) {
+            do {
+                val exercicio = ExercicioModel(c.getInt(c.getColumnIndex(ID_TREINO)),
+                    c.getString(c.getColumnIndex(KEY_APARELHO_NAME)),
+                    //c.getString(c.getColumnIndex(KEY_NAME)),
+                    c.getInt(c.getColumnIndex(KEY_SERIES)),
+                    c.getInt(c.getColumnIndex(KEY_REPS)),
+                    c.getInt(c.getColumnIndex(KEY_PESO))
+                )
+                exercicios.add(exercicio)
+
+            } while (c.moveToNext())
+        }
+
+        return exercicios
+    }
+
+    fun saveExercicio(exercicio: ExercicioModel){
+
+        val db = this.writableDatabase
+        val values = ContentValues()
+        values.put(ID_TREINO, exercicio.idTreino)
+        values.put(KEY_APARELHO_NAME, exercicio.nomeAparelho)
+        values.put(KEY_SERIES, exercicio.series)
+        values.put(KEY_REPS, exercicio.repeticoes)
+        values.put(KEY_PESO, exercicio.peso)
+        val row = db.insert(TABLE_EXERCICIO, null, values)
+        Log.d("row", row.toString())
     }
 
     companion object {

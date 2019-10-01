@@ -20,7 +20,7 @@ import kotlinx.android.synthetic.main.aparelho_list_item.*
 import kotlinx.android.synthetic.main.aparelho_list_item.view.*
 import kotlinx.android.synthetic.main.fragment_grupos.*
 
-class GruposListaFragment(val selectingExercises: Boolean) : Fragment() {
+class GruposListaFragment(val selectingExercises: Boolean, val idTreino: Int) : Fragment() {
 
     lateinit var dbHelper: DatabaseHelper
     lateinit var grupos: MutableList<GrupoModel>
@@ -92,7 +92,7 @@ class GruposListaFragment(val selectingExercises: Boolean) : Fragment() {
                     deleteAparelho(name)
                 }
                 val newTreino = activity as NewTreino
-                newTreino.callExercicioDetail()
+                newTreino.callExercicioDetail(v.expandedGrupoListItem.text.toString(), idTreino)
                 Toast.makeText(context!!, "BAUSGURIClicked: " + titleList[groupPosition] + " -> " + listData[titleList[groupPosition]]!!.get(childPosition), Toast.LENGTH_SHORT).show()
                 false
             }
