@@ -474,6 +474,21 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
         return treinos
     }
 
+    fun getTreinoById(idTreino: Int, idAluno: Int) : TreinoModel{
+        val db = this.readableDatabase
+        val selectQuery = "SELECT * FROM $TABLE_TREINO WHERE $ID_TREINO = $idTreino AND $ID_ALUNO = $idAluno"
+        val c: Cursor = db.rawQuery(selectQuery, null)
+        c.moveToFirst()
+        val treino = TreinoModel(c.getInt(c.getColumnIndex(ID_TREINO)),
+            c.getInt(c.getColumnIndex(ID_PROF)),
+            c.getInt(c.getColumnIndex(ID_ALUNO)),
+            c.getString(c.getColumnIndex(KEY_NAME)),
+            c.getString(c.getColumnIndex(KEY_TIPO))
+        )
+
+        return treino
+    }
+
     fun getExerciciosByIdTreino(id: Int, idAluno: Int): MutableList<ExercicioModel>{
         val db = this.readableDatabase
         val selectQuery = "SELECT * FROM $TABLE_EXERCICIO WHERE $ID_TREINO = $id AND $ID_ALUNO = $idAluno"

@@ -80,7 +80,8 @@ class AddExercicioDialogFragment : DialogFragment() {
         val exercicio = ExercicioModel(idTreino!!, idAluno!!, nome!!, s, r, c)
         dbHelper.saveExercicio(exercicio)
         val main = activity as NewTreino
-        main.supportFragmentManager.beginTransaction().replace(R.id.content_frame, VisualizeTreinoFragment(true, idTreino!!, idAluno)).addToBackStack(null).commit()
+        main.supportFragmentManager.popBackStack()
+        //main.supportFragmentManager.beginTransaction().replace(R.id.content_frame, VisualizeTreinoFragment(false, idTreino!!, idAluno)).addToBackStack(null).commit()
         dismiss()
     }
 

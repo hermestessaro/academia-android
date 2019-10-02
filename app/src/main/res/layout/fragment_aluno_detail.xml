@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
@@ -23,7 +24,7 @@
     <ExpandableListView
         android:id="@+id/treinos_lv"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="200dp"
         android:dividerHeight="0.5dp"
         android:layout_marginTop="10dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -48,7 +49,7 @@
         app:panel_padding="2dp"
 
     />
-    <hakobastvatsatryan.DropdownTextView
+    <!--<hakobastvatsatryan.DropdownTextView
         android:id="@+id/dropdown_treino_esp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -84,7 +85,7 @@
         app:panel_padding="10dp"
 
     />
-    <!--<hakobastvatsatryan.DropdownTextView
+    <hakobastvatsatryan.DropdownTextView
         android:id="@+id/dropdown_indicacoes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

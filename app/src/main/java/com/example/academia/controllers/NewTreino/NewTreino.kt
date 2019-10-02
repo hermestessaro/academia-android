@@ -17,13 +17,13 @@ class NewTreino : AppCompatActivity() {
         setContentView(R.layout.activity_new_treino)
 
         val new = intent.getBooleanExtra("NEW_TREINO", false)
-        val size = intent.getIntExtra("treinosSize", -1)
+        val clickedChild = intent.getIntExtra("treinosSize", -1)
         val id = intent.getIntExtra("idAluno", -1)
-        Log.d("qte treinos", size.toString())
+        Log.d("clicked child", clickedChild.toString())
 
         //idTreino é igual a size porque não quero idTreino que seja 0, se não houver nenhum, vai ser 1
         //vai ser usado pra criação do treino no banco de dados
-        val idTreino = size
+        val idTreino = clickedChild+1
         val visualizeTreinofrag = VisualizeTreinoFragment(new, idTreino, id)
         val transaction = manager.beginTransaction()
         transaction.replace(R.id.content_frame, visualizeTreinofrag)
@@ -32,7 +32,13 @@ class NewTreino : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        super.onBackPressed()
+        Log.d("entry_count", manager.backStackEntryCount.toString())
+        if(manager.backStackEntryCount == 1){
+            finish()
+        }
+        else{
+            super.onBackPressed()
+        }
     }
 
     fun callExercicioDetail(nome: String, idTreino: Int, idAluno: Int?){

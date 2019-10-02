@@ -42,8 +42,11 @@ class AlunoDetailFragment() : Fragment() {
         }
         Log.d("nome", this.aluno.nome)
         idAluno = dbHelper.getIdAlunoByName(this.aluno.nome)
+    }
 
-
+    override fun onResume() {
+        setUpView()
+        super.onResume()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -86,8 +89,8 @@ class AlunoDetailFragment() : Fragment() {
     fun setUpView(){
         setUpList()
         val dropdownObs = dropdown_obs
-        val dropdownTreino = dropdown_treino_esp
-        val dropdownLesoes = dropdown_lesoes
+        //val dropdownTreino = dropdown_treino_esp
+        //val dropdownLesoes = dropdown_lesoes
 
         //idAluno = dbHelper.getIdAlunoByName(aluno.nome)
         val disp = dbHelper.getDisp(idAluno)
@@ -104,16 +107,37 @@ class AlunoDetailFragment() : Fragment() {
         container.nome_aluno.text = aluno.nome
         container.data_nascimento.text = aluno.dataNascimento
         container.prof.text = aluno.prof
-        dropdownObs.setContentText(aluno.observacoes)
-        dropdownLesoes.setContentText(aluno.lesoes)
+        dropdownObs.setContentText(setObservations())
+        //dropdownLesoes.setContentText(aluno.lesoes)
 
+    }
+
+    fun setObservations(): String{
+        var final_text = "Observações: ${aluno.observacoes}\nLesões: ${aluno.lesoes}\n"
+        val auxDorAtividades = "Dor no peito por atividades: "
+        val auxDorUltimoMes = "Dor no peito no último mês: "
+        val auxPerdaConsciencia = "Já perdeu a consciência: "
+        val auxProblemaArticular = "Possui problema ósseo ou articular: "
+        val auxTabagista = "Tabagista: "
+        val auxDiabetico = "Diabético: "
+        val auxCardiaco = "Histórico de ataque cardíaco: "
+
+        if(aluno.dorPeitoAtividades) auxDorAtividades + "Sim\n" else auxDorAtividades + "Não\n"
+        if(aluno.dorPeitoUltimoMes) auxDorUltimoMes + "Sim\n" else auxDorUltimoMes + "Não\n"
+        if(aluno.perdaConsciencia) auxPerdaConsciencia + "Sim\n" else auxPerdaConsciencia + "Não\n"
+        if(aluno.problemaArticular) auxProblemaArticular + "Sim\n" else auxProblemaArticular + "Não\n"
+        if(aluno.tabagista) auxTabagista + "Sim\n" else auxTabagista + "Não\n"
+        if(aluno.diabetico) auxDiabetico + "Sim\n" else auxDiabetico + "Não\n"
+        if(aluno.familiarCardiaco) auxCardiaco + "Sim\n" else auxCardiaco + "Não\n"
+
+        final_text + auxDorAtividades + auxDorUltimoMes + auxPerdaConsciencia + auxProblemaArticular + auxTabagista + auxDiabetico + auxCardiaco
+
+        return final_text
     }
 
     fun createList(): HashMap<String, MutableList<TreinoModel>> {
         val listData = HashMap<String, MutableList<TreinoModel>>()
         val data = dbHelper.getTreinosByIdAluno(idAluno)
-
-
 
         //mesmo fora de testes, isso vai continuar aqui
         data.add(TreinoModel(-1, 0, idAluno, "Criar rotina", ""))
@@ -130,6 +154,7 @@ class AlunoDetailFragment() : Fragment() {
         val listData = createList()
 
         val titleList = ArrayList(listData.keys)
+        Log.d("list_data_size", listData["Ver treinos"]!!.size.toString())
         adapter = TreinosAdapter(context!!, titleList, listData)
         treinos_lv.setAdapter(adapter)
         treinos_lv.setOnChildClickListener{ parent, v, groupPosition, childPosition, id ->
@@ -137,7 +162,7 @@ class AlunoDetailFragment() : Fragment() {
             if(childPosition == lastIndex){
                 new = true
             }
-            val intent = NewTreino.start(context!!, new, listData.size, idAluno)
+            val intent = NewTreino.start(context!!, new, childPosition, idAluno)
             startActivity(intent)
             Toast.makeText(context!!, "Clicked: " + titleList[groupPosition] + " -> " + listData[titleList[groupPosition]]!!.get(childPosition), Toast.LENGTH_SHORT).show()
             false

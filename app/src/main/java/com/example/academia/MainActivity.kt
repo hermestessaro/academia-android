@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity(){
         //val profName = intent.getStringExtra("PROF")
         val profName = "Prof. Renato"
         //TODO: SYNC
-        this.deleteDatabase("database.db")
+        //this.deleteDatabase("database.db")
         val dbHelper = DatabaseHelper(this)
 
         dbHelper.createGrupo("Peito")
