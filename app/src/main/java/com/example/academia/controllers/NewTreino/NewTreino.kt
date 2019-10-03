@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.academia.R
-import com.example.academia.controllers.VisualizeTreino.VisualizeTreinoFragment
+import com.example.academia.controllers.CreateTreino.CreateTreinoFragment
 
 class NewTreino : AppCompatActivity() {
 
@@ -24,7 +24,7 @@ class NewTreino : AppCompatActivity() {
         //idTreino é igual a size porque não quero idTreino que seja 0, se não houver nenhum, vai ser 1
         //vai ser usado pra criação do treino no banco de dados
         val idTreino = clickedChild+1
-        val visualizeTreinofrag = VisualizeTreinoFragment(new, idTreino, id)
+        val visualizeTreinofrag = CreateTreinoFragment(new, idTreino, id)
         val transaction = manager.beginTransaction()
         transaction.replace(R.id.content_frame, visualizeTreinofrag)
         transaction.addToBackStack(null)

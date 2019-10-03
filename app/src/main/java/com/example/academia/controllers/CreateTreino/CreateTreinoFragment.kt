@@ -1,4 +1,4 @@
-package com.example.academia.controllers.VisualizeTreino
+package com.example.academia.controllers.CreateTreino
 
 import android.content.Context
 import android.os.Bundle
@@ -14,13 +14,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.academia.DatabaseHelper
 import com.example.academia.R
 import com.example.academia.controllers.GruposLista.GruposListaFragment
-import com.example.academia.controllers.NewTreino.AddExercicioDialogFragment
 import com.example.academia.controllers.NewTreino.NewTreino
 import com.example.academia.models.ExercicioModel
 import com.example.academia.models.TreinoModel
 import kotlinx.android.synthetic.main.fragment_visualize_treino.*
 
-class VisualizeTreinoFragment(val newTreino: Boolean, var idTreino: Int, val idAluno: Int?) : Fragment(), ExercicioClick {
+class CreateTreinoFragment(val newTreino: Boolean, var idTreino: Int, val idAluno: Int?) : Fragment(), ExercicioClick {
 
     lateinit var dbHelper: DatabaseHelper
     var mExercicios: MutableList<ExercicioModel> = ArrayList()

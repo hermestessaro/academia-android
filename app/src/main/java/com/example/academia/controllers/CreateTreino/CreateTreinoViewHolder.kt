@@ -1,4 +1,4 @@
-package com.example.academia.controllers.VisualizeTreino
+package com.example.academia.controllers.CreateTreino
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.academia.R
 import com.example.academia.models.ExercicioModel
 
-class VisualizeTreinoViewHolder(inflater: LayoutInflater, parent: ViewGroup):
+class CreateTreinoViewHolder(inflater: LayoutInflater, parent: ViewGroup):
 RecyclerView.ViewHolder(inflater.inflate(R.layout.exercicio_lista_view, parent, false))  {
 
     private var mNameView: TextView? = null
@@ -18,7 +18,7 @@ RecyclerView.ViewHolder(inflater.inflate(R.layout.exercicio_lista_view, parent, 
         mInfoView = itemView.findViewById(R.id.second_text_view)
     }
 
-    fun bind(exercicio: ExercicioModel, visualizeTreinoFrag: VisualizeTreinoFragment) {
+    fun bind(exercicio: ExercicioModel, createTreinoFrag: CreateTreinoFragment) {
         mNameView?.text = exercicio.nomeAparelho
         var infoText = ""
         if(exercicio.nomeAparelho != "Adicionar Exercício"){
@@ -26,7 +26,7 @@ RecyclerView.ViewHolder(inflater.inflate(R.layout.exercicio_lista_view, parent, 
         }
         mInfoView?.text = infoText
         itemView.setOnClickListener{
-            visualizeTreinoFrag.onExercicioClicked(exercicio)
+            createTreinoFrag.onExercicioClicked(exercicio)
         }
     }
 

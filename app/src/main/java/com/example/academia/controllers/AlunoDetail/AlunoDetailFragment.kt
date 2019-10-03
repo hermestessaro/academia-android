@@ -5,21 +5,17 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.academia.DatabaseHelper
 import com.example.academia.MainActivity
 import com.example.academia.R
 import com.example.academia.controllers.NewTreino.NewTreino
-import com.example.academia.controllers.VisualizeTreino.ExerciciosAdapter
 import com.example.academia.models.AlunoModel
 import com.example.academia.models.TreinoModel
 import kotlinx.android.synthetic.main.detail_header.view.*
 import kotlinx.android.synthetic.main.fragment_aluno_detail.*
-import kotlinx.android.synthetic.main.fragment_aluno_detail.view.*
 import kotlinx.android.synthetic.main.week_representation.*
-import org.w3c.dom.Text
 
 class AlunoDetailFragment() : Fragment() {
 

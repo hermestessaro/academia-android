@@ -1,4 +1,4 @@
-package com.example.academia.controllers.VisualizeTreino
+package com.example.academia.controllers.CreateTreino
 
 import com.example.academia.models.ExercicioModel
 

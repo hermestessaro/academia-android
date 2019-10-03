@@ -1,9 +1,6 @@
 package com.example.academia.controllers.NewTreino
 
-import android.app.AlertDialog
-import android.app.Dialog
 import android.content.Context
-import android.media.Image
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,10 +9,7 @@ import android.widget.*
 import androidx.fragment.app.DialogFragment
 import com.example.academia.DatabaseHelper
 import com.example.academia.R
-import com.example.academia.controllers.VisualizeTreino.VisualizeTreinoFragment
 import com.example.academia.models.ExercicioModel
-import kotlinx.android.synthetic.main.fragment_new_treino_third_screen.*
-import org.w3c.dom.Text
 
 class AddExercicioDialogFragment : DialogFragment() {
 
@@ -81,7 +75,7 @@ class AddExercicioDialogFragment : DialogFragment() {
         dbHelper.saveExercicio(exercicio)
         val main = activity as NewTreino
         main.supportFragmentManager.popBackStack()
-        //main.supportFragmentManager.beginTransaction().replace(R.id.content_frame, VisualizeTreinoFragment(false, idTreino!!, idAluno)).addToBackStack(null).commit()
+        //main.supportFragmentManager.beginTransaction().replace(R.id.content_frame, CreateTreinoFragment(false, idTreino!!, idAluno)).addToBackStack(null).commit()
         dismiss()
     }
 
