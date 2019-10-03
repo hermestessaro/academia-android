@@ -34,7 +34,8 @@ class NewTreino : AppCompatActivity() {
     override fun onBackPressed() {
         Log.d("entry_count", manager.backStackEntryCount.toString())
         if(manager.backStackEntryCount == 1){
-            finish()
+            //finish()
+            //faz nada, porque tem o botão pra cancelar no fragmento
         }
         else{
             super.onBackPressed()

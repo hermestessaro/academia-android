@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.core.view.size
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.academia.DatabaseHelper
@@ -85,7 +86,17 @@ class VisualizeTreinoFragment(val newTreino: Boolean, var idTreino: Int, val idA
         }
 
         salvar_treino.setOnClickListener {
-            saveTreino()
+            Log.d("exerciciosLista", exerciciosRecyclerView.size.toString())
+            if(exerciciosRecyclerView.size == 1){
+                Toast.makeText(context, "Você não adicionou nenhum exercício!", Toast.LENGTH_LONG).show()
+            }
+            else {
+                saveTreino()
+                activity!!.finish()
+            }
+        }
+
+        cancelar.setOnClickListener {
             activity!!.finish()
         }
     }

@@ -73,6 +73,7 @@
     <string name="editar_aluno">Editar aluno</string>
     <string name="mostrar_frequencia">Mostrar frequência</string>
     <string name="salvar_treino">Salvar Treino</string>
+    <string name="cancelar">Cancelar</string>
 
 
     <!--Offline tests-->
