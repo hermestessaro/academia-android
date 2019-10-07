@@ -2,6 +2,7 @@ package com.example.academia.controllers.AlunoDetail
 
 import android.app.AlertDialog
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -158,7 +159,15 @@ class AlunoDetailFragment() : Fragment() {
             if(childPosition == lastIndex){
                 new = true
             }
-            val intent = NewTreino.start(context!!, new, childPosition, idAluno)
+            val aux = adapter.getChild(groupPosition, childPosition) as TreinoModel
+            Log.d("id do treino", aux.idTreino.toString())
+            lateinit var intent: Intent
+            if(new){
+                intent = NewTreino.start(context!!, new, listData["Ver treinos"]!!.size, idAluno)
+            }
+            else{
+                intent = NewTreino.start(context!!, new, aux.idTreino, idAluno)
+            }
             startActivity(intent)
             Toast.makeText(context!!, "Clicked: " + titleList[groupPosition] + " -> " + listData[titleList[groupPosition]]!!.get(childPosition), Toast.LENGTH_SHORT).show()
             false

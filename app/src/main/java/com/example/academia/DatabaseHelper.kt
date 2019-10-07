@@ -327,7 +327,8 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
         val whereClause = "$ID_ALUNO=?"
         db.delete(TABLE_ALUNO, whereClause, arrayOf(idAluno.toString()))
         db.delete(TABLE_DISP, whereClause, arrayOf(idAluno.toString()))
-        //db.delete(TABLE_TREINO, whereClause, arrayOf(idAluno.toString()))
+        db.delete(TABLE_TREINO, whereClause, arrayOf(idAluno.toString()))
+        db.delete(TABLE_EXERCICIO, whereClause, arrayOf(idAluno.toString()))
     }
 
     fun updateAluno(aluno: AlunoModel, idAluno: Int){
@@ -536,6 +537,26 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
         values.put(KEY_NAME, treino.nome)
         val row = db.insert(TABLE_TREINO, null, values)
         Log.d("rowTreino", row.toString())
+    }
+
+    fun deleteTreino(idAluno: Int, idTreino: Int) {
+        val db = this.writableDatabase
+        val whereClause = "$ID_ALUNO=? AND $ID_TREINO=?"
+        db.delete(TABLE_TREINO, whereClause, arrayOf(idAluno.toString(), idTreino.toString()))
+        db.delete(TABLE_EXERCICIO, whereClause, arrayOf(idAluno.toString(), idTreino.toString()))
+    }
+
+    fun updateTreino(treino: TreinoModel){
+        val db = this.writableDatabase
+        val values = ContentValues()
+        values.put(ID_TREINO, treino.idTreino)
+        values.put(ID_PROF, treino.idProf)
+        values.put(ID_ALUNO, treino.idAluno)
+        values.put(KEY_TIPO, treino.tipo)
+        values.put(KEY_NAME, treino.nome)
+        val whereClause = "$ID_ALUNO=? AND $ID_TREINO=?"
+        db.update(TABLE_TREINO, values, whereClause, arrayOf(treino.idAluno.toString(), treino.idTreino.toString()))
+
     }
 
 

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+            android:id="@+id/excluir_treino"
+            android:title="@string/excluir_treino"
+    />
+    <item
+            android:id="@+id/editar_treino"
+            android:title="@string/editar_treino"
+    />
+</menu>

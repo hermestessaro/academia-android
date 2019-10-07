@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:paddingHorizontal="16dp"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <TextView
+        android:id="@+id/nome_aluno"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="20dp"
+        android:textColor="@color/colorBlack"
+        android:textSize="20sp"
+        tools:text="Nome do aluno"/>
+
+    <TextView
+            android:id="@+id/nome_treino"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/nome_aluno"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/colorBlack"
+            android:textSize="18sp"
+            tools:text="Peito e triceps"
+    />
+
+
+
+    <TextView
+            android:id="@+id/tipo_treino"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/nome_treino"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/colorBlack"
+            android:textSize="18sp"
+            tools:text="Treino A"
+    />
+
+
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/exerciciosRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tipo_treino"
+            android:layout_marginTop="20dp"/>
+
+    <Button
+            android:id="@+id/voltar"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:background="@color/colorRed"
+            android:text="@string/voltar"
+            android:textColor="@color/colorWhite"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center_horizontal"
+            app:layout_constraintTop_toBottomOf="@id/exerciciosRecyclerView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+    />
+
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

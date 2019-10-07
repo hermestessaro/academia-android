@@ -74,6 +74,9 @@
     <string name="mostrar_frequencia">Mostrar frequência</string>
     <string name="salvar_treino">Salvar Treino</string>
     <string name="cancelar">Cancelar</string>
+    <string name="editar_treino">Editar treino</string>
+    <string name="excluir_treino">Excluir treino</string>
+    <string name="voltar">Voltar</string>
 
 
     <!--Offline tests-->

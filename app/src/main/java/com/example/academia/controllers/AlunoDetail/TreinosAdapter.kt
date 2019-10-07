@@ -54,7 +54,7 @@ class TreinosAdapter internal constructor(private val context: Context, private 
     override fun getChildView(listPosition: Int, expandedListPosition: Int, isLastChild: Boolean, convertView: View?, parent: ViewGroup?): View {
         var convertView = convertView
         val treino = getChild(listPosition, expandedListPosition) as TreinoModel
-        val expandedListText = treino.nome
+        val expandedListText = treino.nome //+ treino.idTreino
         if(convertView == null){
             val layoutInflater = this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
             convertView = layoutInflater.inflate(R.layout.treino_list_item, null)
