@@ -9,18 +9,17 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
-import com.example.academia.controllers.AlunoDetail.AlunoDetailFragment
-import com.example.academia.controllers.AlunosLista.AlunosListaFragment
+import com.example.academia.controllers.AlunosLista.AllAlunosListaFragment
 import com.example.academia.controllers.GruposLista.GruposListaFragment
-import com.example.academia.models.AlunoModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.toolbar.toolbar
 
-class MainActivity : AppCompatActivity(){
+class MainActivity : AppCompatActivity() {
 
 
     lateinit var drawerLayout: DrawerLayout
     lateinit var toolbar_layout: androidx.appcompat.widget.Toolbar
+    private lateinit var pagerAdapter: PagerAdapter
     val manager = supportFragmentManager
 
 
@@ -68,12 +67,15 @@ class MainActivity : AppCompatActivity(){
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
 
-        val alunosFragment = AlunosListaFragment()
+        pagerAdapter = PagerAdapter(manager, 2)
+        content_frame.adapter = pagerAdapter
+
+        val alunosFragment = AllAlunosListaFragment()
         val gruposFragment = GruposListaFragment(false, -1, null)
-        val transaction = manager.beginTransaction()
+        /*val transaction = manager.beginTransaction()
         transaction.replace(R.id.content_frame, alunosFragment)
         transaction.addToBackStack(null)
-        transaction.commit()
+        transaction.commit()*/
 
         navView.setNavigationItemSelectedListener { menuItem ->
             when(menuItem.itemId){
