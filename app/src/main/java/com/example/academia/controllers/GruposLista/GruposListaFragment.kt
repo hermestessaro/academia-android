@@ -79,6 +79,7 @@ class GruposListaFragment(val selectingExercises: Boolean, val idTreino: Int, va
         }
     }
 
+
     fun setUpList(){
         val listData = createList()
 

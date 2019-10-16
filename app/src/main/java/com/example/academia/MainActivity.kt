@@ -3,6 +3,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -10,7 +11,9 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import com.example.academia.controllers.AlunosLista.AllAlunosListaFragment
+import com.example.academia.controllers.AlunosLista.MyAlunosListaFragment
 import com.example.academia.controllers.GruposLista.GruposListaFragment
+import com.example.academia.models.AlunoModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.toolbar.toolbar
 
@@ -53,6 +56,10 @@ class MainActivity : AppCompatActivity() {
         dbHelper.createAparelho("Leg Press", "Pernas")
         dbHelper.createAparelho("Obliquo", "Abdomen")*/
 
+        val aluno = AlunoModel("hermo","16/02/94", "Renato", false, false, false, false,
+        false, false, false, "", "", "")
+        //dbHelper.createAluno(aluno)
+
 
 
 
@@ -68,9 +75,10 @@ class MainActivity : AppCompatActivity() {
         toggle.syncState()
 
         pagerAdapter = PagerAdapter(manager, 2)
-        content_frame.adapter = pagerAdapter
+        view_pager.adapter = pagerAdapter
 
-        val alunosFragment = AllAlunosListaFragment()
+
+        val alunosFragment = MyAlunosListaFragment()
         val gruposFragment = GruposListaFragment(false, -1, null)
         /*val transaction = manager.beginTransaction()
         transaction.replace(R.id.content_frame, alunosFragment)
@@ -79,11 +87,17 @@ class MainActivity : AppCompatActivity() {
 
         navView.setNavigationItemSelectedListener { menuItem ->
             when(menuItem.itemId){
-                R.id.nav_item_one -> changesFragment(alunosFragment)
+                R.id.nav_item_one -> {
+                    manager.popBackStack()
+                    view_pager.visibility = View.VISIBLE
+                }
                 R.id.nav_item_two -> startActivity(Intent(this, NewAluno::class.java))
                 R.id.nav_item_four -> Toast.makeText(this, "profs", Toast.LENGTH_LONG).show()
                 R.id.nav_item_five -> Toast.makeText(this, "aparelhos", Toast.LENGTH_LONG).show()
-                R.id.nav_item_six -> changesFragment(gruposFragment)
+                R.id.nav_item_six -> {
+                    view_pager.visibility = View.GONE
+                    changesFragment(gruposFragment)
+                }
             }
             drawerLayout.closeDrawer(GravityCompat.START)
             true

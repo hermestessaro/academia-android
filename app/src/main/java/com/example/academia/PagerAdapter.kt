@@ -11,8 +11,8 @@ class PagerAdapter(fm: FragmentManager, val numOfTabs: Int): FragmentPagerAdapte
     override fun getItem(position: Int): Fragment? {
         var fragment: Fragment? = null
         when(position){
-            0 -> fragment = AllAlunosListaFragment()
-            1 -> fragment = MyAlunosListaFragment()
+            0 -> fragment = MyAlunosListaFragment()
+            1 -> fragment = AllAlunosListaFragment()
         }
 
         return fragment
@@ -20,5 +20,14 @@ class PagerAdapter(fm: FragmentManager, val numOfTabs: Int): FragmentPagerAdapte
 
     override fun getCount(): Int {
       return numOfTabs
+    }
+
+    override fun getPageTitle(position: Int): CharSequence? {
+        var string: CharSequence? = null
+        when(position){
+            0 -> string = "Meus Alunos"
+            1 -> string = "Todos os Alunos"
+        }
+        return string
     }
 }

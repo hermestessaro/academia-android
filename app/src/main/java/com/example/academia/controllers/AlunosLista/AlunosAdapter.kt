@@ -2,10 +2,11 @@ package com.example.academia.controllers.AlunosLista
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.example.academia.models.AlunoModel
 
-class AlunosAdapter(private val list: List<AlunoModel>, val alunoListFrag: AllAlunosListaFragment):
+class AlunosAdapter(private val list: List<AlunoModel>, val alunoListFrag: Fragment):
     RecyclerView.Adapter<AlunosListaViewHolder>(){
 
 
