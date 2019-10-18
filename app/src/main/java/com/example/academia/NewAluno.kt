@@ -2,6 +2,7 @@
 package com.example.academia
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -13,15 +14,24 @@ import kotlinx.android.synthetic.main.activity_new_aluno.*
 
 class NewAluno : AppCompatActivity() {
 
+    lateinit var profName: String
+    private var PRIVATE_MODE = 0
+    private val PREF_NAME = "profName"
+
     override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_aluno)
 
+        val sharedPref: SharedPreferences = getSharedPreferences(PREF_NAME, PRIVATE_MODE)
+
+        profName = sharedPref.getString(PREF_NAME,"default")!!
 
         button_save.setOnClickListener {
             saveAluno()
             Toast.makeText(this, "Salvo com sucesso", Toast.LENGTH_SHORT).show()
-            startActivity(Intent(this, MainActivity::class.java) )
+            val intent = Intent(this, MainActivity::class.java)
+            intent.putExtra("profName", profName)
+            startActivity(intent)
         }
         button_goto_training.setOnClickListener {
             saveAluno()
@@ -47,7 +57,7 @@ class NewAluno : AppCompatActivity() {
 
 
 
-        val aluno = AlunoModel(nome, data, "prof", dorPeitoAtividades, dorPeitoMes, perdaConsciencia,
+        val aluno = AlunoModel(nome, data, profName, dorPeitoAtividades, dorPeitoMes, perdaConsciencia,
                                 problemaOsseo, tabagista, diabetico, cardiaco, lesoes, observacoes, "")
         dbHelper.createAluno(aluno)
 

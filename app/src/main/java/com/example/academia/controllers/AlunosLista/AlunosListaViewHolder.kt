@@ -23,8 +23,13 @@ class AlunosListaViewHolder(inflater: LayoutInflater, parent: ViewGroup):
         mNameView?.text = aluno.nome
         mDateView?.text = aluno.dataNascimento
         itemView.setOnClickListener{
-            alunoListFrag as AllAlunosListaFragment
-            alunoListFrag.onAlunoClicked(aluno)
+            if(alunoListFrag is AllAlunosListaFragment){
+                alunoListFrag.onAlunoClicked(aluno)
+            }
+            if(alunoListFrag is MyAlunosListaFragment){
+                alunoListFrag.onAlunoClicked(aluno)
+            }
+
         }
     }
 }

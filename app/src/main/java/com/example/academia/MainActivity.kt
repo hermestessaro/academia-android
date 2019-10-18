@@ -1,6 +1,7 @@
 package com.example.academia
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -25,12 +26,28 @@ class MainActivity : AppCompatActivity() {
     private lateinit var pagerAdapter: PagerAdapter
     val manager = supportFragmentManager
     lateinit var profName: String
+    private var PRIVATE_MODE = 0
+    private val PREF_NAME = "profName"
 
 
     override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        profName = intent.getStringExtra("PROF")!!
+
+        val sharedPref: SharedPreferences = getSharedPreferences(PREF_NAME, PRIVATE_MODE)
+        val aux = sharedPref.getString(PREF_NAME,"default")
+        Log.d("first_prof_name", aux)
+        if(aux.equals("default"))
+        {
+            profName = intent.getStringExtra("profName")!!
+            val editor = sharedPref.edit()
+            editor.putString(PREF_NAME, profName)
+            editor.apply()
+        }
+        else{
+            profName = aux!!
+        }
+
         initView()
         Log.d("profname", profName)
         //TODO: SYNC
@@ -85,7 +102,10 @@ class MainActivity : AppCompatActivity() {
                     manager.popBackStack()
                     view_pager.visibility = View.VISIBLE
                 }
-                R.id.nav_item_two -> startActivity(Intent(this, NewAluno::class.java))
+                R.id.nav_item_two -> {
+                    view_pager.visibility = View.GONE
+                    startActivity(Intent(this, NewAluno::class.java))
+                }
                 R.id.nav_item_four -> Toast.makeText(this, "profs", Toast.LENGTH_LONG).show()
                 R.id.nav_item_five -> Toast.makeText(this, "aparelhos", Toast.LENGTH_LONG).show()
                 R.id.nav_item_six -> {
@@ -100,6 +120,10 @@ class MainActivity : AppCompatActivity() {
 
     fun changesFragment(fragment: Fragment){
         manager.beginTransaction().replace(R.id.content_frame, fragment).addToBackStack(null).commit()
+    }
+
+    fun viewPagerDisappears(){
+        view_pager.visibility = View.GONE
     }
 
     override fun onBackPressed() {
@@ -118,7 +142,7 @@ class MainActivity : AppCompatActivity() {
     companion object {
         fun start(context: Context, prof: String): Intent {
             val intent = Intent(context, MainActivity::class.java)
-            intent.putExtra("PROF", prof)
+            intent.putExtra("profName", prof)
             return intent
         }
     }

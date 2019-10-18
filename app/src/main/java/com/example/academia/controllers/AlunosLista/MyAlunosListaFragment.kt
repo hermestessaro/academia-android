@@ -14,6 +14,7 @@ import com.example.academia.PagerAdapter
 import com.example.academia.R
 import com.example.academia.controllers.AlunoDetail.AlunoDetailFragment
 import com.example.academia.models.AlunoModel
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_alunos_lista.*
 
 class MyAlunosListaFragment(val profName: String) : Fragment(), AlunoClick  {
@@ -60,6 +61,7 @@ class MyAlunosListaFragment(val profName: String) : Fragment(), AlunoClick  {
 
     override fun onAlunoClicked(aluno: AlunoModel) {
         val main = activity as MainActivity
+        main.viewPagerDisappears()
         val frag = AlunoDetailFragment.newInstance(aluno)
         main.supportFragmentManager.beginTransaction().replace(R.id.content_frame, frag).addToBackStack(null).commit()
     }
