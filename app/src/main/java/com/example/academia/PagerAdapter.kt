@@ -7,11 +7,11 @@ import com.example.academia.controllers.AlunosLista.AllAlunosListaFragment
 import com.example.academia.controllers.AlunosLista.MyAlunosListaFragment
 import com.example.academia.models.AlunoModel
 
-class PagerAdapter(fm: FragmentManager, val numOfTabs: Int): FragmentPagerAdapter(fm) {
+class PagerAdapter(fm: FragmentManager, val numOfTabs: Int, val profName: String): FragmentPagerAdapter(fm) {
     override fun getItem(position: Int): Fragment? {
         var fragment: Fragment? = null
         when(position){
-            0 -> fragment = MyAlunosListaFragment()
+            0 -> fragment = MyAlunosListaFragment(profName)
             1 -> fragment = AllAlunosListaFragment()
         }
 

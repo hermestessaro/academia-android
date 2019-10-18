@@ -108,9 +108,10 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
             "$KEY_DOM BOOLEAN, $ID_ALUNO INTEGER UNIQUE, "+
             "FOREIGN KEY($ID_ALUNO) REFERENCES $TABLE_ALUNO($ID_ALUNO));"
 
-    private val CREATE_TABLE_PROFESSOR = "CREATE TABLE $TABLE_PROF ($ID_PROF int NOT NULL, " +
-            "$KEY_NAME varchar(100), $KEY_EMAIL varchar(45), $KEY_SENHA varchar(255), " +
-            "$KEY_DATA_INC date, $KEY_DATA_ULT datetime, $KEY_ACTIVE varchar(1), PRIMARY KEY ($ID_PROF));"
+    private val CREATE_TABLE_PROFESSOR = "CREATE TABLE $TABLE_PROF ($ID_PROF INTEGER UNIQUE, $KEY_NAME varchar(45)" +
+            ",$KEY_EMAIL varchar(45), $KEY_SENHA varchar(255));"
+            /*"$KEY_DATA_INC date, $KEY_DATA_ULT datetime, $KEY_ACTIVE varchar(1);"*/
+
 
     private val CREATE_TABLE_TREINO = "CREATE TABLE $TABLE_TREINO ($ID_TREINO INTEGER, " +
             "$ID_PROF int, $ID_ALUNO int, $KEY_TIPO varchar (2), $KEY_NAME varchar(45) NULL," +
@@ -175,26 +176,37 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
         onCreate(db)
     }
 
+    fun createProfessor(prof: ProfessorModel){
+        val db = this.writableDatabase
+        val values = ContentValues().apply {
+            put(ID_PROF, prof.id)
+            put(KEY_NAME, prof.nome)
+            put(KEY_EMAIL, prof.email)
+            put(KEY_SENHA, prof.senha)
+        }
+
+        try {
+            db.insertOrThrow(TABLE_PROF, null, values)
+        }catch (e:Exception){
+            e.printStackTrace()
+        }
+    }
 
 
-    fun getProfessor(idProf: Int) : ProfessorModel {
+    fun getProfessorByName(name: String) : ProfessorModel {
         val db = this.readableDatabase
-        val selectQuery : String = "SELECT * FROM $TABLE_PROF WHERE $ID_PROF = $idProf;"
+        val selectQuery : String = "SELECT * FROM $TABLE_PROF WHERE $KEY_NAME = '$name';"
         val c: Cursor = db.rawQuery(selectQuery, null)
         if(c != null){
             c.moveToFirst()
         }
 
-        val prof = ProfessorModel(idProf,
-            c.getString(c.getColumnIndex(KEY_NAME)),
+        val prof = ProfessorModel(c.getInt(c.getColumnIndex(ID_PROF)),
+            name,
             c.getString(c.getColumnIndex(KEY_EMAIL)),
-            c.getString(c.getColumnIndex(KEY_SENHA)),
-            c.getString(c.getColumnIndex(KEY_DATA_INC)),
-            c.getString(c.getColumnIndex(KEY_DATA_ULT)),
-            c.getString(c.getColumnIndex(KEY_ACTIVE))!!.toBoolean()
+            c.getString(c.getColumnIndex(KEY_SENHA))
         )
         return prof
-
     }
 
     fun getAllProfessors() : MutableList<ProfessorModel> {
@@ -208,10 +220,7 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
                 val prof = ProfessorModel(c.getInt(c.getColumnIndex(ID_PROF)),
                     c.getString(c.getColumnIndex(KEY_NAME)),
                     c.getString(c.getColumnIndex(KEY_EMAIL)),
-                    c.getString(c.getColumnIndex(KEY_SENHA)),
-                    c.getString(c.getColumnIndex(KEY_DATA_INC)),
-                    c.getString(c.getColumnIndex(KEY_DATA_ULT)),
-                    c.getString(c.getColumnIndex(KEY_ACTIVE))!!.toBoolean())
+                    c.getString(c.getColumnIndex(KEY_SENHA)))
                 professorList.add(prof)
             }while(c.moveToNext())
         }
@@ -223,7 +232,7 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
         val values = ContentValues().apply {
             put(KEY_NAME, aluno.nome)
             put(KEY_NASCIMENTO, aluno.dataNascimento)
-            put(KEY_PROF, "Renato")
+            put(KEY_PROF, aluno.prof)
             put(KEY_IND_1, aluno.dorPeitoAtividades)
             put(KEY_IND_2, aluno.dorPeitoUltimoMes)
             put(KEY_IND_3, aluno.perdaConsciencia)
@@ -320,6 +329,35 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
         //c.getString(c.getColumnIndex(KEY_ACTIVE))!!.toBoolean())
 
         return aluno
+    }
+
+    fun getAlunosByProf(nomeProf: String): MutableList<AlunoModel>{
+        val prof = getProfessorByName(nomeProf)
+        val db = this.readableDatabase
+        val alunos: MutableList<AlunoModel> = ArrayList()
+        val selectQuery : String = "SELECT * FROM $TABLE_ALUNO WHERE $KEY_PROF = '$nomeProf'"
+        val c: Cursor = db.rawQuery(selectQuery, null)
+        if(c.moveToFirst()) {
+            do {
+                val aluno = AlunoModel(c.getString(c.getColumnIndex(KEY_NAME)),
+                    c.getString(c.getColumnIndex(KEY_NASCIMENTO)),
+                    c.getString(c.getColumnIndex(KEY_PROF)),
+                    c.getString(c.getColumnIndex(KEY_IND_1)).toBoolean(),
+                    c.getString(c.getColumnIndex(KEY_IND_2)).toBoolean(),
+                    c.getString(c.getColumnIndex(KEY_IND_3)).toBoolean(),
+                    c.getString(c.getColumnIndex(KEY_IND_4)).toBoolean(),
+                    c.getString(c.getColumnIndex(KEY_IND_5)).toBoolean(),
+                    c.getString(c.getColumnIndex(KEY_IND_6)).toBoolean(),
+                    c.getString(c.getColumnIndex(KEY_IND_7)).toBoolean(),
+                    c.getString(c.getColumnIndex(KEY_LESOES)),
+                    c.getString(c.getColumnIndex(KEY_OBS)),
+                    c.getString(c.getColumnIndex(KEY_TREINO_ESP)))
+                alunos.add(aluno)
+
+            } while (c.moveToNext())
+        }
+
+        return alunos
     }
 
     fun deleteAluno(idAluno: Int) {

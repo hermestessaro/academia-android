@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ArrayAdapter
+import com.example.academia.models.ProfessorModel
 import kotlinx.android.synthetic.main.activity_selecttrainer.*
 
 class SelectTrainer : AppCompatActivity() {
@@ -11,8 +12,29 @@ class SelectTrainer : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_selecttrainer)
+        //this.deleteDatabase("database.db")
 
-        val adapter = ArrayAdapter.createFromResource(this, R.array.prof_list_test, android.R.layout.simple_spinner_item)
+        val dbHelper = DatabaseHelper(this)
+
+        dbHelper.createGrupo("Peito")
+        dbHelper.createGrupo("Costas")
+        dbHelper.createGrupo("Triceps")
+        dbHelper.createGrupo("Biceps")
+        dbHelper.createGrupo("Ombros")
+        dbHelper.createGrupo("Pernas")
+        dbHelper.createGrupo("Abdomen")
+
+        val prof1 = ProfessorModel(0, "Renato", "renato@gremio.com", "1234")
+        val prof2 = ProfessorModel(1, "Xavier", "xavier@xmen.com", "4321")
+        dbHelper.createProfessor(prof1)
+        dbHelper.createProfessor(prof2)
+
+        val professors = ArrayList<String>()
+        for(item in dbHelper.getAllProfessors()){
+            professors.add(item.nome)
+        }
+
+        val adapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, professors)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         prof_list.adapter = adapter
 

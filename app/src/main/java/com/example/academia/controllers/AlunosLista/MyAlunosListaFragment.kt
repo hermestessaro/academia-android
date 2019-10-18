@@ -16,7 +16,7 @@ import com.example.academia.controllers.AlunoDetail.AlunoDetailFragment
 import com.example.academia.models.AlunoModel
 import kotlinx.android.synthetic.main.fragment_alunos_lista.*
 
-class MyAlunosListaFragment : Fragment(), AlunoClick  {
+class MyAlunosListaFragment(val profName: String) : Fragment(), AlunoClick  {
     lateinit var dbHelper: DatabaseHelper
     lateinit var mAlunos: MutableList<AlunoModel>
     val frag = this
@@ -26,7 +26,7 @@ class MyAlunosListaFragment : Fragment(), AlunoClick  {
     override fun onAttach(context: Context?) {
         super.onAttach(context)
         dbHelper = DatabaseHelper(activity)
-        mAlunos = dbHelper.getAllAlunos()
+        mAlunos = dbHelper.getAlunosByProf(profName)
 
     }
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,8 +65,8 @@ class MyAlunosListaFragment : Fragment(), AlunoClick  {
     }
 
     companion object {
-        fun newInstance(): MyAlunosListaFragment {
-            return MyAlunosListaFragment()
+        fun newInstance(profName: String): MyAlunosListaFragment {
+            return MyAlunosListaFragment(profName)
         }
     }
 }

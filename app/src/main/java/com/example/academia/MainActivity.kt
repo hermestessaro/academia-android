@@ -24,25 +24,17 @@ class MainActivity : AppCompatActivity() {
     lateinit var toolbar_layout: androidx.appcompat.widget.Toolbar
     private lateinit var pagerAdapter: PagerAdapter
     val manager = supportFragmentManager
+    lateinit var profName: String
 
 
     override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        profName = intent.getStringExtra("PROF")!!
         initView()
-        //val profName = intent.getStringExtra("PROF")
-        val profName = "Prof. Renato"
+        Log.d("profname", profName)
         //TODO: SYNC
-        //this.deleteDatabase("database.db")
         val dbHelper = DatabaseHelper(this)
-
-        dbHelper.createGrupo("Peito")
-        dbHelper.createGrupo("Costas")
-        dbHelper.createGrupo("Triceps")
-        dbHelper.createGrupo("Biceps")
-        dbHelper.createGrupo("Ombros")
-        dbHelper.createGrupo("Pernas")
-        dbHelper.createGrupo("Abdomen")
 
         val grupos = dbHelper.getAllGrupos()
         for(item in grupos){
@@ -56,10 +48,12 @@ class MainActivity : AppCompatActivity() {
         dbHelper.createAparelho("Leg Press", "Pernas")
         dbHelper.createAparelho("Obliquo", "Abdomen")*/
 
-        val aluno = AlunoModel("hermo","16/02/94", "Renato", false, false, false, false,
+        /*val aluno1 = AlunoModel("hermo","16/02/94", profName, false, false, false, false,
         false, false, false, "", "", "")
-        //dbHelper.createAluno(aluno)
-
+        dbHelper.createAluno(aluno1)
+        val aluno2 = AlunoModel("wolvie","16/02/30", "Xavier", false, false, false, false,
+            false, false, false, "", "", "")
+        dbHelper.createAluno(aluno2)*/
 
 
 
@@ -74,11 +68,11 @@ class MainActivity : AppCompatActivity() {
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
 
-        pagerAdapter = PagerAdapter(manager, 2)
+        pagerAdapter = PagerAdapter(manager, 2, profName)
         view_pager.adapter = pagerAdapter
 
 
-        val alunosFragment = MyAlunosListaFragment()
+        val alunosFragment = MyAlunosListaFragment(profName)
         val gruposFragment = GruposListaFragment(false, -1, null)
         /*val transaction = manager.beginTransaction()
         transaction.replace(R.id.content_frame, alunosFragment)

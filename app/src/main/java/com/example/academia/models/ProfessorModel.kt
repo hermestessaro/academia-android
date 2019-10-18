@@ -8,8 +8,5 @@ import kotlinx.android.parcel.Parcelize
 class ProfessorModel (val id: Int,
                       val nome: String,
                       val email: String,
-                      val senha: String,
-                      val dataInc: String,
-                      val dataUlt: String,
-                      val indicadorAtivo: Boolean
+                      val senha: String
 ): Parcelable
