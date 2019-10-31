@@ -109,8 +109,8 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
             "FOREIGN KEY($ID_ALUNO) REFERENCES $TABLE_ALUNO($ID_ALUNO));"
 
     private val CREATE_TABLE_PROFESSOR = "CREATE TABLE $TABLE_PROF ($ID_PROF INTEGER UNIQUE, $KEY_NAME varchar(45)" +
-            ",$KEY_EMAIL varchar(45), $KEY_SENHA varchar(255));"
-            /*"$KEY_DATA_INC date, $KEY_DATA_ULT datetime, $KEY_ACTIVE varchar(1);"*/
+            ",$KEY_EMAIL varchar(45), $KEY_SENHA varchar(255),"+
+            "$KEY_DATA_INC date, $KEY_DATA_ULT datetime, $KEY_ACTIVE varchar(4));"
 
 
     private val CREATE_TABLE_TREINO = "CREATE TABLE $TABLE_TREINO ($ID_TREINO INTEGER, " +
@@ -179,10 +179,13 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
     fun createProfessor(prof: ProfessorModel){
         val db = this.writableDatabase
         val values = ContentValues().apply {
-            put(ID_PROF, prof.id)
-            put(KEY_NAME, prof.nome)
-            put(KEY_EMAIL, prof.email)
-            put(KEY_SENHA, prof.senha)
+            put(ID_PROF, prof.IdProfessor)
+            put(KEY_NAME, prof.Nome)
+            put(KEY_EMAIL, prof.Email)
+            put(KEY_SENHA, prof.Senha)
+            put(KEY_DATA_INC, prof.DataInclusao)
+            put(KEY_DATA_ULT, prof.DataHoraUltimaAtu)
+            put(KEY_ACTIVE, prof.IndicadorAtivo)
         }
 
         try {
@@ -204,7 +207,10 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
         val prof = ProfessorModel(c.getInt(c.getColumnIndex(ID_PROF)),
             name,
             c.getString(c.getColumnIndex(KEY_EMAIL)),
-            c.getString(c.getColumnIndex(KEY_SENHA))
+            c.getString(c.getColumnIndex(KEY_SENHA)),
+            c.getString(c.getColumnIndex(KEY_DATA_INC)),
+            c.getString(c.getColumnIndex(KEY_DATA_ULT)),
+            c.getString(c.getColumnIndex(KEY_ACTIVE))
         )
         return prof
     }
@@ -220,7 +226,10 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
                 val prof = ProfessorModel(c.getInt(c.getColumnIndex(ID_PROF)),
                     c.getString(c.getColumnIndex(KEY_NAME)),
                     c.getString(c.getColumnIndex(KEY_EMAIL)),
-                    c.getString(c.getColumnIndex(KEY_SENHA)))
+                    c.getString(c.getColumnIndex(KEY_SENHA)),
+                    c.getString(c.getColumnIndex(KEY_DATA_INC)),
+                    c.getString(c.getColumnIndex(KEY_DATA_ULT)),
+                    c.getString(c.getColumnIndex(KEY_ACTIVE)))
                 professorList.add(prof)
             }while(c.moveToNext())
         }
