@@ -11,6 +11,10 @@ import android.util.Log
 import android.widget.Toast
 import com.example.academia.models.*
 import java.lang.Exception
+import java.text.DateFormat.getDateInstance
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION) {
 
@@ -66,6 +70,7 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
     private val ID_PROF = "IdProfessor"
     private val KEY_EMAIL = "Email"
     private val KEY_SENHA = "Senha"
+    private val KEY_LOGIN = "TentativasLogin"
 
     //Treino column names
     private val ID_TREINO = "IdTreino"
@@ -109,9 +114,9 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
             "$KEY_DOM BOOLEAN, $ID_ALUNO INTEGER UNIQUE, "+
             "FOREIGN KEY($ID_ALUNO) REFERENCES $TABLE_ALUNO($ID_ALUNO));"
 
-    private val CREATE_TABLE_PROFESSOR = "CREATE TABLE $TABLE_PROF ($ID_PROF INTEGER UNIQUE, $KEY_NAME varchar(45)" +
-            ",$KEY_EMAIL varchar(45), $KEY_SENHA varchar(255),"+
-            "$KEY_DATA_INC date, $KEY_DATA_ULT datetime, $KEY_ACTIVE varchar(4));"
+    private val CREATE_TABLE_PROFESSOR = "CREATE TABLE $TABLE_PROF ($ID_PROF INTEGER PRIMARY KEY, $KEY_NAME varchar(100)" +
+            ",$KEY_EMAIL varchar(45) UNIQUE, $KEY_SENHA varchar(255),"+
+            "$KEY_DATA_INC date, $KEY_DATA_ULT datetime, $KEY_ACTIVE varchar(4), $KEY_LOGIN not null default 0);"
 
 
     private val CREATE_TABLE_TREINO = "CREATE TABLE $TABLE_TREINO ($ID_TREINO INTEGER, " +
@@ -121,14 +126,14 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
             "FOREIGN KEY($ID_ALUNO) REFERENCES $TABLE_ALUNO($ID_ALUNO));"
 
     private val CREATE_TABLE_FREQ = "CREATE TABLE $TABLE_FREQ ($ID_FREQ int NOT NULL, " +
-            "$ID_TREINO int, $DATA_FREQ datetime," +
+            "$ID_TREINO int, $DATA_FREQ date," +
             "FOREIGN KEY($ID_TREINO) REFERENCES $TABLE_TREINO($ID_TREINO));"
 
     private val CREATE_TABLE_EXERCICIO = "CREATE TABLE $TABLE_EXERCICIO ($ID_EXERCICIO INTEGER PRIMARY KEY, " +
-            "$ID_TREINO int, $ID_ALUNO int, $KEY_APARELHO_NAME varchar(45), $KEY_SERIES int, $KEY_REPS int, $KEY_PESO int, " +
-            //"$KEY_DATA_ULT datetime, $KEY_ACTIVE varchar(1)" +
+            "$ID_TREINO int, $ID_ALUNO int, $ID_APARELHO varchar(45), $KEY_SERIES int, $KEY_REPS int, $KEY_PESO int, " +
+            "$KEY_DATA_ULT datetime, $KEY_ACTIVE varchar(1)" +
             "FOREIGN KEY($ID_TREINO) REFERENCES $TABLE_TREINO($ID_TREINO)," +
-            "FOREIGN KEY($KEY_APARELHO_NAME) REFERENCES $TABLE_APARELHO($KEY_NAME));"
+            "FOREIGN KEY($ID_APARELHO) REFERENCES $TABLE_APARELHO($ID_APARELHO));"
 
     private val CREATE_TABLE_APARELHO = "CREATE TABLE $TABLE_APARELHO ($ID_APARELHO INTEGER PRIMARY KEY, " +
             "$ID_GRUPO int, $KEY_NAME varchar(45) UNIQUE, " +
@@ -240,22 +245,24 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
     fun createAluno(aluno: AlunoModel){
         val db = this.writableDatabase
         val values = ContentValues().apply {
-            put(KEY_NAME, aluno.nome)
-            put(KEY_NASCIMENTO, aluno.dataNascimento)
-            put(KEY_PROF, aluno.prof)
-            put(KEY_IND_1, aluno.dorPeitoAtividades)
-            put(KEY_IND_2, aluno.dorPeitoUltimoMes)
-            put(KEY_IND_3, aluno.perdaConsciencia)
-            put(KEY_IND_4, aluno.problemaArticular)
-            put(KEY_IND_5, aluno.tabagista)
-            put(KEY_IND_6, aluno.diabetico)
-            put(KEY_IND_7, aluno.familiarCardiaco)
-            put(KEY_LESOES, aluno.lesoes)
-            put(KEY_OBS, aluno.observacoes)
-            put(KEY_TREINO_ESP, aluno.treinoEspecifico)
+            put(KEY_NAME, aluno.Nome)
+            put(KEY_NASCIMENTO, aluno.DataNascimento)
+            put(KEY_PROF, aluno.IdProfessor)
+            put(KEY_IND_1, aluno.IndicadorDorPeitoAtividadesFisicas)
+            put(KEY_IND_2, aluno.IndicadorDorPeitoUltimoMes)
+            put(KEY_IND_3, aluno.IndicadorPerdaConscienciaTontura)
+            put(KEY_IND_4, aluno.IndicadorProblemaArticular)
+            put(KEY_IND_5, aluno.IndicadorTabagista)
+            put(KEY_IND_6, aluno.IndicadorDiabetico)
+            put(KEY_IND_7, aluno.IndicadorFamiliarAtaqueCardiaco)
+            put(KEY_LESOES, aluno.Lesoes)
+            put(KEY_OBS, aluno.Observacoes)
+            put(KEY_TREINO_ESP, aluno.TreinoEspecifico)
+            put(KEY_DATA_INC, aluno.DataInclusao)
+            put(KEY_DATA_ULT, getDateInstance().format(Date()))
+            put(KEY_ACTIVE, 1)
         }
-        //values.put(KEY_DATA_INC, aluno.dataInclusao)
-        //values.put(KEY_ACTIVE, 1)
+
 
         db.insert(TABLE_ALUNO, null, values)
 
@@ -297,9 +304,10 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
                     ind7.toBoolean(),
                     c.getString(c.getColumnIndex(KEY_LESOES)),
                     c.getString(c.getColumnIndex(KEY_OBS)),
-                    c.getString(c.getColumnIndex(KEY_TREINO_ESP)))
-                    //c.getString(c.getColumnIndex(KEY_DATA_INC)),
-                    //c.getString(c.getColumnIndex(KEY_ACTIVE))!!.toBoolean())
+                    c.getString(c.getColumnIndex(KEY_TREINO_ESP)),
+                    c.getString(c.getColumnIndex(KEY_DATA_INC)),
+                    c.getString(c.getColumnIndex(KEY_DATA_ULT)),
+                    c.getString(c.getColumnIndex(KEY_ACTIVE))!!.toBoolean())
                 alunosList.add(aluno)
 
 
@@ -334,9 +342,10 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
             ind7.toBoolean(),
             c.getString(c.getColumnIndex(KEY_LESOES)),
             c.getString(c.getColumnIndex(KEY_OBS)),
-            c.getString(c.getColumnIndex(KEY_TREINO_ESP)))
-        //c.getString(c.getColumnIndex(KEY_DATA_INC)),
-        //c.getString(c.getColumnIndex(KEY_ACTIVE))!!.toBoolean())
+            c.getString(c.getColumnIndex(KEY_TREINO_ESP)),
+            c.getString(c.getColumnIndex(KEY_DATA_INC)),
+            c.getString(c.getColumnIndex(KEY_DATA_ULT)),
+            c.getString(c.getColumnIndex(KEY_ACTIVE))!!.toBoolean())
 
         return aluno
     }
@@ -361,7 +370,10 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
                     c.getString(c.getColumnIndex(KEY_IND_7)).toBoolean(),
                     c.getString(c.getColumnIndex(KEY_LESOES)),
                     c.getString(c.getColumnIndex(KEY_OBS)),
-                    c.getString(c.getColumnIndex(KEY_TREINO_ESP)))
+                    c.getString(c.getColumnIndex(KEY_TREINO_ESP)),
+                    c.getString(c.getColumnIndex(KEY_DATA_INC)),
+                    c.getString(c.getColumnIndex(KEY_DATA_ULT)),
+                    c.getString(c.getColumnIndex(KEY_ACTIVE))!!.toBoolean())
                 alunos.add(aluno)
 
             } while (c.moveToNext())
@@ -382,19 +394,22 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
     fun updateAluno(aluno: AlunoModel, idAluno: Int){
         val db = this.writableDatabase
         val values = ContentValues().apply {
-            put(KEY_NAME, aluno.nome)
-            put(KEY_NASCIMENTO, aluno.dataNascimento)
-            put(KEY_PROF, "Renato")
-            put(KEY_IND_1, aluno.dorPeitoAtividades)
-            put(KEY_IND_2, aluno.dorPeitoUltimoMes)
-            put(KEY_IND_3, aluno.perdaConsciencia)
-            put(KEY_IND_4, aluno.problemaArticular)
-            put(KEY_IND_5, aluno.tabagista)
-            put(KEY_IND_6, aluno.diabetico)
-            put(KEY_IND_7, aluno.familiarCardiaco)
-            put(KEY_LESOES, aluno.lesoes)
-            put(KEY_OBS, aluno.observacoes)
-            put(KEY_TREINO_ESP, aluno.treinoEspecifico)
+            put(KEY_NAME, aluno.Nome)
+            put(KEY_NASCIMENTO, aluno.DataNascimento)
+            put(KEY_PROF, aluno.IdProfessor)
+            put(KEY_IND_1, aluno.IndicadorDorPeitoAtividadesFisicas)
+            put(KEY_IND_2, aluno.IndicadorDorPeitoUltimoMes)
+            put(KEY_IND_3, aluno.IndicadorPerdaConscienciaTontura)
+            put(KEY_IND_4, aluno.IndicadorProblemaArticular)
+            put(KEY_IND_5, aluno.IndicadorTabagista)
+            put(KEY_IND_6, aluno.IndicadorDiabetico)
+            put(KEY_IND_7, aluno.IndicadorFamiliarAtaqueCardiaco)
+            put(KEY_LESOES, aluno.Lesoes)
+            put(KEY_OBS, aluno.Observacoes)
+            put(KEY_TREINO_ESP, aluno.TreinoEspecifico)
+            put(KEY_DATA_INC, aluno.DataInclusao)
+            put(KEY_DATA_ULT, getDateInstance().format(Date()))
+            put(KEY_ACTIVE, 1)
         }
         db.update(TABLE_ALUNO, values, "$ID_ALUNO = ?", arrayOf(idAluno.toString()))
     }
