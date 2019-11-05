@@ -8,7 +8,7 @@ import android.widget.ArrayAdapter
 import com.example.academia.models.ProfessorModel
 import kotlinx.android.synthetic.main.activity_selecttrainer.*
 
-class SelectTrainer() : AppCompatActivity() {
+class SelectTrainer : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

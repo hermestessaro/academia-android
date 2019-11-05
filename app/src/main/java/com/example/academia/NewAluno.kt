@@ -58,7 +58,7 @@ class NewAluno : AppCompatActivity() {
 
 
         val aluno = AlunoModel(nome, data, profName, dorPeitoAtividades, dorPeitoMes, perdaConsciencia,
-                                problemaOsseo, tabagista, diabetico, cardiaco, lesoes, observacoes, "")
+                                problemaOsseo, tabagista, diabetico, cardiaco, lesoes, observacoes, "", "342342", true)
         dbHelper.createAluno(aluno)
 
         val disp = getDisp(dbHelper.getIdAlunoByName(nome))

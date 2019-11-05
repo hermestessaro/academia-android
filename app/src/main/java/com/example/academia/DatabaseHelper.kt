@@ -91,11 +91,12 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
 
     //Table create statements
     private val CREATE_TABLE_ALUNO = "CREATE TABLE $TABLE_ALUNO ($ID_ALUNO INTEGER PRIMARY KEY, " +
-            "$KEY_NAME varchar(100), $KEY_NASCIMENTO date, $KEY_PROF varchar(100), $KEY_IND_1 varchar(1), " +
-            "$KEY_IND_2 varchar(1), $KEY_IND_3 varchar(1), $KEY_IND_4 varchar(1), " +
+            "$ID_INCL int, $KEY_NAME varchar(100), $KEY_NASCIMENTO date, " +
+            "$KEY_IND_1 varchar(1), $KEY_IND_2 varchar(1), $KEY_IND_3 varchar(1), $KEY_IND_4 varchar(1), " +
             "$KEY_IND_5 varchar(1), $KEY_IND_6 varchar(1), $KEY_IND_7 varchar(1), " +
-            "$KEY_LESOES varchar(200) NULL, $KEY_OBS varchar(200) NULL, $KEY_TREINO_ESP varchar(200) NULL);"
-            //"$KEY_DATA_INC date, $KEY_DATA_ULT datetime, $KEY_ACTIVE varchar(1));"
+            "$KEY_LESOES varchar(200) NULL, $KEY_OBS varchar(200) NULL, $KEY_TREINO_ESP varchar(200) NULL" +
+            "$KEY_DATA_INC date, $KEY_DATA_ULT datetime, $KEY_ACTIVE varchar(1), " +
+            "FOREIGN KEY($ID_INCL) REFERENCES $TABLE_PROF($ID_PROF));"
 
     /*private val CREATE_TABLE_ALUNO_DISP = "CREATE TABLE $TABLE_ALUNO_DISP ($ID_ALUNO_DISP INTEGER PRIMARY KEY, " +
             "$ID_ALUNO int, $ID_DISP int, " +
@@ -115,7 +116,7 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
 
     private val CREATE_TABLE_TREINO = "CREATE TABLE $TABLE_TREINO ($ID_TREINO INTEGER, " +
             "$ID_PROF int, $ID_ALUNO int, $KEY_TIPO varchar (2), $KEY_NAME varchar(45) NULL," +
-            //" $KEY_OBJETIVOS varchar(200) NULL, $KEY_DATA_INC date, $KEY_DATA_ULT datetime, $KEY_ACTIVE varchar(1)" +
+            "$KEY_OBJETIVOS varchar(200) NULL, $KEY_DATA_INC date, $KEY_DATA_ULT datetime, $KEY_ACTIVE varchar(1)" +
             "FOREIGN KEY($ID_PROF) REFERENCES $TABLE_PROF($ID_PROF), " +
             "FOREIGN KEY($ID_ALUNO) REFERENCES $TABLE_ALUNO($ID_ALUNO));"
 

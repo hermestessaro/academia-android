@@ -52,7 +52,7 @@ class RetrofitInitializer {
 
 
         return Retrofit.Builder()
-            .baseUrl("http://192.168.0.4/academia/web/")
+            .baseUrl("http://192.168.0.6/academia/web/api/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(getClient())
             .build()
