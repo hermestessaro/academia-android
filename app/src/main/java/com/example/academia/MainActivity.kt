@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val sharedPref: SharedPreferences = getSharedPreferences(PREF_NAME, PRIVATE_MODE)
+        /*val sharedPref: SharedPreferences = getSharedPreferences(PREF_NAME, PRIVATE_MODE)
         val aux = sharedPref.getString(PREF_NAME,"default")
         Log.d("first_prof_name", aux)
         if(aux.equals("default"))
@@ -46,24 +46,11 @@ class MainActivity : AppCompatActivity() {
         }
         else{
             profName = aux!!
-        }
+        }*/
 
+        profName = intent.getStringExtra("profName")!!
         initView()
         Log.d("profname", profName)
-        //TODO: SYNC
-        val dbHelper = DatabaseHelper(this)
-
-        val grupos = dbHelper.getAllGrupos()
-        for(item in grupos){
-            Log.d("nomesgrupos", item.nome+item.id.toString())
-        }
-        /*dbHelper.createAparelho("Supino", "Peito")
-        dbHelper.createAparelho("Puxada Frontal", "Costas")
-        dbHelper.createAparelho("Corda", "Triceps")
-        dbHelper.createAparelho("Barra reta", "Biceps")
-        dbHelper.createAparelho("Desenvolvimento", "Ombros")
-        dbHelper.createAparelho("Leg Press", "Pernas")
-        dbHelper.createAparelho("Obliquo", "Abdomen")*/
 
         /*val aluno1 = AlunoModel("hermo","16/02/94", profName, false, false, false, false,
         false, false, false, "", "", "")

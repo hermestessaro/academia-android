@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.ArrayAdapter
 import com.example.academia.models.ProfessorModel
 import kotlinx.android.synthetic.main.activity_selecttrainer.*
@@ -16,14 +17,6 @@ class SelectTrainer : AppCompatActivity() {
         //this.deleteDatabase("database.db")
 
         val dbHelper = DatabaseHelper(this)
-
-        dbHelper.createGrupo("Peito")
-        dbHelper.createGrupo("Costas")
-        dbHelper.createGrupo("Triceps")
-        dbHelper.createGrupo("Biceps")
-        dbHelper.createGrupo("Ombros")
-        dbHelper.createGrupo("Pernas")
-        dbHelper.createGrupo("Abdomen")
 
         /*val prof1 = ProfessorModel(0, "Renato", "renato@gremio.com", "1234", "1414141", "121212", "Sim")
         val prof2 = ProfessorModel(1, "Xavier", "xavier@xmen.com", "4321","1414141", "121212", "Sim")
@@ -40,6 +33,7 @@ class SelectTrainer : AppCompatActivity() {
         prof_list.adapter = adapter
 
         button_prof.setOnClickListener {
+            Log.d("selected", prof_list.selectedItem.toString())
             val intent = MainActivity.start(this, prof_list.selectedItem.toString())
             startActivity(intent)
         }

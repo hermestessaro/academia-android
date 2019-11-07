@@ -37,8 +37,8 @@ class AlunoDetailFragment() : Fragment() {
         if(arguments != null){
             this.aluno = arguments!!.getParcelable("alunoClicked")!!
         }
-        Log.d("nome", this.aluno.nome)
-        idAluno = dbHelper.getIdAlunoByName(this.aluno.nome)
+        Log.d("nome", this.aluno.Nome)
+        idAluno = dbHelper.getIdAlunoByName(this.aluno.Nome)
     }
 
     override fun onResume() {
@@ -101,16 +101,16 @@ class AlunoDetailFragment() : Fragment() {
         if(disp.dom) { day_7.setBackgroundColor(resources.getColor(R.color.colorGreen)) }
 
 
-        container.nome_aluno.text = aluno.nome
-        container.data_nascimento.text = aluno.dataNascimento
-        container.prof.text = aluno.prof
+        container.nome_aluno.text = aluno.Nome
+        container.data_nascimento.text = aluno.DataNascimento
+        container.prof.text = dbHelper.getProfessorById(aluno.IdProfessor.toInt()).Nome
         dropdownObs.setContentText(setObservations())
         //dropdownLesoes.setContentText(aluno.lesoes)
 
     }
 
     fun setObservations(): String{
-        var final_text = "Observações: ${aluno.observacoes}\nLesões: ${aluno.lesoes}\n"
+        var final_text = "Observações: ${aluno.Observacoes}\nLesões: ${aluno.Lesoes}\n"
         val auxDorAtividades = "Dor no peito por atividades: "
         val auxDorUltimoMes = "Dor no peito no último mês: "
         val auxPerdaConsciencia = "Já perdeu a consciência: "
@@ -119,13 +119,13 @@ class AlunoDetailFragment() : Fragment() {
         val auxDiabetico = "Diabético: "
         val auxCardiaco = "Histórico de ataque cardíaco: "
 
-        if(aluno.dorPeitoAtividades) auxDorAtividades + "Sim\n" else auxDorAtividades + "Não\n"
-        if(aluno.dorPeitoUltimoMes) auxDorUltimoMes + "Sim\n" else auxDorUltimoMes + "Não\n"
-        if(aluno.perdaConsciencia) auxPerdaConsciencia + "Sim\n" else auxPerdaConsciencia + "Não\n"
-        if(aluno.problemaArticular) auxProblemaArticular + "Sim\n" else auxProblemaArticular + "Não\n"
-        if(aluno.tabagista) auxTabagista + "Sim\n" else auxTabagista + "Não\n"
-        if(aluno.diabetico) auxDiabetico + "Sim\n" else auxDiabetico + "Não\n"
-        if(aluno.familiarCardiaco) auxCardiaco + "Sim\n" else auxCardiaco + "Não\n"
+        if(aluno.IndicadorDorPeitoAtividadesFisicas) auxDorAtividades + "Sim\n" else auxDorAtividades + "Não\n"
+        if(aluno.IndicadorDorPeitoUltimoMes) auxDorUltimoMes + "Sim\n" else auxDorUltimoMes + "Não\n"
+        if(aluno.IndicadorPerdaConscienciaTontura) auxPerdaConsciencia + "Sim\n" else auxPerdaConsciencia + "Não\n"
+        if(aluno.IndicadorProblemaArticular) auxProblemaArticular + "Sim\n" else auxProblemaArticular + "Não\n"
+        if(aluno.IndicadorTabagista) auxTabagista + "Sim\n" else auxTabagista + "Não\n"
+        if(aluno.IndicadorDiabetico) auxDiabetico + "Sim\n" else auxDiabetico + "Não\n"
+        if(aluno.IndicadorFamiliarAtaqueCardiaco) auxCardiaco + "Sim\n" else auxCardiaco + "Não\n"
 
         final_text + auxDorAtividades + auxDorUltimoMes + auxPerdaConsciencia + auxProblemaArticular + auxTabagista + auxDiabetico + auxCardiaco
 

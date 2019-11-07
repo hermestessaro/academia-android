@@ -2,6 +2,7 @@ package com.example.academia.controllers.AlunosLista
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,7 +28,9 @@ class MyAlunosListaFragment(val profName: String) : Fragment(), AlunoClick  {
     override fun onAttach(context: Context?) {
         super.onAttach(context)
         dbHelper = DatabaseHelper(activity)
-        mAlunos = dbHelper.getAlunosByProf(profName)
+        val prof = dbHelper.getProfessorByName(profName)
+        Log.d("nomeprof", prof.Nome)
+        mAlunos = dbHelper.getAlunosByIdProf(prof.IdProfessor)
 
     }
     override fun onCreate(savedInstanceState: Bundle?) {

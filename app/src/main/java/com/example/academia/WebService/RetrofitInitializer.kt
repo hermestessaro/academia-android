@@ -1,16 +1,13 @@
-package com.example.academia.controllers.WebService
+package com.example.academia.WebService
 
 import android.util.Log
-import com.google.gson.Gson
+import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import okhttp3.Credentials
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.util.concurrent.TimeUnit
-import javax.net.ssl.SSLContext
-import javax.net.ssl.X509TrustManager
 
 class RetrofitInitializer {
 
@@ -52,7 +49,8 @@ class RetrofitInitializer {
 
 
         return Retrofit.Builder()
-            .baseUrl("http://192.168.0.6/academia/web/api/")
+            .baseUrl("http://192.168.0.4/academia/web/api/")
+            .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .addConverterFactory(GsonConverterFactory.create())
             .client(getClient())
             .build()

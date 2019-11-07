@@ -9,7 +9,7 @@ import java.util.*
 class AlunoModel(
     val Nome: String,
     val DataNascimento: String,
-    val IdProfessor: String,
+    val IdProfessor: Int,
     val IndicadorDorPeitoAtividadesFisicas: Boolean,
     val IndicadorDorPeitoUltimoMes: Boolean,
     val IndicadorPerdaConscienciaTontura: Boolean,

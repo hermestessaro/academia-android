@@ -20,8 +20,8 @@ class AlunosListaViewHolder(inflater: LayoutInflater, parent: ViewGroup):
     }
 
     fun bind(aluno: AlunoModel, alunoListFrag: Fragment) {
-        mNameView?.text = aluno.nome
-        mDateView?.text = aluno.dataNascimento
+        mNameView?.text = aluno.Nome
+        mDateView?.text = aluno.DataNascimento
         itemView.setOnClickListener{
             if(alunoListFrag is AllAlunosListaFragment){
                 alunoListFrag.onAlunoClicked(aluno)

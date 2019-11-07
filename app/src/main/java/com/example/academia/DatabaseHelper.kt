@@ -13,6 +13,8 @@ import com.example.academia.models.*
 import java.lang.Exception
 import java.text.DateFormat.getDateInstance
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.LocalDateTime
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -99,8 +101,8 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
             "$ID_INCL int, $KEY_NAME varchar(100), $KEY_NASCIMENTO date, " +
             "$KEY_IND_1 varchar(1), $KEY_IND_2 varchar(1), $KEY_IND_3 varchar(1), $KEY_IND_4 varchar(1), " +
             "$KEY_IND_5 varchar(1), $KEY_IND_6 varchar(1), $KEY_IND_7 varchar(1), " +
-            "$KEY_LESOES varchar(200) NULL, $KEY_OBS varchar(200) NULL, $KEY_TREINO_ESP varchar(200) NULL" +
-            "$KEY_DATA_INC date, $KEY_DATA_ULT datetime, $KEY_ACTIVE varchar(1), " +
+            "$KEY_LESOES varchar(200) NULL, $KEY_OBS varchar(200) NULL, $KEY_TREINO_ESP varchar(200) NULL, " +
+            "$KEY_DATA_INC date, $KEY_DATA_ULT date, $KEY_ACTIVE varchar(1), " +
             "FOREIGN KEY($ID_INCL) REFERENCES $TABLE_PROF($ID_PROF));"
 
     /*private val CREATE_TABLE_ALUNO_DISP = "CREATE TABLE $TABLE_ALUNO_DISP ($ID_ALUNO_DISP INTEGER PRIMARY KEY, " +
@@ -121,7 +123,7 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
 
     private val CREATE_TABLE_TREINO = "CREATE TABLE $TABLE_TREINO ($ID_TREINO INTEGER, " +
             "$ID_PROF int, $ID_ALUNO int, $KEY_TIPO varchar (2), $KEY_NAME varchar(45) NULL," +
-            "$KEY_OBJETIVOS varchar(200) NULL, $KEY_DATA_INC date, $KEY_DATA_ULT datetime, $KEY_ACTIVE varchar(1)" +
+            "$KEY_OBJETIVOS varchar(200) NULL, $KEY_DATA_INC date, $KEY_DATA_ULT datetime, $KEY_ACTIVE varchar(1)," +
             "FOREIGN KEY($ID_PROF) REFERENCES $TABLE_PROF($ID_PROF), " +
             "FOREIGN KEY($ID_ALUNO) REFERENCES $TABLE_ALUNO($ID_ALUNO));"
 
@@ -131,7 +133,7 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
 
     private val CREATE_TABLE_EXERCICIO = "CREATE TABLE $TABLE_EXERCICIO ($ID_EXERCICIO INTEGER PRIMARY KEY, " +
             "$ID_TREINO int, $ID_ALUNO int, $ID_APARELHO varchar(45), $KEY_SERIES int, $KEY_REPS int, $KEY_PESO int, " +
-            "$KEY_DATA_ULT datetime, $KEY_ACTIVE varchar(1)" +
+            "$KEY_DATA_ULT datetime, $KEY_ACTIVE varchar(1)," +
             "FOREIGN KEY($ID_TREINO) REFERENCES $TABLE_TREINO($ID_TREINO)," +
             "FOREIGN KEY($ID_APARELHO) REFERENCES $TABLE_APARELHO($ID_APARELHO));"
 
@@ -139,7 +141,7 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
             "$ID_GRUPO int, $KEY_NAME varchar(45) UNIQUE, " +
             "FOREIGN KEY($ID_GRUPO) REFERENCES $TABLE_GRUPO($ID_GRUPO));"
 
-    private val CREATE_TABLE_GRUPO = "CREATE TABLE $TABLE_GRUPO ($ID INTEGER PRIMARY KEY, " +
+    private val CREATE_TABLE_GRUPO = "CREATE TABLE $TABLE_GRUPO ($ID_GRUPO INTEGER PRIMARY KEY, " +
             "$KEY_NAME varchar(20) UNIQUE);"
 
 
@@ -221,6 +223,25 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
         return prof
     }
 
+    fun getProfessorById(Id: Int) : ProfessorModel {
+        val db = this.readableDatabase
+        val selectQuery : String = "SELECT * FROM $TABLE_PROF WHERE $ID_PROF = '$Id';"
+        val c: Cursor = db.rawQuery(selectQuery, null)
+        if(c != null){
+            c.moveToFirst()
+        }
+
+        val prof = ProfessorModel(Id,
+            c.getString(c.getColumnIndex(KEY_NAME)),
+            c.getString(c.getColumnIndex(KEY_EMAIL)),
+            c.getString(c.getColumnIndex(KEY_SENHA)),
+            c.getString(c.getColumnIndex(KEY_DATA_INC)),
+            c.getString(c.getColumnIndex(KEY_DATA_ULT)),
+            c.getString(c.getColumnIndex(KEY_ACTIVE))
+        )
+        return prof
+    }
+
     fun getAllProfessors() : MutableList<ProfessorModel> {
         val db = this.readableDatabase
         val selectQuery : String = "SELECT * FROM $TABLE_PROF;"
@@ -247,7 +268,7 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
         val values = ContentValues().apply {
             put(KEY_NAME, aluno.Nome)
             put(KEY_NASCIMENTO, aluno.DataNascimento)
-            put(KEY_PROF, aluno.IdProfessor)
+            put(ID_INCL, aluno.IdProfessor)
             put(KEY_IND_1, aluno.IndicadorDorPeitoAtividadesFisicas)
             put(KEY_IND_2, aluno.IndicadorDorPeitoUltimoMes)
             put(KEY_IND_3, aluno.IndicadorPerdaConscienciaTontura)
@@ -258,8 +279,8 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
             put(KEY_LESOES, aluno.Lesoes)
             put(KEY_OBS, aluno.Observacoes)
             put(KEY_TREINO_ESP, aluno.TreinoEspecifico)
-            put(KEY_DATA_INC, aluno.DataInclusao)
-            put(KEY_DATA_ULT, getDateInstance().format(Date()))
+            put(KEY_DATA_INC, LocalDate.now().toString())
+            put(KEY_DATA_ULT, LocalDateTime.now().toString())
             put(KEY_ACTIVE, 1)
         }
 
@@ -294,7 +315,7 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
                 val ind7 = c.getString(c.getColumnIndex(KEY_IND_7))
                 val aluno = AlunoModel(c.getString(c.getColumnIndex(KEY_NAME)),
                     c.getString(c.getColumnIndex(KEY_NASCIMENTO)),
-                    c.getString(c.getColumnIndex(KEY_PROF)),
+                    c.getInt(c.getColumnIndex(ID_INCL)),
                     ind1.toBoolean(),
                     ind2.toBoolean(),
                     ind3.toBoolean(),
@@ -332,7 +353,7 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
         val ind7 = c.getString(c.getColumnIndex(KEY_IND_7))
         val aluno = AlunoModel(c.getString(c.getColumnIndex(KEY_NAME)),
             c.getString(c.getColumnIndex(KEY_NASCIMENTO)),
-            c.getString(c.getColumnIndex(KEY_PROF)),
+            c.getInt(c.getColumnIndex(ID_INCL)),
             ind1.toBoolean(),
             ind2.toBoolean(),
             ind3.toBoolean(),
@@ -350,17 +371,16 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
         return aluno
     }
 
-    fun getAlunosByProf(nomeProf: String): MutableList<AlunoModel>{
-        val prof = getProfessorByName(nomeProf)
+    fun getAlunosByIdProf(idProf: Int): MutableList<AlunoModel>{
         val db = this.readableDatabase
         val alunos: MutableList<AlunoModel> = ArrayList()
-        val selectQuery : String = "SELECT * FROM $TABLE_ALUNO WHERE $KEY_PROF = '$nomeProf'"
+        val selectQuery : String = "SELECT * FROM $TABLE_ALUNO WHERE $ID_INCL = $idProf"
         val c: Cursor = db.rawQuery(selectQuery, null)
         if(c.moveToFirst()) {
             do {
                 val aluno = AlunoModel(c.getString(c.getColumnIndex(KEY_NAME)),
                     c.getString(c.getColumnIndex(KEY_NASCIMENTO)),
-                    c.getString(c.getColumnIndex(KEY_PROF)),
+                    idProf,
                     c.getString(c.getColumnIndex(KEY_IND_1)).toBoolean(),
                     c.getString(c.getColumnIndex(KEY_IND_2)).toBoolean(),
                     c.getString(c.getColumnIndex(KEY_IND_3)).toBoolean(),
@@ -396,7 +416,7 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
         val values = ContentValues().apply {
             put(KEY_NAME, aluno.Nome)
             put(KEY_NASCIMENTO, aluno.DataNascimento)
-            put(KEY_PROF, aluno.IdProfessor)
+            put(ID_INCL, aluno.IdProfessor)
             put(KEY_IND_1, aluno.IndicadorDorPeitoAtividadesFisicas)
             put(KEY_IND_2, aluno.IndicadorDorPeitoUltimoMes)
             put(KEY_IND_3, aluno.IndicadorPerdaConscienciaTontura)
@@ -433,7 +453,7 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
         val gruposList: MutableList<GrupoModel> = ArrayList()
         if(c.moveToFirst()){
             do {
-                val grupo = GrupoModel(c.getInt(c.getColumnIndex(ID)),
+                val grupo = GrupoModel(c.getInt(c.getColumnIndex(ID_GRUPO)),
                             c.getString(c.getColumnIndex(KEY_NAME)))
                 gruposList.add(grupo)
             }while (c.moveToNext())
@@ -446,18 +466,16 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
         val selectQuery : String = "SELECT * FROM $TABLE_GRUPO WHERE $KEY_NAME = '$nomeGrupo';"
         val c: Cursor = db.rawQuery(selectQuery, null)
         c.moveToFirst()
-        val grupo = GrupoModel(c.getInt(c.getColumnIndex(ID)),
+        val grupo = GrupoModel(c.getInt(c.getColumnIndex(ID_GRUPO)),
                     c.getString(c.getColumnIndex(KEY_NAME)))
         return grupo
     }
 
-    fun createAparelho(nomeAparelho:String, nomeGrupo:String): Int{
-        val grupo = getGrupoByName(nomeGrupo)
-        Log.d("grupoNome", grupo.nome)
+    fun createAparelho(aparelho: AparelhoModel): Int{
         val db = this.writableDatabase
         val values: ContentValues = ContentValues()
-        values.put(ID_GRUPO, grupo.id)
-        values.put(KEY_NAME, nomeAparelho)
+        values.put(ID_GRUPO, aparelho.IdGrupo)
+        values.put(KEY_NAME, aparelho.Nome)
         val rowInserted = db.insert(TABLE_APARELHO, null, values)
         return rowInserted.toInt()
     }
@@ -472,8 +490,8 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
         val grupo = getGrupoByName(nomeGrupo)
         val db = this.readableDatabase
         val aparelhos: MutableList<AparelhoModel> = ArrayList()
-        val idGrupo = grupo.id
-        val selectQuery : String = "SELECT * FROM $TABLE_APARELHO WHERE $ID_GRUPO = '$idGrupo'"
+        val idGrupo = grupo.IdGrupo
+        val selectQuery : String = "SELECT * FROM $TABLE_APARELHO WHERE $ID_GRUPO = $idGrupo"
         val c: Cursor = db.rawQuery(selectQuery, null)
         if(c.moveToFirst()) {
             do {
@@ -505,7 +523,7 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
 
     fun  getDisp(idAluno: Int): DispModel{
         val db = this.readableDatabase
-        val selectQuery = "SELECT * FROM $TABLE_DISP WHERE $ID_ALUNO = '$idAluno'"
+        val selectQuery = "SELECT * FROM $TABLE_DISP WHERE $ID_ALUNO = $idAluno"
         val c: Cursor = db.rawQuery(selectQuery, null)
         c.moveToFirst()
         val disp = DispModel(
@@ -562,7 +580,7 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
             do {
                 val exercicio = ExercicioModel(c.getInt(c.getColumnIndex(ID_TREINO)),
                     c.getInt(c.getColumnIndex(ID_ALUNO)),
-                    c.getString(c.getColumnIndex(KEY_APARELHO_NAME)),
+                    c.getString(c.getColumnIndex(ID_APARELHO)),
                     //c.getString(c.getColumnIndex(KEY_NAME)),
                     c.getInt(c.getColumnIndex(KEY_SERIES)),
                     c.getInt(c.getColumnIndex(KEY_REPS)),
@@ -582,13 +600,14 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
         val values = ContentValues()
         values.put(ID_TREINO, exercicio.idTreino)
         values.put(ID_ALUNO, exercicio.idAluno)
-        values.put(KEY_APARELHO_NAME, exercicio.nomeAparelho)
+        values.put(ID_APARELHO, exercicio.nomeAparelho)
         values.put(KEY_SERIES, exercicio.series)
         values.put(KEY_REPS, exercicio.repeticoes)
         values.put(KEY_PESO, exercicio.peso)
         val row = db.insert(TABLE_EXERCICIO, null, values)
         Log.d("rowExercicio", row.toString())
     }
+
 
     fun saveTreino(treino: TreinoModel){
         val db = this.writableDatabase
@@ -625,7 +644,7 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
 
     companion object {
         private val DB_NAME = "database.db"
-        private val DB_VERSION = 1
+        private val DB_VERSION = 15
 
     }
 }

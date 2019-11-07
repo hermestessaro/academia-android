@@ -42,13 +42,13 @@ class GruposListaFragment(val selectingExercises: Boolean, val idTreino: Int, va
         val listData = HashMap<String, MutableList<String>>()
 
         for(item in grupos){
-            val aparelhosList = dbHelper.getAparelhosByGrupo(item.nome)
+            val aparelhosList = dbHelper.getAparelhosByGrupo(item.Nome)
             val aparelhosListNames: MutableList<String> = ArrayList()
             for(aparelho in aparelhosList){
-                aparelhosListNames.add(aparelho.nome)
+                aparelhosListNames.add(aparelho.Nome)
             }
             //Log.d("names", item.nome)
-            listData[item.nome] = aparelhosListNames
+            listData[item.Nome] = aparelhosListNames
         }
 
         return listData

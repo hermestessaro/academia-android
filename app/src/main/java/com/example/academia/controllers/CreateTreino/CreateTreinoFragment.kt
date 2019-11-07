@@ -67,12 +67,12 @@ class CreateTreinoFragment(val newTreino: Boolean, var idTreino: Int, val idAlun
         val alunos_names = ArrayList<String>()
         if(idAluno != null){
             val aluno = dbHelper.getAlunoById(idAluno)
-            alunos_names.add(aluno.nome)
+            alunos_names.add(aluno.Nome)
         }
         else{
             val alunos = dbHelper.getAllAlunos()
             for(item in alunos){
-                alunos_names.add(item.nome)
+                alunos_names.add(item.Nome)
             }
         }
 
@@ -117,12 +117,12 @@ class CreateTreinoFragment(val newTreino: Boolean, var idTreino: Int, val idAlun
         var auxIdAluno = -1
         if(idAluno==null){
             auxIdAluno = dbHelper.getIdAlunoByName(aluno_nome)
+
         }
         else{
             auxIdAluno = idAluno
         }
 
-        val treino = TreinoModel(idTreino, 0, auxIdAluno, treino_nome, tipo_treino)
         dbHelper.saveTreino(treino)
     }
 
@@ -137,8 +137,9 @@ class CreateTreinoFragment(val newTreino: Boolean, var idTreino: Int, val idAlun
         else{
             auxIdAluno = idAluno
         }
+        val aluno = dbHelper.getAlunoById(auxIdAluno)
 
-        val treino = TreinoModel(idTreino, 0, auxIdAluno, treino_nome, tipo_treino)
+        val treino = TreinoModel(idTreino, aluno.IdProfessor, auxIdAluno, treino_nome, tipo_treino)
         dbHelper.updateTreino(treino)
     }
 
