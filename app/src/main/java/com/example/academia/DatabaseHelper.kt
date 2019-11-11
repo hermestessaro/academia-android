@@ -205,6 +205,7 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
 
 
     fun getProfessorByName(name: String) : ProfessorModel {
+
         val db = this.readableDatabase
         val selectQuery : String = "SELECT * FROM $TABLE_PROF WHERE $KEY_NAME = '$name';"
         val c: Cursor = db.rawQuery(selectQuery, null)
@@ -472,12 +473,34 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
     }
 
     fun createAparelho(aparelho: AparelhoModel): Int{
+        if(getAparelhoByName(aparelho) == null){
+            return -1
+        }
         val db = this.writableDatabase
         val values: ContentValues = ContentValues()
         values.put(ID_GRUPO, aparelho.IdGrupo)
         values.put(KEY_NAME, aparelho.Nome)
-        val rowInserted = db.insert(TABLE_APARELHO, null, values)
-        return rowInserted.toInt()
+        var rowInserted = -1
+        try {
+            rowInserted = db.insertOrThrow(TABLE_APARELHO, null, values).toInt()
+        }catch (e:Exception){
+            e.printStackTrace()
+        }
+        return rowInserted
+    }
+
+    fun getAparelhoByName(aparelho: AparelhoModel): AparelhoModel?{
+        val db = this.readableDatabase
+        val selectQuery : String = "SELECT * FROM $TABLE_APARELHO WHERE $KEY_NAME = '${aparelho.Nome}';"
+        val c: Cursor = db.rawQuery(selectQuery, null)
+        if(c.moveToFirst()){
+            val new = AparelhoModel(
+                c.getInt(c.getColumnIndex(ID_GRUPO)),
+                c.getString(c.getColumnIndex(KEY_NAME))
+            )
+            return new
+        }
+        else return null
     }
 
     fun deleteAparelho(nomeAparelho: String): Int{

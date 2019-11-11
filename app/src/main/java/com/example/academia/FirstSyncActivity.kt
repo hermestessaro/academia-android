@@ -5,21 +5,15 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.coordinatorlayout.widget.CoordinatorLayout
-import com.example.academia.WebService.*
+import com.example.academia.WebService.RetrofitInitializer
 import com.example.academia.models.AparelhoModel
 import com.example.academia.models.GrupoModel
 import com.example.academia.models.ProfessorModel
 import kotlinx.coroutines.*
-import retrofit2.HttpException
-import retrofit2.Retrofit
-import java.lang.Exception
 import java.lang.Runnable
-import kotlin.coroutines.suspendCoroutine
 
-class SyncActivity : AppCompatActivity() {
+class FirstSyncActivity : AppCompatActivity() {
 
     val PRIVATE_MODE = 0
     val PREF_NAME = "synced"
@@ -40,9 +34,9 @@ class SyncActivity : AppCompatActivity() {
                         builder.setTitle("Sincronizar")
                         builder.setMessage("Você gostaria de sincronizar o banco de dados?")
                         builder.setPositiveButton("Sim") { dialog, which ->
-                            syncProf()
-                            syncGrupos()
-                            syncAparelhos()
+                            GlobalScope.launch (Dispatchers.Default){
+                                async{syncAll()}.await()
+                            }
                         }
                         builder.setNegativeButton("Não") { _, _ ->
                             val prof = ProfessorModel(9, "ProfTeste", "teste@teste.com", "1234", "", "", "Sim")
@@ -58,9 +52,11 @@ class SyncActivity : AppCompatActivity() {
         }
         //não sincronizou
         else {
-            syncProf()
-            syncGrupos()
-            syncAparelhos()
+            GlobalScope.launch (Dispatchers.IO){
+                async{syncAll()}.await()
+
+            }
+
             val editor = sharedPref.edit()
             editor.putBoolean(PREF_NAME, true)
             editor.apply()
@@ -72,10 +68,16 @@ class SyncActivity : AppCompatActivity() {
 
     }
 
+     fun syncAll(){
+        syncAparelhos()
+        syncProf()
+        syncGrupos()
+    }
+
 
 
     fun syncProf() {
-        GlobalScope.launch(Dispatchers.IO) {
+        GlobalScope.launch (Dispatchers.IO){
             try {
                 val professors = retrieveProfessors().await() as List<ProfessorModel>
                 withContext(Dispatchers.Main) {
@@ -128,7 +130,7 @@ class SyncActivity : AppCompatActivity() {
     }
 
     fun syncGrupos() {
-        GlobalScope.launch(Dispatchers.IO) {
+        GlobalScope.launch (Dispatchers.IO) {
             try {
                 val grupos = retrieveGrupos().await() as List<GrupoModel>
                 withContext(Dispatchers.Main) {
@@ -167,11 +169,13 @@ class SyncActivity : AppCompatActivity() {
     }
 
     fun syncAparelhos() {
-        GlobalScope.launch(Dispatchers.IO) {
+        GlobalScope.launch (Dispatchers.IO) {
             try {
                 val aparelhos = retrieveAparelhos().await() as List<AparelhoModel>
+
                 withContext(Dispatchers.Main) {
                     aparelhos.forEach {
+                        Log.d("nomeaparelho", it.Nome)
                         val aparelho = AparelhoModel(
                             it.IdGrupo,
                             it.Nome
@@ -195,8 +199,15 @@ class SyncActivity : AppCompatActivity() {
 
         return GlobalScope.async {
             try {
-                val primaryResponse = retrofit.appServices().getAparelhos().await()
-                return@async primaryResponse.items
+                val primaryResponse = retrofit.appServices().getAparelhos(1).await()
+                val items = primaryResponse.items
+                var result = items
+                if(primaryResponse._meta.pageCount > 1){
+                    for(i in 2 until primaryResponse._meta.pageCount+1){
+                        result = result + retrofit.appServices().getAparelhos(i).await().items
+                    }
+                }
+                return@async result
             }
             catch (e: Exception){
                 e.printStackTrace()

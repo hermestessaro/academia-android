@@ -16,6 +16,7 @@ import com.example.academia.controllers.AlunosLista.MyAlunosListaFragment
 import com.example.academia.controllers.GruposLista.GruposListaFragment
 import com.example.academia.models.AlunoModel
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.detail_header.*
 import kotlinx.android.synthetic.main.toolbar.toolbar
 
 class MainActivity : AppCompatActivity() {
@@ -91,7 +92,8 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.nav_item_two -> {
                     view_pager.visibility = View.GONE
-                    startActivity(Intent(this, NewAluno::class.java))
+                    val intent = NewAluno.start(applicationContext, profName)
+                    startActivity(intent)
                 }
                 R.id.nav_item_four -> Toast.makeText(this, "profs", Toast.LENGTH_LONG).show()
                 R.id.nav_item_five -> Toast.makeText(this, "aparelhos", Toast.LENGTH_LONG).show()

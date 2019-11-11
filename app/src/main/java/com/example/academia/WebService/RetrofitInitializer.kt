@@ -49,7 +49,7 @@ class RetrofitInitializer {
 
 
         return Retrofit.Builder()
-            .baseUrl("http://192.168.0.4/academia/web/api/")
+            .baseUrl("http://192.168.0.3/academia/web/api/")
             .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .addConverterFactory(GsonConverterFactory.create())
             .client(getClient())

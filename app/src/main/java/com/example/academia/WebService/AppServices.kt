@@ -5,6 +5,7 @@ import kotlinx.coroutines.Deferred
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.GET
+import retrofit2.http.Query
 
 interface AppServices {
 
@@ -21,5 +22,5 @@ interface AppServices {
     fun getGrupos(): Deferred<ApiResponse<GrupoModel>>
 
     @GET("/academia/web/api/aparelho")
-    fun getAparelhos(): Deferred<ApiResponse<AparelhoModel>>
+    fun getAparelhos(@Query("page") page: Int): Deferred<ApiResponse<AparelhoModel>>
 }

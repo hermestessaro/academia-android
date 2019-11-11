@@ -49,7 +49,67 @@ class AddExercicioDialogFragment : DialogFragment() {
         val subCarga = view.findViewById<ImageView>(R.id.sub_button_carga)
         val okButton = view.findViewById<Button>(R.id.ok)
 
+        seriesET.setText("0")
+        repsET.setText("0")
+        cargaET.setText("0")
 
+
+        addSeries.setOnClickListener {
+            if(seriesET.text.isNullOrEmpty()){
+                seriesET.setText("1")
+            }
+            else{
+                var value = seriesET.text.toString().toInt()
+                value += 1
+                seriesET.setText(value.toString())
+            }
+        }
+
+        subSeries.setOnClickListener {
+            if((!seriesET.text.isNullOrEmpty())&&(seriesET.text.toString() != "0")){
+                var value = seriesET.text.toString().toInt()
+                value -= 1
+                seriesET.setText(value.toString())
+            }
+        }
+
+        addReps.setOnClickListener {
+            if(repsET.text.isNullOrEmpty()){
+                repsET.setText("1")
+            }
+            else{
+                var value = repsET.text.toString().toInt()
+                value += 1
+                repsET.setText(value.toString())
+            }
+        }
+
+        subReps.setOnClickListener {
+            if((!repsET.text.isNullOrEmpty())&&(repsET.text.toString() != "0")){
+                var value = repsET.text.toString().toInt()
+                value -= 1
+                repsET.setText(value.toString())
+            }
+        }
+
+        addCarga.setOnClickListener {
+            if(cargaET.text.isNullOrEmpty()){
+                cargaET.setText("1")
+            }
+            else{
+                var value = cargaET.text.toString().toInt()
+                value += 1
+                cargaET.setText(value.toString())
+            }
+        }
+
+        subCarga.setOnClickListener {
+            if((!cargaET.text.isNullOrEmpty())&&(cargaET.text.toString() != "0")){
+                var value = cargaET.text.toString().toInt()
+                value -= 1
+                cargaET.setText(value.toString())
+            }
+        }
 
         okButton.setOnClickListener {
             if((seriesET.text.isNullOrEmpty()) || (repsET.text.isNullOrEmpty()) ||

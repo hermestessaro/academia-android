@@ -1,6 +1,7 @@
 
 package com.example.academia
 
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -15,16 +16,13 @@ import kotlinx.android.synthetic.main.activity_new_aluno.*
 class NewAluno : AppCompatActivity() {
 
     lateinit var profName: String
-    private var PRIVATE_MODE = 0
-    private val PREF_NAME = "profName"
 
     override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_aluno)
 
-        val sharedPref: SharedPreferences = getSharedPreferences(PREF_NAME, PRIVATE_MODE)
 
-        profName = sharedPref.getString(PREF_NAME,"default")!!
+        profName = intent.getStringExtra("profName")!!
 
         button_save.setOnClickListener {
             saveAluno()
@@ -79,5 +77,13 @@ class NewAluno : AppCompatActivity() {
 
     }
 
+
+    companion object {
+        fun start(context: Context, prof: String): Intent {
+            val intent = Intent(context, NewAluno::class.java)
+            intent.putExtra("profName", prof)
+            return intent
+        }
+    }
 
 }
