@@ -8,7 +8,7 @@ import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.example.academia.DatabaseHelper
+import com.example.academia.Database.DatabaseHelper
 import com.example.academia.MainActivity
 import com.example.academia.R
 import com.example.academia.controllers.NewTreino.NewTreino

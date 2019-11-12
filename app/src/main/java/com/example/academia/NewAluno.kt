@@ -3,11 +3,11 @@ package com.example.academia
 
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.academia.Database.DatabaseHelper
 import com.example.academia.models.AlunoModel
 import com.example.academia.models.DispModel
 import kotlinx.android.synthetic.main.activity_new_aluno.*

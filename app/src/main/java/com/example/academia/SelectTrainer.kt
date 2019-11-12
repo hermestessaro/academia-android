@@ -1,12 +1,10 @@
 package com.example.academia
 
-import android.content.Context
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.ArrayAdapter
-import com.example.academia.models.ProfessorModel
+import com.example.academia.Database.DatabaseHelper
 import kotlinx.android.synthetic.main.activity_selecttrainer.*
 
 class SelectTrainer : AppCompatActivity() {

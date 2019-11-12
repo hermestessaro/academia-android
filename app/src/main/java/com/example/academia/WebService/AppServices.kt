@@ -13,7 +13,7 @@ interface AppServices {
     fun getProfessors(): Deferred<ApiResponse<ProfessorModel>>
 
     @GET("/academia/web/api/aluno")
-    fun getAlunos(): Response<ApiResponse<AlunoModel>>
+    fun getAlunos(@Query("page") page: Int): Deferred<ApiResponse<AlunoModel>>
 
     @GET("/academia/web/api/exercicio")
     fun getExercicios(): Response<ApiResponse<ExercicioModel>>
@@ -23,4 +23,7 @@ interface AppServices {
 
     @GET("/academia/web/api/aparelho")
     fun getAparelhos(@Query("page") page: Int): Deferred<ApiResponse<AparelhoModel>>
+
+    @GET("/academia/web/api/treino")
+    fun getTreinos(@Query("page") page: Int): Deferred<ApiResponse<TreinoModel>>
 }

@@ -7,12 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.academia.DatabaseHelper
+import com.example.academia.Database.DatabaseHelper
 import com.example.academia.MainActivity
 import com.example.academia.R
 import com.example.academia.controllers.AlunoDetail.AlunoDetailFragment
 import com.example.academia.models.AlunoModel
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_alunos_lista.*
 
 class AllAlunosListaFragment : Fragment(), AlunoClick {

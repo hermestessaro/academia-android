@@ -1,15 +1,13 @@
 package com.example.academia.controllers
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.academia.DatabaseHelper
+import com.example.academia.Database.DatabaseHelper
 import com.example.academia.R
-import com.example.academia.controllers.GruposLista.GruposListaFragment
 import com.example.academia.models.AparelhoModel
 import kotlinx.android.synthetic.main.activity_edit_grupos.*
 

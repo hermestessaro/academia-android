@@ -4,19 +4,17 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
-import com.example.academia.DatabaseHelper
+import com.example.academia.Database.DatabaseHelper
 import com.example.academia.R
 import com.example.academia.controllers.EditGruposActivity
 import com.example.academia.controllers.NewTreino.NewTreino
 import com.example.academia.models.GrupoModel
-import kotlinx.android.synthetic.main.aparelho_list_item.*
 import kotlinx.android.synthetic.main.aparelho_list_item.view.*
 import kotlinx.android.synthetic.main.fragment_grupos.*
 

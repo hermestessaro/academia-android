@@ -11,7 +11,7 @@ import android.widget.Toast
 import androidx.core.view.size
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.academia.DatabaseHelper
+import com.example.academia.Database.DatabaseHelper
 import com.example.academia.R
 import com.example.academia.controllers.GruposLista.GruposListaFragment
 import com.example.academia.controllers.NewTreino.NewTreino
@@ -117,12 +117,12 @@ class CreateTreinoFragment(val newTreino: Boolean, var idTreino: Int, val idAlun
         var auxIdAluno = -1
         if(idAluno==null){
             auxIdAluno = dbHelper.getIdAlunoByName(aluno_nome)
-
         }
         else{
             auxIdAluno = idAluno
         }
-
+        val aluno = dbHelper.getAlunoById(auxIdAluno)
+        val treino = TreinoModel(idTreino, aluno.IdProfessor, auxIdAluno, treino_nome, tipo_treino)
         dbHelper.saveTreino(treino)
     }
 

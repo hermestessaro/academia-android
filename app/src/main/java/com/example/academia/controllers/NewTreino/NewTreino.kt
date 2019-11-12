@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.example.academia.DatabaseHelper
+import com.example.academia.Database.DatabaseHelper
 import com.example.academia.R
 import com.example.academia.controllers.CreateTreino.CreateTreinoFragment
 import com.example.academia.controllers.ViewTreino.ViewTreinoFragment

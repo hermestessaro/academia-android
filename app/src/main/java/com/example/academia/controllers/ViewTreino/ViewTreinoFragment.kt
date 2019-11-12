@@ -3,15 +3,10 @@ package com.example.academia.controllers.ViewTreino
 import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.*
-import android.widget.ArrayAdapter
-import android.widget.Toast
-import androidx.core.view.size
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.academia.DatabaseHelper
-import com.example.academia.MainActivity
+import com.example.academia.Database.DatabaseHelper
 import com.example.academia.R
 import com.example.academia.controllers.CreateTreino.CreateTreinoFragment
 import com.example.academia.controllers.CreateTreino.ExerciciosAdapter

@@ -6,7 +6,7 @@ import java.util.*
 
 
 @Parcelize
-class ProfessorModel (val IdProfessor: Int,
+class ProfessorModel (var IdProfessor: Int,
                       val Nome: String,
                       val Email: String,
                       val Senha: String,
