@@ -45,7 +45,7 @@ class DHAluno(val db: SQLiteDatabase) {
     val values = ContentValues().apply {
         put(KEY_NAME, aluno.Nome)
         put(KEY_NASCIMENTO, aluno.DataNascimento)
-        put(ID_INCL, aluno.IdProfessor)
+        put(ID_INCL, aluno.IdProf)
         put(KEY_IND_1, aluno.IndicadorDorPeitoAtividadesFisicas)
         put(KEY_IND_2, aluno.IndicadorDorPeitoUltimoMes)
         put(KEY_IND_3, aluno.IndicadorPerdaConscienciaTontura)
@@ -58,7 +58,7 @@ class DHAluno(val db: SQLiteDatabase) {
         put(KEY_TREINO_ESP, aluno.TreinoEspecifico)
         put(KEY_DATA_INC, LocalDate.now().toString())
         put(KEY_DATA_ULT, LocalDateTime.now().format(formatter).toString())
-        put(KEY_ACTIVE, 1)
+        put(KEY_ACTIVE, "1")
     }
 
 
@@ -67,15 +67,17 @@ class DHAluno(val db: SQLiteDatabase) {
 }
 
     fun getIdAlunoByName(name: String): Int {
-        val selectQuery = "SELECT * FROM $TABLE_ALUNO WHERE $KEY_NAME = '$name' AND $KEY_ACTIVE = 1;"
+        val selectQuery = "SELECT * FROM $TABLE_ALUNO WHERE $KEY_NAME = '$name' AND $KEY_ACTIVE = \"1\";"
         val c: Cursor = db.rawQuery(selectQuery, null)
         c.moveToLast()
-        return c.getInt(c.getColumnIndex(ID_ALUNO))
+        val result = c.getInt(c.getColumnIndex(ID_ALUNO))
+        c.close()
+        return result
     }
 
     fun getAllAlunos() : MutableList<AlunoModel> {
         Log.d("primeiro", "passou")
-        val selectQuery : String = "SELECT * FROM $TABLE_ALUNO WHERE $KEY_ACTIVE = 1;"
+        val selectQuery : String = "SELECT * FROM $TABLE_ALUNO WHERE $KEY_ACTIVE = \"1\";"
         val c: Cursor = db.rawQuery(selectQuery, null)
 
         val alunosList : MutableList<AlunoModel> = ArrayList()
@@ -103,7 +105,7 @@ class DHAluno(val db: SQLiteDatabase) {
                     c.getString(c.getColumnIndex(KEY_TREINO_ESP)),
                     c.getString(c.getColumnIndex(KEY_DATA_INC)),
                     c.getString(c.getColumnIndex(KEY_DATA_ULT)),
-                    c.getString(c.getColumnIndex(KEY_ACTIVE))!!.toBoolean())
+                    c.getString(c.getColumnIndex(KEY_ACTIVE)))
                 alunosList.add(aluno)
 
 
@@ -111,11 +113,12 @@ class DHAluno(val db: SQLiteDatabase) {
             }while(c.moveToNext())
         }
 
+        c.close()
         return alunosList
     }
 
     fun getAlunoById(idAluno: Int): AlunoModel {
-        val selectQuery = "SELECT * FROM $TABLE_ALUNO WHERE $ID_ALUNO = $idAluno AND $KEY_ACTIVE = 1;"
+        val selectQuery = "SELECT * FROM $TABLE_ALUNO WHERE $ID_ALUNO = $idAluno AND $KEY_ACTIVE = \"1\";"
         val c: Cursor = db.rawQuery(selectQuery, null)
         c.moveToFirst()
         val ind1 = c.getString(c.getColumnIndex(KEY_IND_1))
@@ -140,14 +143,14 @@ class DHAluno(val db: SQLiteDatabase) {
             c.getString(c.getColumnIndex(KEY_TREINO_ESP)),
             c.getString(c.getColumnIndex(KEY_DATA_INC)),
             c.getString(c.getColumnIndex(KEY_DATA_ULT)),
-            c.getString(c.getColumnIndex(KEY_ACTIVE))!!.toBoolean())
+            c.getString(c.getColumnIndex(KEY_ACTIVE)))
 
         return aluno
     }
 
     fun getAlunosByIdProf(idProf: Int): MutableList<AlunoModel>{
         val alunos: MutableList<AlunoModel> = ArrayList()
-        val selectQuery : String = "SELECT * FROM $TABLE_ALUNO WHERE $ID_INCL = $idProf AND $KEY_ACTIVE = 1"
+        val selectQuery : String = "SELECT * FROM $TABLE_ALUNO WHERE $ID_INCL = $idProf AND $KEY_ACTIVE = \"1\";"
         val c: Cursor = db.rawQuery(selectQuery, null)
         if(c.moveToFirst()) {
             do {
@@ -166,7 +169,7 @@ class DHAluno(val db: SQLiteDatabase) {
                     c.getString(c.getColumnIndex(KEY_TREINO_ESP)),
                     c.getString(c.getColumnIndex(KEY_DATA_INC)),
                     c.getString(c.getColumnIndex(KEY_DATA_ULT)),
-                    c.getString(c.getColumnIndex(KEY_ACTIVE))!!.toBoolean())
+                    c.getString(c.getColumnIndex(KEY_ACTIVE)))
                 alunos.add(aluno)
 
             } while (c.moveToNext())
@@ -181,8 +184,10 @@ class DHAluno(val db: SQLiteDatabase) {
          db.delete(TABLE_DISP, whereClause, arrayOf(idAluno.toString()))
          db.delete(TABLE_TREINO, whereClause, arrayOf(idAluno.toString()))
          db.delete(TABLE_EXERCICIO, whereClause, arrayOf(idAluno.toString()))*/
-        val updateQuery = "UPDATE $TABLE_ALUNO SET $KEY_ACTIVE = 0 WHERE $ID_ALUNO = $idAluno;"
-        db.rawQuery(updateQuery, null)
+        val updateQuery = "UPDATE $TABLE_ALUNO SET $KEY_ACTIVE = \"0\" WHERE $ID_ALUNO = $idAluno;"
+        val c = db.rawQuery(updateQuery, null)
+        c.moveToFirst()
+        c.close()
 
     }
 
@@ -190,7 +195,7 @@ class DHAluno(val db: SQLiteDatabase) {
         val values = ContentValues().apply {
             put(KEY_NAME, aluno.Nome)
             put(KEY_NASCIMENTO, aluno.DataNascimento)
-            put(ID_INCL, aluno.IdProfessor)
+            put(ID_INCL, aluno.IdProf)
             put(KEY_IND_1, aluno.IndicadorDorPeitoAtividadesFisicas)
             put(KEY_IND_2, aluno.IndicadorDorPeitoUltimoMes)
             put(KEY_IND_3, aluno.IndicadorPerdaConscienciaTontura)
@@ -203,7 +208,7 @@ class DHAluno(val db: SQLiteDatabase) {
             put(KEY_TREINO_ESP, aluno.TreinoEspecifico)
             put(KEY_DATA_INC, aluno.DataInclusao)
             put(KEY_DATA_ULT, LocalDateTime.now().format(formatter).toString())
-            put(KEY_ACTIVE, 1)
+            put(KEY_ACTIVE, "1")
         }
         db.update(TABLE_ALUNO, values, "$ID_ALUNO = ?", arrayOf(idAluno.toString()))
     }

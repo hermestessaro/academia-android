@@ -36,7 +36,7 @@ class DHProfessor(val db: SQLiteDatabase) {
             put(KEY_SENHA, prof.Senha)
             put(KEY_DATA_INC, prof.DataInclusao)
             put(KEY_DATA_ULT, prof.DataHoraUltimaAtu)
-            put(KEY_ACTIVE, 1)
+            put(KEY_ACTIVE, "1")
         }
 
         try {
@@ -47,22 +47,21 @@ class DHProfessor(val db: SQLiteDatabase) {
     }
 
 
-    fun getProfessorByName(name: String) : ProfessorModel {
+    fun getProfessorByName(name: String) : ProfessorModel? {
 
         val selectQuery : String = "SELECT * FROM $TABLE_PROF WHERE $KEY_NAME = '$name';"
         val c: Cursor = db.rawQuery(selectQuery, null)
-        if(c != null){
-            c.moveToFirst()
+        var prof: ProfessorModel? = null
+        if(c.moveToFirst()){
+            prof = ProfessorModel(c.getInt(c.getColumnIndex(ID_PROF)),
+                name,
+                c.getString(c.getColumnIndex(KEY_EMAIL)),
+                c.getString(c.getColumnIndex(KEY_SENHA)),
+                c.getString(c.getColumnIndex(KEY_DATA_INC)),
+                c.getString(c.getColumnIndex(KEY_DATA_ULT)),
+                c.getString(c.getColumnIndex(KEY_ACTIVE))
+            )
         }
-
-        val prof = ProfessorModel(c.getInt(c.getColumnIndex(ID_PROF)),
-            name,
-            c.getString(c.getColumnIndex(KEY_EMAIL)),
-            c.getString(c.getColumnIndex(KEY_SENHA)),
-            c.getString(c.getColumnIndex(KEY_DATA_INC)),
-            c.getString(c.getColumnIndex(KEY_DATA_ULT)),
-            c.getString(c.getColumnIndex(KEY_ACTIVE))
-        )
         return prof
     }
 
@@ -113,9 +112,10 @@ class DHProfessor(val db: SQLiteDatabase) {
             put(KEY_SENHA, prof.Senha)
             put(KEY_DATA_INC, prof.DataInclusao)
             put(KEY_DATA_ULT, LocalDateTime.now().format(formatter).toString())
-            put(KEY_ACTIVE, 1)
+            put(KEY_ACTIVE, "1")
         }
         db.update(TABLE_PROF, values, "$ID_PROF = ?", arrayOf(idProf.toString()))
+
     }
 
 }

@@ -26,8 +26,8 @@ class MyAlunosListaFragment(val profName: String) : Fragment(), AlunoClick  {
         super.onAttach(context)
         dbHelper = DatabaseHelper(activity)
         val prof = dbHelper.getProfessorByName(profName)
-        Log.d("nomeprof", prof.Nome)
-        mAlunos = dbHelper.getAlunosByIdProf(prof.IdProfessor)
+        Log.d("nomeprof", prof!!.Nome)
+        mAlunos = dbHelper.getAlunosByIdProf(prof!!.IdProfessor)
 
     }
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -27,13 +27,17 @@ class FirstSyncActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sync)
-        //this.deleteDatabase("database.db")
+
+
 
         val sharedPref: SharedPreferences = getSharedPreferences(PREF_NAME, PRIVATE_MODE)
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
 
+        //this.deleteDatabase("database.db")
+        //sharedPref.edit().clear().apply()
+
         //já sincronizou
-        if (sharedPref.getBoolean(PREF_NAME, false)) {
+        if (!sharedPref.getBoolean(PREF_NAME, false)) {
             runOnUiThread {
                 run {
                     if(!isFinishing){
@@ -71,7 +75,7 @@ class FirstSyncActivity : AppCompatActivity() {
         }
         //não sincronizou
         else {
-            GlobalScope.launch{
+            /*GlobalScope.launch{
                 syncHelper.getAll().await()
             }
 
@@ -80,7 +84,7 @@ class FirstSyncActivity : AppCompatActivity() {
             val date = LocalDateTime.now().toString()
             Log.d("date", date)
             editor.putString(PREF_DATE, date)
-            editor.apply()
+            editor.apply()*/
             val intent = Intent(applicationContext, SelectTrainer::class.java)
             startActivity(intent)
         }

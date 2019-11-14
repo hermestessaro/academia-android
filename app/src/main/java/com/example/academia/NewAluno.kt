@@ -11,6 +11,8 @@ import com.example.academia.Database.DatabaseHelper
 import com.example.academia.models.AlunoModel
 import com.example.academia.models.DispModel
 import kotlinx.android.synthetic.main.activity_new_aluno.*
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 
 class NewAluno : AppCompatActivity() {
@@ -42,7 +44,13 @@ class NewAluno : AppCompatActivity() {
     fun saveAluno(){
         val dbHelper = DatabaseHelper(this)
         val nome = nome_et.text.toString()
-        val data = data_et.text.toString()
+
+        var formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+        var date = LocalDate.parse(data_et.text.toString(), formatter)
+        formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        date = LocalDate.parse(date.toString(), formatter)
+        val data = date.toString()
+
         val dorPeitoAtividades = dorPeito_rg.checkedRadioButtonId == R.id.dorPeitoSim
         val dorPeitoMes = dorPeitoMes_rg.checkedRadioButtonId == R.id.dorPeitoMesSim
         val perdaConsciencia = consciencia_rg.checkedRadioButtonId == R.id.conscienciaSim
@@ -55,9 +63,9 @@ class NewAluno : AppCompatActivity() {
 
         val prof = dbHelper.getProfessorByName(profName)
 
-        val aluno = AlunoModel(nome, data, prof.IdProfessor, dorPeitoAtividades, dorPeitoMes, perdaConsciencia,
+        val aluno = AlunoModel(nome, data, prof!!.IdProfessor, dorPeitoAtividades, dorPeitoMes, perdaConsciencia,
                     problemaOsseo, tabagista, diabetico, cardiaco, lesoes, observacoes, "",
-                    "", "", true)
+                    "", "", "1")
         dbHelper.createAluno(aluno)
 
         val disp = getDisp(dbHelper.getIdAlunoByName(nome))

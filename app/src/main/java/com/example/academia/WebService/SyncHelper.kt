@@ -172,10 +172,11 @@ class SyncHelper(val dbHelper: DatabaseHelper) {
         val alunos = retrieveAlunos().await() as List<AlunoModel>
 
         alunos.forEach {
+            Log.d("indativo", it.IndicadorAtivo.toString())
             val aluno = AlunoModel(
                 it.Nome,
                 it.DataNascimento,
-                it.IdProfessor,
+                it.IdProf,
                 it.IndicadorDorPeitoAtividadesFisicas,
                 it.IndicadorDorPeitoUltimoMes,
                 it.IndicadorPerdaConscienciaTontura,
@@ -215,6 +216,27 @@ class SyncHelper(val dbHelper: DatabaseHelper) {
                 e.printStackTrace()
             }
         }
+    }
+
+    fun retrieveDisp(): Deferred<Any> {
+        val retrofit = RetrofitInitializer()
+        return GlobalScope.async {
+            try {
+                val primaryResponse = retrofit.appServices().getAlunos(1).await()
+                val items = primaryResponse.items
+                var result = items
+                if(primaryResponse._meta.pageCount > 1){
+                    for(i in 2 until primaryResponse._meta.pageCount+1){
+                        result = result + retrofit.appServices().getAlunos(i).await().items
+                    }
+                }
+                return@async result
+            }
+            catch (e: Exception){
+                e.printStackTrace()
+            }
+        }
+
     }
 
     suspend fun getTreinos(){

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Fitness Hall</string>
+    <string name="app_name">Academia</string>
 
     <!--Presentation screen-->
     <string name="presentation">Olá Professor! Escolha seu nome na lista abaixo</string>
@@ -8,12 +8,12 @@
 
     <!--Initial Screen-->
     <string name="welcome">Olá professor</string>
-    <string name="primaryName">Fitness Hall Academia</string>
+    <string name="primaryName">Academia</string>
 
 
     <string name="create_treino">Criar treino</string>
     <string name="see_alunos">Ver todos os alunos</string>
-    <string name="new_aluno">Novo aluno</string>
+    <string name="new_aluno">Novo Aluno</string>
     <string name="meus_alunos">Meus Alunos</string>
     <string name="exercicios">Exercícios</string>
     <string name="criar_treino">Criar Treino</string>
@@ -31,6 +31,7 @@
     <!--New aluno-->
     <string name="name">Nome:</string>
     <string name="data">Data de Nascimento:</string>
+    <string name="date_format">Formato: dd/mm/aaaa</string>
 
     <string name="dorPeitoAtividades">Você tem dor no peito provocada por atividades físicas?</string>
     <string name="dorPeitoMes">Você sentiu dor no peito no último mês?</string>

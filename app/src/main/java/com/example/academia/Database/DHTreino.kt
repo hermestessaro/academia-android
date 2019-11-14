@@ -26,7 +26,7 @@ class DHTreino(val db: SQLiteDatabase) {
     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
 
     fun getTreinosByIdAluno(idAluno: Int) : MutableList<TreinoModel>{
-        val selectQuery = "SELECT * FROM $TABLE_TREINO WHERE $ID_ALUNO = $idAluno AND $KEY_ACTIVE = 1;"
+        val selectQuery = "SELECT * FROM $TABLE_TREINO WHERE $ID_ALUNO = $idAluno AND $KEY_ACTIVE = \"1\";"
         val treinos: MutableList<TreinoModel> = ArrayList()
         val c: Cursor = db.rawQuery(selectQuery, null)
         if(c.moveToFirst()) {
@@ -46,7 +46,7 @@ class DHTreino(val db: SQLiteDatabase) {
     }
 
     fun getTreinoById(idTreino: Int, idAluno: Int) : TreinoModel {
-        val selectQuery = "SELECT * FROM $TABLE_TREINO WHERE $ID_TREINO = $idTreino AND $ID_ALUNO = $idAluno AND $KEY_ACTIVE = 1;"
+        val selectQuery = "SELECT * FROM $TABLE_TREINO WHERE $ID_TREINO = $idTreino AND $ID_ALUNO = $idAluno AND $KEY_ACTIVE = \"1\";"
         val c: Cursor = db.rawQuery(selectQuery, null)
         c.moveToFirst()
         val treino = TreinoModel(c.getInt(c.getColumnIndex(ID_TREINO)),
@@ -69,7 +69,7 @@ class DHTreino(val db: SQLiteDatabase) {
         values.put(KEY_OBJETIVOS, "")
         values.put(KEY_DATA_INC, LocalDate.now().toString())
         values.put(KEY_DATA_ULT, LocalDateTime.now().format(formatter).toString())
-        values.put(KEY_ACTIVE, 1)
+        values.put(KEY_ACTIVE, "1")
         val row = db.insert(TABLE_TREINO, null, values)
         Log.d("rowTreino", row.toString())
     }
@@ -79,8 +79,10 @@ class DHTreino(val db: SQLiteDatabase) {
         /*val whereClause = "$ID_ALUNO=? AND $ID_TREINO=?"
         db.delete(TABLE_TREINO, whereClause, arrayOf(idAluno.toString(), idTreino.toString()))
         db.delete(TABLE_EXERCICIO, whereClause, arrayOf(idAluno.toString(), idTreino.toString()))*/
-        val updateQuery = "UPDATE $TABLE_TREINO SET $KEY_ACTIVE = 0 WHERE $ID_ALUNO = $idAluno AND $ID_TREINO = $idTreino;"
-        db.rawQuery(updateQuery, null)
+        val updateQuery = "UPDATE $TABLE_TREINO SET $KEY_ACTIVE = \"0\" WHERE $ID_ALUNO = $idAluno AND $ID_TREINO = $idTreino;"
+        val c = db.rawQuery(updateQuery, null)
+        c.moveToFirst()
+        c.close()
     }
 
     fun updateTreino(treino: TreinoModel){

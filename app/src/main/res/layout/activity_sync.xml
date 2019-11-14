@@ -5,6 +5,7 @@
 
     <ImageView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" app:srcCompat="@drawable/fitnesshall2" android:id="@+id/imageView"
-            android:layout_centerVertical="true" android:alpha="0.5" android:layout_marginBottom="100dp"/>
+            android:layout_height="wrap_content" app:srcCompat="@drawable/exercicio" android:id="@+id/imageView"
+            android:layout_centerVertical="true" android:alpha="0.5" android:layout_marginBottom="110dp"
+            android:layout_centerHorizontal="true"/>
 </RelativeLayout>

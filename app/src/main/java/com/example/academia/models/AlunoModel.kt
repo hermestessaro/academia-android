@@ -9,7 +9,7 @@ import java.util.*
 class AlunoModel(
     val Nome: String,
     val DataNascimento: String,
-    val IdProfessor: Int,
+    val IdProf: Int,
     val IndicadorDorPeitoAtividadesFisicas: Boolean,
     val IndicadorDorPeitoUltimoMes: Boolean,
     val IndicadorPerdaConscienciaTontura: Boolean,
@@ -17,10 +17,10 @@ class AlunoModel(
     val IndicadorTabagista: Boolean,
     val IndicadorDiabetico: Boolean,
     val IndicadorFamiliarAtaqueCardiaco: Boolean,
-    val Lesoes: String,
-    val Observacoes: String,
-    val TreinoEspecifico: String,
+    val Lesoes: String?,
+    val Observacoes: String?,
+    val TreinoEspecifico: String?,
     val DataInclusao: String,
     val DataHoraUltimaAtu: String,
-    val IndicadorAtivo: Boolean
+    val IndicadorAtivo: String
 ) : Parcelable

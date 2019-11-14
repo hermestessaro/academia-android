@@ -17,6 +17,8 @@ import com.example.academia.models.TreinoModel
 import kotlinx.android.synthetic.main.detail_header.view.*
 import kotlinx.android.synthetic.main.fragment_aluno_detail.*
 import kotlinx.android.synthetic.main.week_representation.*
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class AlunoDetailFragment() : Fragment() {
 
@@ -26,6 +28,7 @@ class AlunoDetailFragment() : Fragment() {
     lateinit var data: HashMap<String, MutableList<String>>
     lateinit var adapter: TreinosAdapter
     var lastIndex = -1
+    lateinit var profName: String
 
 
     override fun onAttach(context: Context?) {
@@ -90,7 +93,7 @@ class AlunoDetailFragment() : Fragment() {
         //val dropdownLesoes = dropdown_lesoes
 
         //idAluno = dbHelper.getIdAlunoByName(aluno.nome)
-        val disp = dbHelper.getDisp(idAluno)
+        /*val disp = dbHelper.getDisp(idAluno)
 
         if(disp.seg) { day_1.setBackgroundColor(resources.getColor(R.color.colorGreen)) }
         if(disp.ter) { day_2.setBackgroundColor(resources.getColor(R.color.colorGreen)) }
@@ -98,12 +101,17 @@ class AlunoDetailFragment() : Fragment() {
         if(disp.qui) { day_4.setBackgroundColor(resources.getColor(R.color.colorGreen)) }
         if(disp.sex) { day_5.setBackgroundColor(resources.getColor(R.color.colorGreen)) }
         if(disp.sab) { day_6.setBackgroundColor(resources.getColor(R.color.colorGreen)) }
-        if(disp.dom) { day_7.setBackgroundColor(resources.getColor(R.color.colorGreen)) }
+        if(disp.dom) { day_7.setBackgroundColor(resources.getColor(R.color.colorGreen)) }*/
 
+        profName = dbHelper.getProfessorById(aluno.IdProf)!!.Nome
 
         container.nome_aluno.text = aluno.Nome
-        container.data_nascimento.text = aluno.DataNascimento
-        container.prof.text = dbHelper.getProfessorById(aluno.IdProfessor.toInt()).Nome
+
+        val date = LocalDate.parse(aluno.DataNascimento) //data em formato yyyy-MM-dd
+        val date_text: String = date.dayOfMonth.toString() +"/"+ date.monthValue.toString() +"/"+ date.year.toString()
+        container.data_nascimento.text = date_text
+
+        container.prof.text = profName
         dropdownObs.setContentText(setObservations())
         //dropdownLesoes.setContentText(aluno.lesoes)
 
@@ -181,12 +189,16 @@ class AlunoDetailFragment() : Fragment() {
         builder.setMessage("Tem certeza que gostaria de excluir este aluno?")
         builder.setPositiveButton("Sim"){dialog, which ->
             dbHelper.deleteAluno(idAluno)
-            val main = activity as MainActivity
-            main.supportFragmentManager.popBackStack()
+            //val main = activity as MainActivity
+            //main.supportFragmentManager.popBackStack()
+            val intent = Intent(context, MainActivity::class.java).putExtra("profName", profName)
+            startActivity(intent)
         }
         builder.setNegativeButton("Não"){_, _ ->}
 
         builder.create().show()
+
+
 
     }
 

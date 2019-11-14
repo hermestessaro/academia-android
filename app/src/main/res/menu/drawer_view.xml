@@ -11,7 +11,7 @@
         android:title="@string/new_aluno"
     />
 
-    <item
+    <!--<item
             android:id="@+id/nav_item_four"
             android:icon="@android:drawable/ic_info"
             android:title="@string/create_treino"
@@ -21,7 +21,7 @@
             android:id="@+id/nav_item_five"
             android:icon="@android:drawable/ic_info"
             android:title="@string/ver_aparelhos"
-    />
+    />-->
 
     <item
             android:id="@+id/nav_item_six"

@@ -1,24 +1,23 @@
-package com.example.academia
+package com.example.academia.Database
 
-import android.app.PendingIntent.getActivity
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import android.provider.ContactsContract
 import android.util.Log
-import android.widget.Toast
 import com.example.academia.models.*
 import java.lang.Exception
 import java.text.DateFormat.getDateInstance
-import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.*
 import kotlin.collections.ArrayList
 
-class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION) {
+class DatabaseHelper(context:Context?): SQLiteOpenHelper(context,
+    DB_NAME, null,
+    DB_VERSION
+) {
 
     //Table names
     private val TABLE_ALUNO = "Aluno"
@@ -118,7 +117,7 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
 
     private val CREATE_TABLE_PROFESSOR = "CREATE TABLE $TABLE_PROF ($ID_PROF INTEGER PRIMARY KEY, $KEY_NAME varchar(100)" +
             ",$KEY_EMAIL varchar(45) UNIQUE, $KEY_SENHA varchar(255),"+
-            "$KEY_DATA_INC date, $KEY_DATA_ULT datetime, $KEY_ACTIVE varchar(4), $KEY_LOGIN not null default 0);"
+            "$KEY_DATA_INC date, $KEY_DATA_ULT datetime, $KEY_ACTIVE varchar(1), $KEY_LOGIN not null default 0);"
 
 
     private val CREATE_TABLE_TREINO = "CREATE TABLE $TABLE_TREINO ($ID_TREINO INTEGER, " +
@@ -184,352 +183,44 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
         onCreate(db)
     }
 
-    fun createProfessor(prof: ProfessorModel){
-        val db = this.writableDatabase
-        val values = ContentValues().apply {
-            put(ID_PROF, prof.IdProfessor)
-            put(KEY_NAME, prof.Nome)
-            put(KEY_EMAIL, prof.Email)
-            put(KEY_SENHA, prof.Senha)
-            put(KEY_DATA_INC, prof.DataInclusao)
-            put(KEY_DATA_ULT, prof.DataHoraUltimaAtu)
-            put(KEY_ACTIVE, prof.IndicadorAtivo)
-        }
+    //PROFESSOR related functions
+    fun createProfessor(prof: ProfessorModel){DHProfessor(this.writableDatabase).createProfessor(prof)}
+    fun updateProfessor(prof: ProfessorModel, idProf: Int){DHProfessor(this.writableDatabase).updateProfessor(prof, idProf)}
+    fun getProfessorByName(name: String) : ProfessorModel? {return DHProfessor(this.readableDatabase).getProfessorByName(name)}
+    fun getProfessorById(Id: Int) : ProfessorModel? {return DHProfessor(this.readableDatabase).getProfessorById(Id)}
+    fun getAllProfessors() : MutableList<ProfessorModel> {return DHProfessor(this.readableDatabase).getAllProfessors()}
 
-        try {
-            db.insertOrThrow(TABLE_PROF, null, values)
-        }catch (e:Exception){
-            e.printStackTrace()
-        }
-    }
+    //ALUNO related functions
+    fun createAluno(aluno: AlunoModel){DHAluno(this.writableDatabase).createAluno(aluno)}
+    fun updateAluno(aluno: AlunoModel, idAluno: Int){DHAluno(this.writableDatabase).updateAluno(aluno, idAluno)}
+    fun deleteAluno(idAluno: Int) {DHAluno(this.writableDatabase).deleteAluno(idAluno)}
+    fun getIdAlunoByName(name: String): Int {return DHAluno(this.readableDatabase).getIdAlunoByName(name)}
+    fun getAllAlunos() : MutableList<AlunoModel> {return DHAluno(this.readableDatabase).getAllAlunos()}
+    fun getAlunoById(idAluno: Int): AlunoModel {return DHAluno(this.readableDatabase).getAlunoById(idAluno)}
+    fun getAlunosByIdProf(idProf: Int): MutableList<AlunoModel> {return DHAluno(this.readableDatabase).getAlunosByIdProf(idProf)}
 
+    //GRUPO related functions
+    fun createGrupo(nomeGrupo: String){DHGrupo(this.writableDatabase).createGrupo(nomeGrupo)}
+    fun getAllGrupos() : MutableList<GrupoModel>{return DHGrupo(this.readableDatabase).getAllGrupos()}
+    fun getGrupoByName(nomeGrupo: String): GrupoModel{return DHGrupo(this.readableDatabase).getGrupoByName(nomeGrupo)}
 
-    fun getProfessorByName(name: String) : ProfessorModel {
+    //APARELHO related functions
+    fun createAparelho(aparelho: AparelhoModel): Int{return DHAparelho(this.writableDatabase).createAparelho(aparelho)}
+    fun deleteAparelho(nomeAparelho: String): Int{return DHAparelho(this.writableDatabase).deleteAparelho(nomeAparelho)}
+    fun getAparelhoByName(aparelho: AparelhoModel): AparelhoModel?{return DHAparelho(this.readableDatabase).getAparelhoByName(aparelho)}
+    fun getAparelhosByGrupo(nomeGrupo: String): MutableList<AparelhoModel>{return DHAparelho(this.readableDatabase).getAparelhosByGrupo(nomeGrupo)}
 
-        val db = this.readableDatabase
-        val selectQuery : String = "SELECT * FROM $TABLE_PROF WHERE $KEY_NAME = '$name';"
-        val c: Cursor = db.rawQuery(selectQuery, null)
-        if(c != null){
-            c.moveToFirst()
-        }
+    //TREINO related functions
+    fun getTreinosByIdAluno(idAluno: Int) : MutableList<TreinoModel>{ return DHTreino(this.readableDatabase).getTreinosByIdAluno(idAluno)}
+    fun getTreinoById(idTreino: Int, idAluno: Int) : TreinoModel { return DHTreino(this.readableDatabase).getTreinoById(idTreino, idAluno)}
+    fun saveTreino(treino: TreinoModel) { DHTreino(this.writableDatabase).saveTreino(treino)}
+    fun deleteTreino(idAluno: Int, idTreino: Int){ DHTreino(this.writableDatabase).deleteTreino(idAluno, idTreino)}
+    fun updateTreino(treino: TreinoModel){DHTreino(this.writableDatabase).updateTreino(treino)}
 
-        val prof = ProfessorModel(c.getInt(c.getColumnIndex(ID_PROF)),
-            name,
-            c.getString(c.getColumnIndex(KEY_EMAIL)),
-            c.getString(c.getColumnIndex(KEY_SENHA)),
-            c.getString(c.getColumnIndex(KEY_DATA_INC)),
-            c.getString(c.getColumnIndex(KEY_DATA_ULT)),
-            c.getString(c.getColumnIndex(KEY_ACTIVE))
-        )
-        return prof
-    }
+    //EXERCICIO related functions
+    fun getExerciciosByIdTreino(id: Int, idAluno: Int): MutableList<ExercicioModel>{return DHExercicio(this.readableDatabase).getExerciciosByIdTreino(id, idAluno)}
+    fun saveExercicio(exercicio: ExercicioModel){DHExercicio(this.writableDatabase).saveExercicio(exercicio)}
 
-    fun getProfessorById(Id: Int) : ProfessorModel {
-        val db = this.readableDatabase
-        val selectQuery : String = "SELECT * FROM $TABLE_PROF WHERE $ID_PROF = '$Id';"
-        val c: Cursor = db.rawQuery(selectQuery, null)
-        if(c != null){
-            c.moveToFirst()
-        }
-
-        val prof = ProfessorModel(Id,
-            c.getString(c.getColumnIndex(KEY_NAME)),
-            c.getString(c.getColumnIndex(KEY_EMAIL)),
-            c.getString(c.getColumnIndex(KEY_SENHA)),
-            c.getString(c.getColumnIndex(KEY_DATA_INC)),
-            c.getString(c.getColumnIndex(KEY_DATA_ULT)),
-            c.getString(c.getColumnIndex(KEY_ACTIVE))
-        )
-        return prof
-    }
-
-    fun getAllProfessors() : MutableList<ProfessorModel> {
-        val db = this.readableDatabase
-        val selectQuery : String = "SELECT * FROM $TABLE_PROF;"
-        val c: Cursor = db.rawQuery(selectQuery, null)
-
-        val professorList : MutableList<ProfessorModel> = ArrayList()
-        if(c.moveToFirst()){
-            do {
-                val prof = ProfessorModel(c.getInt(c.getColumnIndex(ID_PROF)),
-                    c.getString(c.getColumnIndex(KEY_NAME)),
-                    c.getString(c.getColumnIndex(KEY_EMAIL)),
-                    c.getString(c.getColumnIndex(KEY_SENHA)),
-                    c.getString(c.getColumnIndex(KEY_DATA_INC)),
-                    c.getString(c.getColumnIndex(KEY_DATA_ULT)),
-                    c.getString(c.getColumnIndex(KEY_ACTIVE)))
-                professorList.add(prof)
-            }while(c.moveToNext())
-        }
-        return professorList
-    }
-
-    fun createAluno(aluno: AlunoModel){
-        val db = this.writableDatabase
-        val values = ContentValues().apply {
-            put(KEY_NAME, aluno.Nome)
-            put(KEY_NASCIMENTO, aluno.DataNascimento)
-            put(ID_INCL, aluno.IdProfessor)
-            put(KEY_IND_1, aluno.IndicadorDorPeitoAtividadesFisicas)
-            put(KEY_IND_2, aluno.IndicadorDorPeitoUltimoMes)
-            put(KEY_IND_3, aluno.IndicadorPerdaConscienciaTontura)
-            put(KEY_IND_4, aluno.IndicadorProblemaArticular)
-            put(KEY_IND_5, aluno.IndicadorTabagista)
-            put(KEY_IND_6, aluno.IndicadorDiabetico)
-            put(KEY_IND_7, aluno.IndicadorFamiliarAtaqueCardiaco)
-            put(KEY_LESOES, aluno.Lesoes)
-            put(KEY_OBS, aluno.Observacoes)
-            put(KEY_TREINO_ESP, aluno.TreinoEspecifico)
-            put(KEY_DATA_INC, LocalDate.now().toString())
-            put(KEY_DATA_ULT, LocalDateTime.now().toString())
-            put(KEY_ACTIVE, 1)
-        }
-
-
-        db.insert(TABLE_ALUNO, null, values)
-
-    }
-
-    fun getIdAlunoByName(name: String): Int {
-        val db = this.readableDatabase
-        val selectQuery = "SELECT * FROM $TABLE_ALUNO WHERE $KEY_NAME = '$name' AND $KEY_ACTIVE = '1';"
-        val c: Cursor = db.rawQuery(selectQuery, null)
-        c.moveToLast()
-        return c.getInt(c.getColumnIndex(ID_ALUNO))
-    }
-
-    fun getAllAlunos() : MutableList<AlunoModel> {
-        val db = this.readableDatabase
-        Log.d("primeiro", "passou")
-        val selectQuery : String = "SELECT * FROM $TABLE_ALUNO WHERE $KEY_ACTIVE = '1';"
-        val c: Cursor = db.rawQuery(selectQuery, null)
-
-        val alunosList : MutableList<AlunoModel> = ArrayList()
-        if(c.moveToFirst()){
-            do {
-                val ind1 = c.getString(c.getColumnIndex(KEY_IND_1))
-                val ind2 = c.getString(c.getColumnIndex(KEY_IND_2))
-                val ind3 = c.getString(c.getColumnIndex(KEY_IND_3))
-                val ind4 = c.getString(c.getColumnIndex(KEY_IND_4))
-                val ind5 = c.getString(c.getColumnIndex(KEY_IND_5))
-                val ind6 = c.getString(c.getColumnIndex(KEY_IND_6))
-                val ind7 = c.getString(c.getColumnIndex(KEY_IND_7))
-                val aluno = AlunoModel(c.getString(c.getColumnIndex(KEY_NAME)),
-                    c.getString(c.getColumnIndex(KEY_NASCIMENTO)),
-                    c.getInt(c.getColumnIndex(ID_INCL)),
-                    ind1.toBoolean(),
-                    ind2.toBoolean(),
-                    ind3.toBoolean(),
-                    ind4.toBoolean(),
-                    ind5.toBoolean(),
-                    ind6.toBoolean(),
-                    ind7.toBoolean(),
-                    c.getString(c.getColumnIndex(KEY_LESOES)),
-                    c.getString(c.getColumnIndex(KEY_OBS)),
-                    c.getString(c.getColumnIndex(KEY_TREINO_ESP)),
-                    c.getString(c.getColumnIndex(KEY_DATA_INC)),
-                    c.getString(c.getColumnIndex(KEY_DATA_ULT)),
-                    c.getString(c.getColumnIndex(KEY_ACTIVE))!!.toBoolean())
-                alunosList.add(aluno)
-
-
-
-            }while(c.moveToNext())
-        }
-
-        return alunosList
-    }
-
-    fun getAlunoById(idAluno: Int): AlunoModel{
-        val db = this.readableDatabase
-        val selectQuery = "SELECT * FROM $TABLE_ALUNO WHERE $ID_ALUNO = $idAluno AND $KEY_ACTIVE = '1';"
-        val c: Cursor = db.rawQuery(selectQuery, null)
-        c.moveToFirst()
-        val ind1 = c.getString(c.getColumnIndex(KEY_IND_1))
-        val ind2 = c.getString(c.getColumnIndex(KEY_IND_2))
-        val ind3 = c.getString(c.getColumnIndex(KEY_IND_3))
-        val ind4 = c.getString(c.getColumnIndex(KEY_IND_4))
-        val ind5 = c.getString(c.getColumnIndex(KEY_IND_5))
-        val ind6 = c.getString(c.getColumnIndex(KEY_IND_6))
-        val ind7 = c.getString(c.getColumnIndex(KEY_IND_7))
-        val aluno = AlunoModel(c.getString(c.getColumnIndex(KEY_NAME)),
-            c.getString(c.getColumnIndex(KEY_NASCIMENTO)),
-            c.getInt(c.getColumnIndex(ID_INCL)),
-            ind1.toBoolean(),
-            ind2.toBoolean(),
-            ind3.toBoolean(),
-            ind4.toBoolean(),
-            ind5.toBoolean(),
-            ind6.toBoolean(),
-            ind7.toBoolean(),
-            c.getString(c.getColumnIndex(KEY_LESOES)),
-            c.getString(c.getColumnIndex(KEY_OBS)),
-            c.getString(c.getColumnIndex(KEY_TREINO_ESP)),
-            c.getString(c.getColumnIndex(KEY_DATA_INC)),
-            c.getString(c.getColumnIndex(KEY_DATA_ULT)),
-            c.getString(c.getColumnIndex(KEY_ACTIVE))!!.toBoolean())
-
-        return aluno
-    }
-
-    fun getAlunosByIdProf(idProf: Int): MutableList<AlunoModel>{
-        val db = this.readableDatabase
-        val alunos: MutableList<AlunoModel> = ArrayList()
-        val selectQuery : String = "SELECT * FROM $TABLE_ALUNO WHERE $ID_INCL = $idProf AND $KEY_ACTIVE = '1'"
-        val c: Cursor = db.rawQuery(selectQuery, null)
-        if(c.moveToFirst()) {
-            do {
-                val aluno = AlunoModel(c.getString(c.getColumnIndex(KEY_NAME)),
-                    c.getString(c.getColumnIndex(KEY_NASCIMENTO)),
-                    idProf,
-                    c.getString(c.getColumnIndex(KEY_IND_1)).toBoolean(),
-                    c.getString(c.getColumnIndex(KEY_IND_2)).toBoolean(),
-                    c.getString(c.getColumnIndex(KEY_IND_3)).toBoolean(),
-                    c.getString(c.getColumnIndex(KEY_IND_4)).toBoolean(),
-                    c.getString(c.getColumnIndex(KEY_IND_5)).toBoolean(),
-                    c.getString(c.getColumnIndex(KEY_IND_6)).toBoolean(),
-                    c.getString(c.getColumnIndex(KEY_IND_7)).toBoolean(),
-                    c.getString(c.getColumnIndex(KEY_LESOES)),
-                    c.getString(c.getColumnIndex(KEY_OBS)),
-                    c.getString(c.getColumnIndex(KEY_TREINO_ESP)),
-                    c.getString(c.getColumnIndex(KEY_DATA_INC)),
-                    c.getString(c.getColumnIndex(KEY_DATA_ULT)),
-                    c.getString(c.getColumnIndex(KEY_ACTIVE))!!.toBoolean())
-                alunos.add(aluno)
-
-            } while (c.moveToNext())
-        }
-
-        return alunos
-    }
-
-    fun deleteAluno(idAluno: Int) {
-        val db = this.writableDatabase
-       /* val whereClause = "$ID_ALUNO=?"
-        db.delete(TABLE_ALUNO, whereClause, arrayOf(idAluno.toString()))
-        db.delete(TABLE_DISP, whereClause, arrayOf(idAluno.toString()))
-        db.delete(TABLE_TREINO, whereClause, arrayOf(idAluno.toString()))
-        db.delete(TABLE_EXERCICIO, whereClause, arrayOf(idAluno.toString()))*/
-        val updateQuery = "UPDATE $TABLE_ALUNO SET $KEY_ACTIVE = '0' WHERE $ID_ALUNO = $idAluno;"
-        db.rawQuery(updateQuery, null)
-
-    }
-
-    fun updateAluno(aluno: AlunoModel, idAluno: Int){
-        val db = this.writableDatabase
-        val values = ContentValues().apply {
-            put(KEY_NAME, aluno.Nome)
-            put(KEY_NASCIMENTO, aluno.DataNascimento)
-            put(ID_INCL, aluno.IdProfessor)
-            put(KEY_IND_1, aluno.IndicadorDorPeitoAtividadesFisicas)
-            put(KEY_IND_2, aluno.IndicadorDorPeitoUltimoMes)
-            put(KEY_IND_3, aluno.IndicadorPerdaConscienciaTontura)
-            put(KEY_IND_4, aluno.IndicadorProblemaArticular)
-            put(KEY_IND_5, aluno.IndicadorTabagista)
-            put(KEY_IND_6, aluno.IndicadorDiabetico)
-            put(KEY_IND_7, aluno.IndicadorFamiliarAtaqueCardiaco)
-            put(KEY_LESOES, aluno.Lesoes)
-            put(KEY_OBS, aluno.Observacoes)
-            put(KEY_TREINO_ESP, aluno.TreinoEspecifico)
-            put(KEY_DATA_INC, aluno.DataInclusao)
-            put(KEY_DATA_ULT, getDateInstance().format(Date()))
-            put(KEY_ACTIVE, 1)
-        }
-        db.update(TABLE_ALUNO, values, "$ID_ALUNO = ?", arrayOf(idAluno.toString()))
-    }
-
-    fun createGrupo(nomeGrupo: String){
-        val db = this.writableDatabase
-        val values: ContentValues = ContentValues()
-        values.put(KEY_NAME, nomeGrupo)
-        try {
-            db.insertOrThrow(TABLE_GRUPO, null, values)
-        }catch (e:Exception){
-            e.printStackTrace()
-        }
-
-    }
-
-    fun getAllGrupos() : MutableList<GrupoModel>{
-        val db = this.readableDatabase
-        val selectQuery : String = "SELECT * FROM $TABLE_GRUPO;"
-        val c: Cursor = db.rawQuery(selectQuery, null)
-        val gruposList: MutableList<GrupoModel> = ArrayList()
-        if(c.moveToFirst()){
-            do {
-                val grupo = GrupoModel(c.getInt(c.getColumnIndex(ID_GRUPO)),
-                            c.getString(c.getColumnIndex(KEY_NAME)))
-                gruposList.add(grupo)
-            }while (c.moveToNext())
-        }
-        return gruposList
-    }
-
-    fun getGrupoByName(nomeGrupo: String): GrupoModel{
-        val db = this.readableDatabase
-        val selectQuery : String = "SELECT * FROM $TABLE_GRUPO WHERE $KEY_NAME = '$nomeGrupo';"
-        val c: Cursor = db.rawQuery(selectQuery, null)
-        c.moveToFirst()
-        val grupo = GrupoModel(c.getInt(c.getColumnIndex(ID_GRUPO)),
-                    c.getString(c.getColumnIndex(KEY_NAME)))
-        return grupo
-    }
-
-    fun createAparelho(aparelho: AparelhoModel): Int{
-        if(getAparelhoByName(aparelho) == null){
-            return -1
-        }
-        val db = this.writableDatabase
-        val values: ContentValues = ContentValues()
-        values.put(ID_GRUPO, aparelho.IdGrupo)
-        values.put(KEY_NAME, aparelho.Nome)
-        var rowInserted = -1
-        try {
-            rowInserted = db.insertOrThrow(TABLE_APARELHO, null, values).toInt()
-        }catch (e:Exception){
-            e.printStackTrace()
-        }
-        return rowInserted
-    }
-
-    fun getAparelhoByName(aparelho: AparelhoModel): AparelhoModel?{
-        val db = this.readableDatabase
-        val selectQuery : String = "SELECT * FROM $TABLE_APARELHO WHERE $KEY_NAME = '${aparelho.Nome}';"
-        val c: Cursor = db.rawQuery(selectQuery, null)
-        if(c.moveToFirst()){
-            val new = AparelhoModel(
-                c.getInt(c.getColumnIndex(ID_GRUPO)),
-                c.getString(c.getColumnIndex(KEY_NAME))
-            )
-            return new
-        }
-        else return null
-    }
-
-    fun deleteAparelho(nomeAparelho: String): Int{
-        val db = this.writableDatabase
-        val whereClause = "$KEY_NAME=?"
-        return db.delete(TABLE_APARELHO, whereClause, arrayOf(nomeAparelho))
-    }
-
-    fun getAparelhosByGrupo(nomeGrupo: String): MutableList<AparelhoModel>{
-        val grupo = getGrupoByName(nomeGrupo)
-        val db = this.readableDatabase
-        val aparelhos: MutableList<AparelhoModel> = ArrayList()
-        val idGrupo = grupo.IdGrupo
-        val selectQuery : String = "SELECT * FROM $TABLE_APARELHO WHERE $ID_GRUPO = $idGrupo"
-        val c: Cursor = db.rawQuery(selectQuery, null)
-        if(c.moveToFirst()) {
-            do {
-                val aparelho = AparelhoModel(c.getInt(c.getColumnIndex(ID_GRUPO)),
-                                c.getString(c.getColumnIndex(KEY_NAME)))
-                aparelhos.add(aparelho)
-
-            } while (c.moveToNext())
-        }
-
-        return aparelhos
-    }
 
     fun saveDisp(disp: DispModel): Int{
         val db = this.writableDatabase
@@ -561,118 +252,11 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context, DB_NAME, null,
         return disp
     }
 
-    fun getTreinosByIdAluno(idAluno: Int) : MutableList<TreinoModel>{
-        val db = this.readableDatabase
-        val selectQuery = "SELECT * FROM $TABLE_TREINO WHERE $ID_ALUNO = $idAluno"
-        val treinos: MutableList<TreinoModel> = ArrayList()
-        val c: Cursor = db.rawQuery(selectQuery, null)
-        if(c.moveToFirst()) {
-            do {
-                val treino = TreinoModel(c.getInt(c.getColumnIndex(ID_TREINO)),
-                    c.getInt(c.getColumnIndex(ID_PROF)),
-                    c.getInt(c.getColumnIndex(ID_ALUNO)),
-                    c.getString(c.getColumnIndex(KEY_NAME)),
-                    c.getString(c.getColumnIndex(KEY_TIPO))
-                )
-                treinos.add(treino)
-
-            } while (c.moveToNext())
-        }
-
-        return treinos
-    }
-
-    fun getTreinoById(idTreino: Int, idAluno: Int) : TreinoModel{
-        val db = this.readableDatabase
-        val selectQuery = "SELECT * FROM $TABLE_TREINO WHERE $ID_TREINO = $idTreino AND $ID_ALUNO = $idAluno"
-        val c: Cursor = db.rawQuery(selectQuery, null)
-        c.moveToFirst()
-        val treino = TreinoModel(c.getInt(c.getColumnIndex(ID_TREINO)),
-            c.getInt(c.getColumnIndex(ID_PROF)),
-            c.getInt(c.getColumnIndex(ID_ALUNO)),
-            c.getString(c.getColumnIndex(KEY_NAME)),
-            c.getString(c.getColumnIndex(KEY_TIPO))
-        )
-
-        return treino
-    }
-
-    fun getExerciciosByIdTreino(id: Int, idAluno: Int): MutableList<ExercicioModel>{
-        val db = this.readableDatabase
-        val selectQuery = "SELECT * FROM $TABLE_EXERCICIO WHERE $ID_TREINO = $id AND $ID_ALUNO = $idAluno"
-        val exercicios: MutableList<ExercicioModel> = ArrayList()
-        val c: Cursor = db.rawQuery(selectQuery, null)
-        if(c.moveToFirst()) {
-            do {
-                val exercicio = ExercicioModel(c.getInt(c.getColumnIndex(ID_TREINO)),
-                    c.getInt(c.getColumnIndex(ID_ALUNO)),
-                    c.getString(c.getColumnIndex(ID_APARELHO)),
-                    //c.getString(c.getColumnIndex(KEY_NAME)),
-                    c.getInt(c.getColumnIndex(KEY_SERIES)),
-                    c.getInt(c.getColumnIndex(KEY_REPS)),
-                    c.getInt(c.getColumnIndex(KEY_PESO))
-                )
-                exercicios.add(exercicio)
-
-            } while (c.moveToNext())
-        }
-
-        return exercicios
-    }
-
-    fun saveExercicio(exercicio: ExercicioModel){
-
-        val db = this.writableDatabase
-        val values = ContentValues()
-        values.put(ID_TREINO, exercicio.idTreino)
-        values.put(ID_ALUNO, exercicio.idAluno)
-        values.put(ID_APARELHO, exercicio.nomeAparelho)
-        values.put(KEY_SERIES, exercicio.series)
-        values.put(KEY_REPS, exercicio.repeticoes)
-        values.put(KEY_PESO, exercicio.peso)
-        val row = db.insert(TABLE_EXERCICIO, null, values)
-        Log.d("rowExercicio", row.toString())
-    }
-
-
-    fun saveTreino(treino: TreinoModel){
-        val db = this.writableDatabase
-        val values = ContentValues()
-        values.put(ID_TREINO, treino.idTreino)
-        values.put(ID_PROF, treino.idProf)
-        values.put(ID_ALUNO, treino.idAluno)
-        values.put(KEY_TIPO, treino.tipo)
-        values.put(KEY_NAME, treino.nome)
-        val row = db.insert(TABLE_TREINO, null, values)
-        Log.d("rowTreino", row.toString())
-    }
-
-    fun deleteTreino(idAluno: Int, idTreino: Int) {
-        val db = this.writableDatabase
-        /*val whereClause = "$ID_ALUNO=? AND $ID_TREINO=?"
-        db.delete(TABLE_TREINO, whereClause, arrayOf(idAluno.toString(), idTreino.toString()))
-        db.delete(TABLE_EXERCICIO, whereClause, arrayOf(idAluno.toString(), idTreino.toString()))*/
-        val updateQuery = "UPDATE $TABLE_TREINO SET $KEY_ACTIVE = '0' WHERE $ID_ALUNO = $idAluno;"
-        db.rawQuery(updateQuery, null)
-    }
-
-    fun updateTreino(treino: TreinoModel){
-        val db = this.writableDatabase
-        val values = ContentValues()
-        values.put(ID_TREINO, treino.idTreino)
-        values.put(ID_PROF, treino.idProf)
-        values.put(ID_ALUNO, treino.idAluno)
-        values.put(KEY_TIPO, treino.tipo)
-        values.put(KEY_NAME, treino.nome)
-        val whereClause = "$ID_ALUNO=? AND $ID_TREINO=?"
-        db.update(TABLE_TREINO, values, whereClause, arrayOf(treino.idAluno.toString(), treino.idTreino.toString()))
-
-    }
 
 
     companion object {
         private val DB_NAME = "database.db"
-        private val DB_VERSION = 15
+        private val DB_VERSION = 1
 
     }
 }

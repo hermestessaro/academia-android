@@ -95,8 +95,8 @@ class MainActivity : AppCompatActivity() {
                     val intent = NewAluno.start(applicationContext, profName)
                     startActivity(intent)
                 }
-                R.id.nav_item_four -> Toast.makeText(this, "profs", Toast.LENGTH_LONG).show()
-                R.id.nav_item_five -> Toast.makeText(this, "aparelhos", Toast.LENGTH_LONG).show()
+                //R.id.nav_item_four -> Toast.makeText(this, "profs", Toast.LENGTH_LONG).show()
+                //R.id.nav_item_five -> Toast.makeText(this, "aparelhos", Toast.LENGTH_LONG).show()
                 R.id.nav_item_six -> {
                     view_pager.visibility = View.GONE
                     changesFragment(gruposFragment)

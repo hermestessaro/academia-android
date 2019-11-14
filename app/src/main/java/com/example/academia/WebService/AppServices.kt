@@ -26,4 +26,7 @@ interface AppServices {
 
     @GET("/academia/web/api/treino")
     fun getTreinos(@Query("page") page: Int): Deferred<ApiResponse<TreinoModel>>
+
+    @GET("/academia/web/api/disponibilidade")
+    fun getDisp(): Deferred<ApiResponse<DispModel>>
 }
