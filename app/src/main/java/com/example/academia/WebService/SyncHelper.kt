@@ -1,5 +1,6 @@
 package com.example.academia.WebService
 
+import android.content.SharedPreferences
 import android.util.Log
 import com.example.academia.Database.DatabaseHelper
 import com.example.academia.models.*
@@ -23,13 +24,13 @@ class SyncHelper(val dbHelper: DatabaseHelper) {
         val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
         professors_server.forEach {
             if(last_sync.isBefore(LocalDateTime.parse(it.DataHoraUltimaAtu, dateTimeFormatter))){
-                professors_server_new.add(it)
+                professors_local_new.add(it)
             }
         }
 
         professors_local.forEach {
             if(last_sync.isBefore(LocalDateTime.parse(it.DataHoraUltimaAtu, dateTimeFormatter))) {
-                professors_local_new.add(it)
+                professors_server_new.add(it)
             }
         }
 
@@ -52,6 +53,38 @@ class SyncHelper(val dbHelper: DatabaseHelper) {
                 dbHelper.createProfessor(it)
             }
         }
+
+        //TODO: atualizar shared preferences com nova data de last sync
+        //TODO: atualizar bancos com listas new
+    }
+
+    suspend fun syncAlunos(last_sync: LocalDateTime){
+        val alunos_server = retrieveAlunos().await() as List<AlunoModel>
+        val alunos_local = dbHelper.getAllAlunos()
+        val alunos_server_new: MutableList<AlunoModel> = mutableListOf()
+        val alunos_local_new: MutableList<AlunoModel> = mutableListOf()
+        val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+
+        alunos_server.forEach {
+            if(last_sync.isBefore(LocalDateTime.parse(it.DataHoraUltimaAtu, dateTimeFormatter))){
+                alunos_local_new.add(it)
+            }
+        }
+
+        alunos_local.forEach {
+            if(last_sync.isBefore(LocalDateTime.parse(it.DataHoraUltimaAtu, dateTimeFormatter))) {
+                alunos_server_new.add(it)
+            }
+        }
+
+        alunos_server_new.forEach{
+            val aux = dbHelper.getAlunoById(dbHelper.getIdAlunoByName(it.Nome)) //TODO: checar o que getIdAlunoByName retorna se não acha
+            if(aux!=null){
+                
+            }
+        }
+
+
     }
 
 

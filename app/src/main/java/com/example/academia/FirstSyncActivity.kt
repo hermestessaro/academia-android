@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.example.academia.Database.DatabaseHelper
 import com.example.academia.WebService.RetrofitInitializer
@@ -12,6 +13,7 @@ import com.example.academia.WebService.SyncHelper
 import com.example.academia.models.AparelhoModel
 import com.example.academia.models.GrupoModel
 import com.example.academia.models.ProfessorModel
+import kotlinx.android.synthetic.main.activity_sync.*
 import kotlinx.coroutines.*
 import java.lang.Runnable
 import java.time.LocalDateTime
@@ -45,6 +47,7 @@ class FirstSyncActivity : AppCompatActivity() {
                         builder.setTitle("Sincronizar")
                         builder.setMessage("Você gostaria de sincronizar o banco de dados?")
                         builder.setPositiveButton("Sim") { dialog, which ->
+                            first_sync_progress.visibility = View.VISIBLE
                             GlobalScope.launch{
                                 syncHelper.getAll().await()
 
@@ -54,11 +57,13 @@ class FirstSyncActivity : AppCompatActivity() {
                                 val date = LocalDateTime.now().format(formatter).toString()
                                 Log.d("date", date)
                                 editor.putString(PREF_DATE, date)
-
                                 editor.apply()
+
+                                first_sync_progress.visibility = View.GONE
                                 val intent = Intent(applicationContext, SelectTrainer::class.java)
                                 startActivity(intent)
                             }
+
 
                         }
                         builder.setNegativeButton("Não") { _, _ ->
@@ -71,6 +76,7 @@ class FirstSyncActivity : AppCompatActivity() {
                     }
                 }
             }
+
 
         }
         //não sincronizou
