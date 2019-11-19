@@ -7,6 +7,7 @@ import java.util.*
 
 @Parcelize
 class AlunoModel(
+    var IdAluno: Int,
     val Nome: String,
     val DataNascimento: String,
     val IdProf: Int,

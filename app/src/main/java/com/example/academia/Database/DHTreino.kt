@@ -96,4 +96,11 @@ class DHTreino(val db: SQLiteDatabase) {
         db.update(TABLE_TREINO, values, whereClause, arrayOf(treino.idAluno.toString(), treino.idTreino.toString()))
 
     }
+
+    fun changeTreinosAluno(oldIdAluno: Int, newIdAluno: Int){
+        val updateQuery = "UPDATE $TABLE_TREINO SET $ID_ALUNO = $newIdAluno WHERE $ID_ALUNO = $oldIdAluno;"
+        val c = db.rawQuery(updateQuery, null)
+        c.moveToFirst()
+        c.close()
+    }
 }

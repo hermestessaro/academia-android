@@ -78,6 +78,7 @@
     <string name="editar_treino">Editar treino</string>
     <string name="excluir_treino">Excluir treino</string>
     <string name="voltar">Voltar</string>
+    <string name="sincronizar">Sincronizar</string>
 
 
     <!--Offline tests-->

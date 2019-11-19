@@ -196,8 +196,9 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context,
     fun deleteAluno(idAluno: Int) {DHAluno(this.writableDatabase).deleteAluno(idAluno)}
     fun getIdAlunoByName(name: String): Int {return DHAluno(this.readableDatabase).getIdAlunoByName(name)}
     fun getAllAlunos() : MutableList<AlunoModel> {return DHAluno(this.readableDatabase).getAllAlunos()}
-    fun getAlunoById(idAluno: Int): AlunoModel {return DHAluno(this.readableDatabase).getAlunoById(idAluno)}
+    fun getAlunoById(idAluno: Int): AlunoModel? {return DHAluno(this.readableDatabase).getAlunoById(idAluno)}
     fun getAlunosByIdProf(idProf: Int): MutableList<AlunoModel> {return DHAluno(this.readableDatabase).getAlunosByIdProf(idProf)}
+    fun getLastIdInsertedAluno(): Int {return DHAluno(this.readableDatabase).getLastIdInserted()}
 
     //GRUPO related functions
     fun createGrupo(nomeGrupo: String){DHGrupo(this.writableDatabase).createGrupo(nomeGrupo)}
@@ -216,6 +217,7 @@ class DatabaseHelper(context:Context?): SQLiteOpenHelper(context,
     fun saveTreino(treino: TreinoModel) { DHTreino(this.writableDatabase).saveTreino(treino)}
     fun deleteTreino(idAluno: Int, idTreino: Int){ DHTreino(this.writableDatabase).deleteTreino(idAluno, idTreino)}
     fun updateTreino(treino: TreinoModel){DHTreino(this.writableDatabase).updateTreino(treino)}
+    fun changeTreinosAluno(oldIdAluno: Int, newIdAluno: Int){DHTreino(this.writableDatabase).changeTreinosAluno(oldIdAluno, newIdAluno)}
 
     //EXERCICIO related functions
     fun getExerciciosByIdTreino(id: Int, idAluno: Int): MutableList<ExercicioModel>{return DHExercicio(this.readableDatabase).getExerciciosByIdTreino(id, idAluno)}

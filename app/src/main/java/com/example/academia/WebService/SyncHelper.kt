@@ -12,7 +12,7 @@ import java.time.format.DateTimeFormatter
 
 class SyncHelper(val dbHelper: DatabaseHelper) {
 
-    suspend fun SyncAll(last_sync: LocalDateTime){
+    suspend fun syncAll(last_sync: LocalDateTime){
         syncProf(last_sync)
     }
 
@@ -24,13 +24,13 @@ class SyncHelper(val dbHelper: DatabaseHelper) {
         val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
         professors_server.forEach {
             if(last_sync.isBefore(LocalDateTime.parse(it.DataHoraUltimaAtu, dateTimeFormatter))){
-                professors_local_new.add(it)
+                professors_server_new.add(it)
             }
         }
 
         professors_local.forEach {
             if(last_sync.isBefore(LocalDateTime.parse(it.DataHoraUltimaAtu, dateTimeFormatter))) {
-                professors_server_new.add(it)
+                professors_local_new.add(it)
             }
         }
 
@@ -62,27 +62,93 @@ class SyncHelper(val dbHelper: DatabaseHelper) {
         val alunos_server = retrieveAlunos().await() as List<AlunoModel>
         val alunos_local = dbHelper.getAllAlunos()
         val alunos_server_new: MutableList<AlunoModel> = mutableListOf()
+        val alunos_server_alt: MutableList<AlunoModel> = mutableListOf()
         val alunos_local_new: MutableList<AlunoModel> = mutableListOf()
+        val alunos_local_alt: MutableList<AlunoModel> = mutableListOf()
         val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
 
         alunos_server.forEach {
-            if(last_sync.isBefore(LocalDateTime.parse(it.DataHoraUltimaAtu, dateTimeFormatter))){
-                alunos_local_new.add(it)
-            }
-        }
-
-        alunos_local.forEach {
-            if(last_sync.isBefore(LocalDateTime.parse(it.DataHoraUltimaAtu, dateTimeFormatter))) {
+            if(last_sync.isBefore(LocalDateTime.parse(it.DataInclusao, dateTimeFormatter))){
                 alunos_server_new.add(it)
             }
+            else{
+                if(last_sync.isBefore(LocalDateTime.parse(it.DataHoraUltimaAtu, dateTimeFormatter))){
+                    alunos_server_alt.add(it)
+                }
+            }
+
         }
 
-        alunos_server_new.forEach{
-            val aux = dbHelper.getAlunoById(dbHelper.getIdAlunoByName(it.Nome)) //TODO: checar o que getIdAlunoByName retorna se não acha
-            if(aux!=null){
-                
+
+        alunos_local.forEach {
+            if(last_sync.isBefore(LocalDateTime.parse(it.DataInclusao, dateTimeFormatter))){
+                alunos_local_new.add(it)
             }
+            else{
+                if(last_sync.isBefore(LocalDateTime.parse(it.DataHoraUltimaAtu, dateTimeFormatter))){
+                    alunos_local_alt.add(it)
+                }
+            }
+
         }
+
+        Log.d("SYNC", "alunos server new iniciando")
+        //novo aluno no server, verifica se ja tem um aluno com esse id criado localmente, se não só insere normalmente, se sim insere no local e muda o que tava ali pro final da tabela
+        alunos_server_new.forEach {
+            val alunoServerNew = AlunoModel(it.IdAluno, it.Nome, it.DataNascimento, it.IdProf, it.IndicadorDorPeitoAtividadesFisicas, it.IndicadorDorPeitoUltimoMes,
+                it.IndicadorPerdaConscienciaTontura,it.IndicadorProblemaArticular,it.IndicadorTabagista,it.IndicadorDiabetico,it.IndicadorFamiliarAtaqueCardiaco,
+                it.Lesoes,it.Observacoes,it.TreinoEspecifico,it.DataInclusao,it.DataHoraUltimaAtu,it.IndicadorAtivo)
+
+            val aux = dbHelper.getAlunoById(it.IdAluno)
+            if(aux == null){
+                dbHelper.createAluno(alunoServerNew)
+            }
+            else{
+                dbHelper.updateAluno(alunoServerNew, it.IdAluno)
+                aux.IdAluno = dbHelper.getLastIdInsertedAluno() + 1
+                dbHelper.createAluno(aux)
+                dbHelper.changeTreinosAluno(it.IdAluno, aux.IdAluno)
+            }
+
+        }
+
+        Log.d("SYNC", "alunos server alt iniciando")
+        //alteração no server, altera no banco local
+        alunos_server_alt.forEach {
+            val alunoServerAlt = AlunoModel(it.IdAluno, it.Nome, it.DataNascimento, it.IdProf, it.IndicadorDorPeitoAtividadesFisicas, it.IndicadorDorPeitoUltimoMes,
+                it.IndicadorPerdaConscienciaTontura,it.IndicadorProblemaArticular,it.IndicadorTabagista,it.IndicadorDiabetico,it.IndicadorFamiliarAtaqueCardiaco,
+                it.Lesoes,it.Observacoes,it.TreinoEspecifico,it.DataInclusao,it.DataHoraUltimaAtu,it.IndicadorAtivo)
+
+            dbHelper.updateAluno(alunoServerAlt, it.IdAluno)
+        }
+
+        Log.d("SYNC", "alunos local new iniciando")
+        //alunos novos no local que não estão no servidor
+        alunos_local_new.forEach {
+            val alunoNewLocal = AlunoModel(it.IdAluno, it.Nome, it.DataNascimento, it.IdProf, it.IndicadorDorPeitoAtividadesFisicas, it.IndicadorDorPeitoUltimoMes,
+                it.IndicadorPerdaConscienciaTontura,it.IndicadorProblemaArticular,it.IndicadorTabagista,it.IndicadorDiabetico,it.IndicadorFamiliarAtaqueCardiaco,
+                it.Lesoes,it.Observacoes,it.TreinoEspecifico,it.DataInclusao,it.DataHoraUltimaAtu,it.IndicadorAtivo)
+
+            val result = createAlunoServer(alunoNewLocal).await() as AlunoModel
+            //se aluno foi criado com id diferente no servidor, tem que atualizar no local
+            if(result.IdAluno != it.IdAluno){
+                dbHelper.updateAluno(result, result.IdAluno)
+                dbHelper.changeTreinosAluno(it.IdAluno, result.IdAluno)
+            }
+
+        }
+
+        Log.d("SYNC", "alunos local alt iniciando")
+        alunos_local_alt.forEach {
+            val alunoAltLocal = AlunoModel(it.IdAluno, it.Nome, it.DataNascimento, it.IdProf, it.IndicadorDorPeitoAtividadesFisicas, it.IndicadorDorPeitoUltimoMes,
+                it.IndicadorPerdaConscienciaTontura,it.IndicadorProblemaArticular,it.IndicadorTabagista,it.IndicadorDiabetico,it.IndicadorFamiliarAtaqueCardiaco,
+                it.Lesoes,it.Observacoes,it.TreinoEspecifico,it.DataInclusao,it.DataHoraUltimaAtu,it.IndicadorAtivo)
+
+            updateAlunoServer(alunoAltLocal)
+        }
+
+
+
 
 
     }
@@ -206,7 +272,7 @@ class SyncHelper(val dbHelper: DatabaseHelper) {
 
         alunos.forEach {
             Log.d("indativo", it.IndicadorAtivo.toString())
-            val aluno = AlunoModel(
+            val aluno = AlunoModel(it.IdAluno,
                 it.Nome,
                 it.DataNascimento,
                 it.IdProf,
@@ -251,6 +317,51 @@ class SyncHelper(val dbHelper: DatabaseHelper) {
         }
     }
 
+    fun retrieveSingleAluno(idAluno: Int) : Deferred<Any>{
+        val retrofit = RetrofitInitializer()
+
+        return GlobalScope.async {
+            try {
+                val primaryResponse = retrofit.appServices().viewAluno(idAluno).await()
+                val items = primaryResponse.items
+                val result = items[0]
+                return@async result
+            }
+            catch (e: Exception){
+                e.printStackTrace()
+            }
+        }
+    }
+
+    fun createAlunoServer(aluno: AlunoModel) : Deferred<Any>{
+        val retrofit = RetrofitInitializer()
+
+        return GlobalScope.async {
+            try {
+                val primaryResponse = retrofit.appServices().createAluno(aluno).await()
+                val items = primaryResponse.items
+                val result = items[0]
+                return@async result
+            }
+            catch (e: Exception){
+                e.printStackTrace()
+            }
+        }
+    }
+
+    fun updateAlunoServer(aluno: AlunoModel){
+        val retrofit = RetrofitInitializer()
+
+        GlobalScope.async {
+            try{
+                val primaryResponse = retrofit.appServices().updateAluno(aluno.IdAluno, aluno).await()
+            }
+            catch (e: Exception){
+                e.printStackTrace()
+            }
+        }
+    }
+
     fun retrieveDisp(): Deferred<Any> {
         val retrofit = RetrofitInitializer()
         return GlobalScope.async {
@@ -271,6 +382,8 @@ class SyncHelper(val dbHelper: DatabaseHelper) {
         }
 
     }
+
+
 
     suspend fun getTreinos(){
         val treinos = retrieveTreinos().await() as List<TreinoModel>

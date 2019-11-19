@@ -90,7 +90,8 @@ class DHAluno(val db: SQLiteDatabase) {
                 val ind5 = c.getString(c.getColumnIndex(KEY_IND_5))
                 val ind6 = c.getString(c.getColumnIndex(KEY_IND_6))
                 val ind7 = c.getString(c.getColumnIndex(KEY_IND_7))
-                val aluno = AlunoModel(c.getString(c.getColumnIndex(KEY_NAME)),
+                val aluno = AlunoModel(c.getInt(c.getColumnIndex(ID_ALUNO)),
+                    c.getString(c.getColumnIndex(KEY_NAME)),
                     c.getString(c.getColumnIndex(KEY_NASCIMENTO)),
                     c.getInt(c.getColumnIndex(ID_INCL)),
                     ind1.toBoolean(),
@@ -117,35 +118,40 @@ class DHAluno(val db: SQLiteDatabase) {
         return alunosList
     }
 
-    fun getAlunoById(idAluno: Int): AlunoModel {
+    fun getAlunoById(idAluno: Int): AlunoModel? {
         val selectQuery = "SELECT * FROM $TABLE_ALUNO WHERE $ID_ALUNO = $idAluno AND $KEY_ACTIVE = \"1\";"
         val c: Cursor = db.rawQuery(selectQuery, null)
-        c.moveToFirst()
-        val ind1 = c.getString(c.getColumnIndex(KEY_IND_1))
-        val ind2 = c.getString(c.getColumnIndex(KEY_IND_2))
-        val ind3 = c.getString(c.getColumnIndex(KEY_IND_3))
-        val ind4 = c.getString(c.getColumnIndex(KEY_IND_4))
-        val ind5 = c.getString(c.getColumnIndex(KEY_IND_5))
-        val ind6 = c.getString(c.getColumnIndex(KEY_IND_6))
-        val ind7 = c.getString(c.getColumnIndex(KEY_IND_7))
-        val aluno = AlunoModel(c.getString(c.getColumnIndex(KEY_NAME)),
-            c.getString(c.getColumnIndex(KEY_NASCIMENTO)),
-            c.getInt(c.getColumnIndex(ID_INCL)),
-            ind1.toBoolean(),
-            ind2.toBoolean(),
-            ind3.toBoolean(),
-            ind4.toBoolean(),
-            ind5.toBoolean(),
-            ind6.toBoolean(),
-            ind7.toBoolean(),
-            c.getString(c.getColumnIndex(KEY_LESOES)),
-            c.getString(c.getColumnIndex(KEY_OBS)),
-            c.getString(c.getColumnIndex(KEY_TREINO_ESP)),
-            c.getString(c.getColumnIndex(KEY_DATA_INC)),
-            c.getString(c.getColumnIndex(KEY_DATA_ULT)),
-            c.getString(c.getColumnIndex(KEY_ACTIVE)))
+        if(c.moveToFirst()){
+            val ind1 = c.getString(c.getColumnIndex(KEY_IND_1))
+            val ind2 = c.getString(c.getColumnIndex(KEY_IND_2))
+            val ind3 = c.getString(c.getColumnIndex(KEY_IND_3))
+            val ind4 = c.getString(c.getColumnIndex(KEY_IND_4))
+            val ind5 = c.getString(c.getColumnIndex(KEY_IND_5))
+            val ind6 = c.getString(c.getColumnIndex(KEY_IND_6))
+            val ind7 = c.getString(c.getColumnIndex(KEY_IND_7))
+            val aluno = AlunoModel(c.getInt(c.getColumnIndex(ID_ALUNO)),
+                c.getString(c.getColumnIndex(KEY_NAME)),
+                c.getString(c.getColumnIndex(KEY_NASCIMENTO)),
+                c.getInt(c.getColumnIndex(ID_INCL)),
+                ind1.toBoolean(),
+                ind2.toBoolean(),
+                ind3.toBoolean(),
+                ind4.toBoolean(),
+                ind5.toBoolean(),
+                ind6.toBoolean(),
+                ind7.toBoolean(),
+                c.getString(c.getColumnIndex(KEY_LESOES)),
+                c.getString(c.getColumnIndex(KEY_OBS)),
+                c.getString(c.getColumnIndex(KEY_TREINO_ESP)),
+                c.getString(c.getColumnIndex(KEY_DATA_INC)),
+                c.getString(c.getColumnIndex(KEY_DATA_ULT)),
+                c.getString(c.getColumnIndex(KEY_ACTIVE)))
 
-        return aluno
+            c.close()
+            return aluno
+        }
+        else{return null}
+
     }
 
     fun getAlunosByIdProf(idProf: Int): MutableList<AlunoModel>{
@@ -154,7 +160,8 @@ class DHAluno(val db: SQLiteDatabase) {
         val c: Cursor = db.rawQuery(selectQuery, null)
         if(c.moveToFirst()) {
             do {
-                val aluno = AlunoModel(c.getString(c.getColumnIndex(KEY_NAME)),
+                val aluno = AlunoModel(c.getInt(c.getColumnIndex(ID_ALUNO)),
+                    c.getString(c.getColumnIndex(KEY_NAME)),
                     c.getString(c.getColumnIndex(KEY_NASCIMENTO)),
                     idProf,
                     c.getString(c.getColumnIndex(KEY_IND_1)).toBoolean(),
@@ -211,5 +218,14 @@ class DHAluno(val db: SQLiteDatabase) {
             put(KEY_ACTIVE, "1")
         }
         db.update(TABLE_ALUNO, values, "$ID_ALUNO = ?", arrayOf(idAluno.toString()))
+    }
+
+    fun getLastIdInserted(): Int{
+        val selectQuery = "SELECT * FROM $TABLE_ALUNO ORDER BY $ID_ALUNO DESC LIMIT 1;"
+        val c = db.rawQuery(selectQuery, null)
+        c.moveToFirst()
+        c.close()
+        return c.getInt(c.getColumnIndex(ID_ALUNO))
+
     }
 }

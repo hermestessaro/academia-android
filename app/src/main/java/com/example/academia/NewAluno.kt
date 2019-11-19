@@ -62,8 +62,9 @@ class NewAluno : AppCompatActivity() {
         val observacoes = obs_et.text.toString()
 
         val prof = dbHelper.getProfessorByName(profName)
+        val idAluno = dbHelper.getLastIdInsertedAluno()
 
-        val aluno = AlunoModel(nome, data, prof!!.IdProfessor, dorPeitoAtividades, dorPeitoMes, perdaConsciencia,
+        val aluno = AlunoModel(idAluno, nome, data, prof!!.IdProfessor, dorPeitoAtividades, dorPeitoMes, perdaConsciencia,
                     problemaOsseo, tabagista, diabetico, cardiaco, lesoes, observacoes, "",
                     "", "", "1")
         dbHelper.createAluno(aluno)

@@ -4,6 +4,8 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -11,6 +13,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import com.example.academia.Database.DatabaseHelper
+import com.example.academia.WebService.SyncHelper
 import com.example.academia.controllers.AlunosLista.AllAlunosListaFragment
 import com.example.academia.controllers.AlunosLista.MyAlunosListaFragment
 import com.example.academia.controllers.GruposLista.GruposListaFragment
@@ -18,6 +22,11 @@ import com.example.academia.models.AlunoModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.detail_header.*
 import kotlinx.android.synthetic.main.toolbar.toolbar
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -27,41 +36,55 @@ class MainActivity : AppCompatActivity() {
     private lateinit var pagerAdapter: PagerAdapter
     val manager = supportFragmentManager
     lateinit var profName: String
+    lateinit var dbHelper: DatabaseHelper
+    lateinit var syncHelper: SyncHelper
+    lateinit var last_sync: LocalDateTime
     private var PRIVATE_MODE = 0
     private val PREF_NAME = "profName"
+    private val PREF_DATE = "last_sync"
+
 
 
     override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        /*val sharedPref: SharedPreferences = getSharedPreferences(PREF_NAME, PRIVATE_MODE)
-        val aux = sharedPref.getString(PREF_NAME,"default")
-        Log.d("first_prof_name", aux)
-        if(aux.equals("default"))
-        {
-            profName = intent.getStringExtra("profName")!!
-            val editor = sharedPref.edit()
-            editor.putString(PREF_NAME, profName)
-            editor.apply()
-        }
-        else{
-            profName = aux!!
-        }*/
+        val sharedPref: SharedPreferences = getSharedPreferences(PREF_NAME, PRIVATE_MODE)
+        val aux = sharedPref.getString(PREF_DATE,"0000-00-00")
+
+        val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+        last_sync = LocalDateTime.parse(aux, dateTimeFormatter)
+
+        Log.d("last_sync", last_sync.toString())
+
+
+
+        dbHelper = DatabaseHelper(applicationContext)
+        syncHelper = SyncHelper(dbHelper)
 
         profName = intent.getStringExtra("profName")!!
         initView()
         Log.d("profname", profName)
 
-        /*val aluno1 = AlunoModel("hermo","16/02/94", profName, false, false, false, false,
-        false, false, false, "", "", "")
-        dbHelper.createAluno(aluno1)
-        val aluno2 = AlunoModel("wolvie","16/02/30", "Xavier", false, false, false, false,
-            false, false, false, "", "", "")
-        dbHelper.createAluno(aluno2)*/
 
 
+    }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if(item.itemId == R.id.sincronizar){
+            sync_progress.visibility = View.VISIBLE
+            GlobalScope.async {
+                sync()
+                sync_progress.visibility = View.GONE
+            }
+
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     fun initView(){
@@ -123,6 +146,10 @@ class MainActivity : AppCompatActivity() {
         {
             //super.onBackPressed()
         }
+    }
+
+    suspend fun sync(){
+        syncHelper.syncAll(last_sync)
     }
 
 

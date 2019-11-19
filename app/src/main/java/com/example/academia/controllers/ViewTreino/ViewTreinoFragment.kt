@@ -43,7 +43,7 @@ class ViewTreinoFragment(val idTreino: Int, val idAluno: Int?) : Fragment() {
         tipo_treino.text = treino.tipo
 
         val aluno = dbHelper.getAlunoById(idAluno!!)
-        nome_aluno.text = aluno.Nome
+        nome_aluno.text = aluno!!.Nome
 
         exerciciosRecyclerView.apply {
             layoutManager = LinearLayoutManager(activity)
