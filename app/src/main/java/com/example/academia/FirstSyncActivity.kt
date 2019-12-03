@@ -1,8 +1,11 @@
 package com.example.academia
 
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -22,6 +25,7 @@ import java.time.format.DateTimeFormatter
 class FirstSyncActivity : AppCompatActivity() {
 
     val PRIVATE_MODE = 0
+    val PREF_FILE = "prefFile"
     val PREF_NAME = "synced"
     val PREF_DATE = "last_sync"
     val dbHelper = DatabaseHelper(this)
@@ -32,47 +36,63 @@ class FirstSyncActivity : AppCompatActivity() {
 
 
 
-        val sharedPref: SharedPreferences = getSharedPreferences(PREF_NAME, PRIVATE_MODE)
+        val sharedPref: SharedPreferences = getSharedPreferences(PREF_FILE, PRIVATE_MODE)
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
 
         //this.deleteDatabase("database.db")
         //sharedPref.edit().clear().apply()
 
+        //variables to check if there's internet connection
+        val connectivityManager = applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        var result = false
+        connectivityManager.run {
+            connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)?.run {
+                result = when{
+                    hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+                    hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+                    hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
+                    else -> false
+                }
+            }
+        }
+
         //já sincronizou
         if (!sharedPref.getBoolean(PREF_NAME, false)) {
-            runOnUiThread {
-                run {
-                    if(!isFinishing){
-                        val builder = AlertDialog.Builder(this)
-                        builder.setTitle("Sincronizar")
-                        builder.setMessage("Você gostaria de sincronizar o banco de dados?")
-                        builder.setPositiveButton("Sim") { dialog, which ->
-                            first_sync_progress.visibility = View.VISIBLE
-                            GlobalScope.launch{
-                                syncHelper.getAll().await()
+            if(result) {
+                runOnUiThread {
+                    run {
+                        if (!isFinishing) {
+                            val builder = AlertDialog.Builder(this)
+                            builder.setTitle("Sincronizar")
+                            builder.setMessage("Você gostaria de sincronizar o banco de dados?")
+                            builder.setPositiveButton("Sim") { dialog, which ->
+                                first_sync_progress.visibility = View.VISIBLE
+                                GlobalScope.launch {
+                                    syncHelper.getAll().await()
 
-                                val editor = sharedPref.edit()
-                                editor.putBoolean(PREF_NAME, true)
+                                    val editor = sharedPref.edit()
+                                    editor.putBoolean(PREF_NAME, true)
 
-                                val date = LocalDateTime.now().format(formatter).toString()
-                                Log.d("date", date)
-                                editor.putString(PREF_DATE, date)
-                                editor.apply()
+                                    val date = LocalDateTime.now().format(formatter).toString()
+                                    Log.d("date", date)
+                                    editor.putString(PREF_DATE, date)
+                                    editor.apply()
 
-                                first_sync_progress.visibility = View.GONE
+                                    val intent = Intent(applicationContext, SelectTrainer::class.java)
+                                    startActivity(intent)
+
+                                }
+
+
+                            }
+                            builder.setNegativeButton("Não") { _, _ ->
+                                val prof = ProfessorModel(9, "ProfTeste", "teste@teste.com", "1234", "", "", "Sim")
+                                dbHelper.createProfessor(prof)
                                 val intent = Intent(applicationContext, SelectTrainer::class.java)
                                 startActivity(intent)
                             }
-
-
+                            builder.create().show()
                         }
-                        builder.setNegativeButton("Não") { _, _ ->
-                            val prof = ProfessorModel(9, "ProfTeste", "teste@teste.com", "1234", "", "", "Sim")
-                            dbHelper.createProfessor(prof)
-                            val intent = Intent(applicationContext, SelectTrainer::class.java)
-                            startActivity(intent)
-                        }
-                        builder.create().show()
                     }
                 }
             }
@@ -98,6 +118,7 @@ class FirstSyncActivity : AppCompatActivity() {
 
 
     }
+
 
 
 

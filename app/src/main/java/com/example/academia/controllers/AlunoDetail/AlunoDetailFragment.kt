@@ -40,7 +40,7 @@ class AlunoDetailFragment() : Fragment() {
         if(arguments != null){
             this.aluno = arguments!!.getParcelable("alunoClicked")!!
         }
-        Log.d("nome", this.aluno.Nome)
+        Log.d("datainclusao", this.aluno.DataInclusao)
         idAluno = dbHelper.getIdAlunoByName(this.aluno.Nome)
     }
 

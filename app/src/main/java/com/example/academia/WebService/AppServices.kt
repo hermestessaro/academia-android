@@ -18,7 +18,7 @@ interface AppServices {
     fun viewAluno(@Path("id") id: Int) : Deferred<ApiResponse<AlunoModel>>
 
     @POST("/academia/web/api/aluno/create")
-    fun createAluno(@Body body: AlunoModel): Deferred<ApiResponse<AlunoModel>>
+    fun createAluno(@Body body: AlunoModelServer): Deferred<ApiResponse<AlunoModelServer>>
 
     @PUT("/academia/web/api/aluno/update?id={id}")
     fun updateAluno(@Path("id") id: Int, @Body body: AlunoModel) : Deferred<ApiResponse<AlunoModel>>

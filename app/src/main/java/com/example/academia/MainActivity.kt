@@ -2,6 +2,8 @@ package com.example.academia
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -40,6 +42,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var syncHelper: SyncHelper
     lateinit var last_sync: LocalDateTime
     private var PRIVATE_MODE = 0
+    private val PREF_FILE = "prefFile"
     private val PREF_NAME = "profName"
     private val PREF_DATE = "last_sync"
 
@@ -49,22 +52,26 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val sharedPref: SharedPreferences = getSharedPreferences(PREF_NAME, PRIVATE_MODE)
-        val aux = sharedPref.getString(PREF_DATE,"0000-00-00")
+        val sharedPref: SharedPreferences = getSharedPreferences(PREF_FILE, PRIVATE_MODE)
+        val aux = sharedPref.getString(PREF_DATE,"0000-00-00T00:00:00")
 
         val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
         last_sync = LocalDateTime.parse(aux, dateTimeFormatter)
 
         Log.d("last_sync", last_sync.toString())
 
-
-
+        val data_inc = LocalDateTime.parse("2019-11-19 23:57:11", dateTimeFormatter)
+        if(last_sync.isBefore(data_inc)){
+                Log.d("data_format", "true")
+        }
+        Log.d("data_inc", data_inc.toString())
         dbHelper = DatabaseHelper(applicationContext)
         syncHelper = SyncHelper(dbHelper)
 
         profName = intent.getStringExtra("profName")!!
         initView()
         Log.d("profname", profName)
+
 
 
 
@@ -77,11 +84,57 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if(item.itemId == R.id.sincronizar){
-            sync_progress.visibility = View.VISIBLE
-            GlobalScope.async {
-                sync()
-                sync_progress.visibility = View.GONE
+            //variables to check if there's internet connection
+            val connectivityManager = applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            var result = false
+            connectivityManager.run {
+                connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)?.run {
+                    result = when{
+                        hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+                        hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+                        hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
+                        else -> false
+                    }
+                }
             }
+            if(result){
+                sync_progress.visibility = View.VISIBLE
+                GlobalScope.async {
+                    sync()
+                    sync_progress.visibility = View.GONE
+                }
+            }
+            else{
+                Toast.makeText(applicationContext, "Não foi detectada conexão com a internet", Toast.LENGTH_LONG).show()
+            }
+
+
+
+            /*val alunos_local = dbHelper.getAllAlunos()
+            val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+
+            alunos_local?.forEach {
+                Log.d("SYNCalunoslocal", it.DataInclusao)
+                if(last_sync.isBefore(LocalDateTime.parse(it.DataInclusao, dateTimeFormatter))){
+                    Log.d("SYNC", "entrou if")
+                }
+                else{
+                    Log.d("SYNC", "if passed")
+                    if(last_sync.isBefore(LocalDateTime.parse(it.DataHoraUltimaAtu, dateTimeFormatter))){
+                        Log.d("SYNC", "entrou segundo if")
+                    }
+                }
+            }*/
+
+            val sharedPref: SharedPreferences = getSharedPreferences(PREF_DATE, PRIVATE_MODE)
+            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+            val editor = sharedPref.edit()
+            editor.putBoolean(PREF_DATE, true)
+
+            val date = LocalDateTime.now().format(formatter).toString()
+            Log.d("date", date)
+            editor.putString(PREF_DATE, date)
+            editor.apply()
 
         }
         return super.onOptionsItemSelected(item)
@@ -149,6 +202,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     suspend fun sync(){
+        Log.d("SYNC", "blo")
         syncHelper.syncAll(last_sync)
     }
 

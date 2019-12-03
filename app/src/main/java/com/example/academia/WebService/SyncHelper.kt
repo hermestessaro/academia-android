@@ -13,7 +13,9 @@ import java.time.format.DateTimeFormatter
 class SyncHelper(val dbHelper: DatabaseHelper) {
 
     suspend fun syncAll(last_sync: LocalDateTime){
-        syncProf(last_sync)
+        Log.d("SYNC", "gr")
+        //syncProf(last_sync)
+        syncAlunos(last_sync)
     }
 
     suspend fun syncProf(last_sync: LocalDateTime){
@@ -67,7 +69,11 @@ class SyncHelper(val dbHelper: DatabaseHelper) {
         val alunos_local_alt: MutableList<AlunoModel> = mutableListOf()
         val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
 
+        Log.d("SYNC", "retrieved")
+
         alunos_server.forEach {
+
+            Log.d("SYNCalunosserver", it.DataInclusao)
             if(last_sync.isBefore(LocalDateTime.parse(it.DataInclusao, dateTimeFormatter))){
                 alunos_server_new.add(it)
             }
@@ -79,18 +85,23 @@ class SyncHelper(val dbHelper: DatabaseHelper) {
 
         }
 
+        Log.d("SYNC", "new lists")
 
-        alunos_local.forEach {
+
+        alunos_local?.forEach {
+            Log.d("SYNCalunoslocal", it.DataInclusao)
             if(last_sync.isBefore(LocalDateTime.parse(it.DataInclusao, dateTimeFormatter))){
+                Log.d("SYNC", "entrou if")
                 alunos_local_new.add(it)
             }
             else{
+                Log.d("SYNC", "if passed")
                 if(last_sync.isBefore(LocalDateTime.parse(it.DataHoraUltimaAtu, dateTimeFormatter))){
                     alunos_local_alt.add(it)
                 }
             }
-
         }
+
 
         Log.d("SYNC", "alunos server new iniciando")
         //novo aluno no server, verifica se ja tem um aluno com esse id criado localmente, se não só insere normalmente, se sim insere no local e muda o que tava ali pro final da tabela
@@ -125,8 +136,10 @@ class SyncHelper(val dbHelper: DatabaseHelper) {
         Log.d("SYNC", "alunos local new iniciando")
         //alunos novos no local que não estão no servidor
         alunos_local_new.forEach {
-            val alunoNewLocal = AlunoModel(it.IdAluno, it.Nome, it.DataNascimento, it.IdProf, it.IndicadorDorPeitoAtividadesFisicas, it.IndicadorDorPeitoUltimoMes,
-                it.IndicadorPerdaConscienciaTontura,it.IndicadorProblemaArticular,it.IndicadorTabagista,it.IndicadorDiabetico,it.IndicadorFamiliarAtaqueCardiaco,
+            val alunoNewLocal = AlunoModelServer(it.IdAluno, it.Nome, it.DataNascimento, it.IdProf, changeBoolToString(it.IndicadorDorPeitoAtividadesFisicas),
+                changeBoolToString(it.IndicadorDorPeitoUltimoMes),changeBoolToString(it.IndicadorPerdaConscienciaTontura),
+                changeBoolToString(it.IndicadorProblemaArticular),changeBoolToString(it.IndicadorTabagista),
+                changeBoolToString(it.IndicadorDiabetico),changeBoolToString(it.IndicadorFamiliarAtaqueCardiaco),
                 it.Lesoes,it.Observacoes,it.TreinoEspecifico,it.DataInclusao,it.DataHoraUltimaAtu,it.IndicadorAtivo)
 
             val result = createAlunoServer(alunoNewLocal).await() as AlunoModel
@@ -146,11 +159,18 @@ class SyncHelper(val dbHelper: DatabaseHelper) {
 
             updateAlunoServer(alunoAltLocal)
         }
+        Log.d("SYNC", "deu")
 
 
+    }
 
-
-
+    fun changeBoolToString(value: Boolean): String{
+        if(value == true){
+            return "1"
+        }
+        else{
+            return "0"
+        }
     }
 
 
@@ -271,7 +291,7 @@ class SyncHelper(val dbHelper: DatabaseHelper) {
         val alunos = retrieveAlunos().await() as List<AlunoModel>
 
         alunos.forEach {
-            Log.d("indativo", it.IndicadorAtivo.toString())
+            Log.d("dataincsync", it.DataInclusao)
             val aluno = AlunoModel(it.IdAluno,
                 it.Nome,
                 it.DataNascimento,
@@ -333,14 +353,14 @@ class SyncHelper(val dbHelper: DatabaseHelper) {
         }
     }
 
-    fun createAlunoServer(aluno: AlunoModel) : Deferred<Any>{
+    fun createAlunoServer(aluno: AlunoModelServer) : Deferred<Any>{
         val retrofit = RetrofitInitializer()
 
         return GlobalScope.async {
             try {
                 val primaryResponse = retrofit.appServices().createAluno(aluno).await()
                 val items = primaryResponse.items
-                val result = items[0]
+                val result = items
                 return@async result
             }
             catch (e: Exception){

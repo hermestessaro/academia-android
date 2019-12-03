@@ -71,7 +71,7 @@ class CreateTreinoFragment(val newTreino: Boolean, var idTreino: Int, val idAlun
         }
         else{
             val alunos = dbHelper.getAllAlunos()
-            for(item in alunos){
+            for(item in alunos!!){
                 alunos_names.add(item.Nome)
             }
         }

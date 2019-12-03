@@ -56,7 +56,7 @@ class DHAluno(val db: SQLiteDatabase) {
         put(KEY_LESOES, aluno.Lesoes)
         put(KEY_OBS, aluno.Observacoes)
         put(KEY_TREINO_ESP, aluno.TreinoEspecifico)
-        put(KEY_DATA_INC, LocalDate.now().toString())
+        put(KEY_DATA_INC, aluno.DataInclusao.format(formatter))
         put(KEY_DATA_ULT, LocalDateTime.now().format(formatter).toString())
         put(KEY_ACTIVE, "1")
     }
@@ -75,7 +75,7 @@ class DHAluno(val db: SQLiteDatabase) {
         return result
     }
 
-    fun getAllAlunos() : MutableList<AlunoModel> {
+    fun getAllAlunos() : MutableList<AlunoModel>? {
         Log.d("primeiro", "passou")
         val selectQuery : String = "SELECT * FROM $TABLE_ALUNO WHERE $KEY_ACTIVE = \"1\";"
         val c: Cursor = db.rawQuery(selectQuery, null)
@@ -109,13 +109,13 @@ class DHAluno(val db: SQLiteDatabase) {
                     c.getString(c.getColumnIndex(KEY_ACTIVE)))
                 alunosList.add(aluno)
 
-
-
             }while(c.moveToNext())
+        }else{
+            c.close()
+            return null
         }
-
-        c.close()
         return alunosList
+
     }
 
     fun getAlunoById(idAluno: Int): AlunoModel? {
@@ -213,7 +213,7 @@ class DHAluno(val db: SQLiteDatabase) {
             put(KEY_LESOES, aluno.Lesoes)
             put(KEY_OBS, aluno.Observacoes)
             put(KEY_TREINO_ESP, aluno.TreinoEspecifico)
-            put(KEY_DATA_INC, aluno.DataInclusao)
+            put(KEY_DATA_INC, aluno.DataInclusao.format(formatter))
             put(KEY_DATA_ULT, LocalDateTime.now().format(formatter).toString())
             put(KEY_ACTIVE, "1")
         }
@@ -224,7 +224,6 @@ class DHAluno(val db: SQLiteDatabase) {
         val selectQuery = "SELECT * FROM $TABLE_ALUNO ORDER BY $ID_ALUNO DESC LIMIT 1;"
         val c = db.rawQuery(selectQuery, null)
         c.moveToFirst()
-        c.close()
         return c.getInt(c.getColumnIndex(ID_ALUNO))
 
     }

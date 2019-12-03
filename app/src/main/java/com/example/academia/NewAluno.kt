@@ -12,6 +12,7 @@ import com.example.academia.models.AlunoModel
 import com.example.academia.models.DispModel
 import kotlinx.android.synthetic.main.activity_new_aluno.*
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 
@@ -66,7 +67,7 @@ class NewAluno : AppCompatActivity() {
 
         val aluno = AlunoModel(idAluno, nome, data, prof!!.IdProfessor, dorPeitoAtividades, dorPeitoMes, perdaConsciencia,
                     problemaOsseo, tabagista, diabetico, cardiaco, lesoes, observacoes, "",
-                    "", "", "1")
+                    LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")).toString(), "", "1")
         dbHelper.createAluno(aluno)
 
         val disp = getDisp(dbHelper.getIdAlunoByName(nome))

@@ -39,14 +39,14 @@ class AllAlunosListaFragment : Fragment(), AlunoClick {
     override fun onAttach(context: Context?) {
         super.onAttach(context)
         dbHelper = DatabaseHelper(activity)
-        mAlunos = dbHelper.getAllAlunos()
+        mAlunos = dbHelper.getAllAlunos()!!
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
 
     override fun onResume() {
-        mAlunos = dbHelper.getAllAlunos()
+        mAlunos = dbHelper.getAllAlunos()!!
         alunosRecyclerView.apply {
             layoutManager = LinearLayoutManager(activity)
             adapter = AlunosAdapter(mAlunos, frag)
