@@ -31,7 +31,7 @@ class SelectTrainer : AppCompatActivity() {
         prof_list.adapter = adapter
 
         button_prof.setOnClickListener {
-            Log.d("selected", prof_list.selectedItem.toString())
+            Log.d("log", prof_list.selectedItem.toString())
             val intent = MainActivity.start(this, prof_list.selectedItem.toString())
             startActivity(intent)
         }

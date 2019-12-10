@@ -50,6 +50,7 @@ class AlunoDetailFragment() : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        //container?.removeAllViews()
         setHasOptionsMenu(true)
         return inflater.inflate(R.layout.fragment_aluno_detail, container, false)
     }
@@ -177,7 +178,7 @@ class AlunoDetailFragment() : Fragment() {
                 intent = NewTreino.start(context!!, new, aux.idTreino, idAluno)
             }
             startActivity(intent)
-            Toast.makeText(context!!, "Clicked: " + titleList[groupPosition] + " -> " + listData[titleList[groupPosition]]!!.get(childPosition), Toast.LENGTH_SHORT).show()
+            //Toast.makeText(context!!, "Clicked: " + titleList[groupPosition] + " -> " + listData[titleList[groupPosition]]!!.get(childPosition), Toast.LENGTH_SHORT).show()
             false
         }
     }

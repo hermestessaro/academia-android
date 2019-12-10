@@ -1,6 +1,7 @@
 package com.example.academia.WebService
 
 import android.util.Log
+import com.example.academia.models.ProfessorModel
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import okhttp3.Credentials
 import okhttp3.Interceptor
@@ -9,7 +10,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class RetrofitInitializer {
+class RetrofitInitializer() {
 
     /*private fun getClient(): OkHttpClient {
 
@@ -49,7 +50,7 @@ class RetrofitInitializer {
 
 
         return Retrofit.Builder()
-            .baseUrl("http://192.168.0.5/academia/web/api/")
+            .baseUrl("http://192.168.0.7/academia/web/api/")
             .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .addConverterFactory(GsonConverterFactory.create())
             .client(getClient())
@@ -60,7 +61,14 @@ class RetrofitInitializer {
 
 
     private fun headersInterceptor() = Interceptor{ chain ->
-        val authToken = Credentials.basic("matmic08@gmail.com", "215623")
+        val authToken = Credentials.basic("hermes.tessaro@gmail.com", "160294")
+        /*if(prof != null){
+            authToken = Credentials.basic(prof.Email, prof.Senha)
+        }
+        else{
+            authToken = Credentials.basic("hermes.tessaro@gmail.com", "160294")
+        }*/
+
         Log.d("token", authToken)
         chain.proceed(
             chain.request().newBuilder()

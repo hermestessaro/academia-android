@@ -23,6 +23,7 @@ import com.example.academia.controllers.GruposLista.GruposListaFragment
 import com.example.academia.models.AlunoModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.detail_header.*
+import kotlinx.android.synthetic.main.fragment_aluno_detail.*
 import kotlinx.android.synthetic.main.toolbar.toolbar
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
@@ -53,7 +54,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val sharedPref: SharedPreferences = getSharedPreferences(PREF_FILE, PRIVATE_MODE)
-        val aux = sharedPref.getString(PREF_DATE,"0000-00-00T00:00:00")
+        val aux = sharedPref.getString(PREF_DATE,"0001-01-01 00:00:00")
 
         val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
         last_sync = LocalDateTime.parse(aux, dateTimeFormatter)
@@ -66,9 +67,10 @@ class MainActivity : AppCompatActivity() {
         }
         Log.d("data_inc", data_inc.toString())
         dbHelper = DatabaseHelper(applicationContext)
+        profName = intent.getStringExtra("profName")!!
         syncHelper = SyncHelper(dbHelper)
 
-        profName = intent.getStringExtra("profName")!!
+
         initView()
         Log.d("profname", profName)
 
@@ -171,8 +173,6 @@ class MainActivity : AppCompatActivity() {
                     val intent = NewAluno.start(applicationContext, profName)
                     startActivity(intent)
                 }
-                //R.id.nav_item_four -> Toast.makeText(this, "profs", Toast.LENGTH_LONG).show()
-                //R.id.nav_item_five -> Toast.makeText(this, "aparelhos", Toast.LENGTH_LONG).show()
                 R.id.nav_item_six -> {
                     view_pager.visibility = View.GONE
                     changesFragment(gruposFragment)
@@ -189,6 +189,10 @@ class MainActivity : AppCompatActivity() {
 
     fun viewPagerDisappears(){
         view_pager.visibility = View.GONE
+    }
+
+    fun viewPagerAppears(){
+        view_pager.visibility = View.VISIBLE
     }
 
     override fun onBackPressed() {

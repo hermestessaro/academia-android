@@ -5,12 +5,17 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import android.widget.RadioGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.academia.Database.DatabaseHelper
 import com.example.academia.models.AlunoModel
 import com.example.academia.models.DispModel
 import kotlinx.android.synthetic.main.activity_new_aluno.*
+import java.lang.Exception
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -23,23 +28,40 @@ class NewAluno : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_aluno)
-
-
         profName = intent.getStringExtra("profName")!!
 
+        DateInputMask(data_et).listen()
+
         button_save.setOnClickListener {
+            checkDateFormat()
+        }
+        button_goto_training.setOnClickListener {
+            saveAluno()
+            Toast.makeText(this, "Treino", Toast.LENGTH_SHORT).show()
+        }
+
+        //hide soft keyboard
+        dorPeito_rg.setOnCheckedChangeListener { group, checkedId ->
+            val imm = applicationContext.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(this.currentFocus?.windowToken, 0)
+        }
+    }
+
+    fun checkDateFormat(){
+        val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+        try{
+            var date = LocalDate.parse(data_et.text.toString(), formatter)
             saveAluno()
             Toast.makeText(this, "Salvo com sucesso", Toast.LENGTH_SHORT).show()
             val intent = Intent(this, MainActivity::class.java)
             intent.putExtra("profName", profName)
             startActivity(intent)
         }
-        button_goto_training.setOnClickListener {
-            saveAluno()
-            Toast.makeText(this, "vai pro treino", Toast.LENGTH_SHORT).show()
+        catch (e: Exception){
+            Toast.makeText(applicationContext, "Data inválida! Lembre que o formato é dd/mm/aaaa", Toast.LENGTH_LONG).show()
+            return
         }
     }
-
 
 
     fun saveAluno(){

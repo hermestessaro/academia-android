@@ -12,6 +12,7 @@ import java.time.format.DateTimeFormatter
 
 class SyncHelper(val dbHelper: DatabaseHelper) {
 
+
     suspend fun syncAll(last_sync: LocalDateTime){
         Log.d("SYNC", "gr")
         //syncProf(last_sync)

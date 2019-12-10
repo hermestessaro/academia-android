@@ -46,11 +46,15 @@ class MyAlunosListaFragment(val profName: String) : Fragment(), AlunoClick  {
         super.onResume()
     }*/
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        //container?.removeAllViews()
         return inflater.inflate(R.layout.fragment_alunos_lista, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        //val main = activity as MainActivity
+        //main.viewPagerAppears()
         super.onViewCreated(view, savedInstanceState)
+
 
         alunosRecyclerView.apply {
             layoutManager = LinearLayoutManager(activity)

@@ -33,10 +33,10 @@
     <string name="data">Data de Nascimento:</string>
     <string name="date_format">Formato: dd/mm/aaaa</string>
 
-    <string name="dorPeitoAtividades">Você tem dor no peito provocada por atividades físicas?</string>
-    <string name="dorPeitoMes">Você sentiu dor no peito no último mês?</string>
-    <string name="perdaConsciencia">Você já perdeu a consciência em alguma ocasião ou sofreu alguma queda em virtude de tontura?</string>
-    <string name="problemaOsseo">Você tem algum problema ósseo ou articular que poderia agravar-se com a prática de atividades físicas?</string>
+    <string name="dorPeitoAtividades">O aluno tem dor no peito provocada por atividades físicas?</string>
+    <string name="dorPeitoMes">O aluno sentiu dor no peito no último mês?</string>
+    <string name="perdaConsciencia">O aluno já perdeu a consciência em alguma ocasião ou sofreu alguma queda em virtude de tontura?</string>
+    <string name="problemaOsseo">O aluno tem algum problema ósseo ou articular que poderia agravar-se com a prática de atividades físicas?</string>
     <string name="tabagista">Tabagista?</string>
     <string name="diabetico">Diabético?</string>
     <string name="cardiaco">Histórico familiar de ataque cardíaco? (Pai ou irmão de 55 anos ou mãe ou irmã antes dos 65 anos)</string>
@@ -69,7 +69,7 @@
     <string name="series">Séries</string>
     <string name="repeticoes">Repetições</string>
     <string name="carga">Carga</string>
-    <string name="tipo">Tipo:</string>
+    <string name="tipo">Identificador:</string>
     <string name="excluir_aluno">Excluir aluno</string>
     <string name="editar_aluno">Editar aluno</string>
     <string name="mostrar_frequencia">Mostrar frequência</string>
@@ -79,6 +79,7 @@
     <string name="excluir_treino">Excluir treino</string>
     <string name="voltar">Voltar</string>
     <string name="sincronizar">Sincronizar</string>
+    <string name="adicionar">Adicionar</string>
 
 
     <!--Offline tests-->

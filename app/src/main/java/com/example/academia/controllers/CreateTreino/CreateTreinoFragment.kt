@@ -151,9 +151,6 @@ class CreateTreinoFragment(val newTreino: Boolean, var idTreino: Int, val idAlun
             val main = activity as NewTreino
             main.supportFragmentManager.beginTransaction().replace(R.id.content_frame, GruposListaFragment(true, idTreino, idAluno)).addToBackStack(null).commit()
         }
-        else{
-            Toast.makeText(context, "não é o pei dos guri", Toast.LENGTH_LONG).show()
-        }
     }
 
 

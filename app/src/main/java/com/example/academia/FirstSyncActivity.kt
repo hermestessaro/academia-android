@@ -14,6 +14,7 @@ import com.example.academia.Database.DatabaseHelper
 import com.example.academia.WebService.RetrofitInitializer
 import com.example.academia.WebService.SyncHelper
 import com.example.academia.models.AparelhoModel
+import com.example.academia.models.ExercicioModel
 import com.example.academia.models.GrupoModel
 import com.example.academia.models.ProfessorModel
 import kotlinx.android.synthetic.main.activity_sync.*
@@ -88,6 +89,25 @@ class FirstSyncActivity : AppCompatActivity() {
                             builder.setNegativeButton("Não") { _, _ ->
                                 val prof = ProfessorModel(9, "ProfTeste", "teste@teste.com", "1234", "", "", "Sim")
                                 dbHelper.createProfessor(prof)
+                                dbHelper.createGrupo("Peito")
+                                dbHelper.createGrupo("Costas")
+                                dbHelper.createGrupo("Pernas")
+                                dbHelper.createGrupo("Ombros")
+                                dbHelper.createGrupo("Biceps")
+                                dbHelper.createGrupo("Triceps")
+
+                                val ap1 = AparelhoModel(1, "Supino")
+                                val ap2 = AparelhoModel(2, "Remada baixa")
+                                val ap3 = AparelhoModel(3, "Agachamento")
+                                val ap4 = AparelhoModel(4, "Desenvolvimento")
+                                val ap5 = AparelhoModel(5, "Barra reta")
+                                val ap6 = AparelhoModel(6, "Francesa")
+                                dbHelper.createAparelho(ap1)
+                                dbHelper.createAparelho(ap2)
+                                dbHelper.createAparelho(ap3)
+                                dbHelper.createAparelho(ap4)
+                                dbHelper.createAparelho(ap5)
+                                dbHelper.createAparelho(ap6)
                                 val intent = Intent(applicationContext, SelectTrainer::class.java)
                                 startActivity(intent)
                             }

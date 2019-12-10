@@ -77,10 +77,9 @@ class DHAluno(val db: SQLiteDatabase) {
 
     fun getAllAlunos() : MutableList<AlunoModel>? {
         Log.d("primeiro", "passou")
+        val alunosList : MutableList<AlunoModel> = ArrayList()
         val selectQuery : String = "SELECT * FROM $TABLE_ALUNO WHERE $KEY_ACTIVE = \"1\";"
         val c: Cursor = db.rawQuery(selectQuery, null)
-
-        val alunosList : MutableList<AlunoModel> = ArrayList()
         if(c.moveToFirst()){
             do {
                 val ind1 = c.getString(c.getColumnIndex(KEY_IND_1))
@@ -112,7 +111,6 @@ class DHAluno(val db: SQLiteDatabase) {
             }while(c.moveToNext())
         }else{
             c.close()
-            return null
         }
         return alunosList
 
@@ -223,8 +221,10 @@ class DHAluno(val db: SQLiteDatabase) {
     fun getLastIdInserted(): Int{
         val selectQuery = "SELECT * FROM $TABLE_ALUNO ORDER BY $ID_ALUNO DESC LIMIT 1;"
         val c = db.rawQuery(selectQuery, null)
-        c.moveToFirst()
-        return c.getInt(c.getColumnIndex(ID_ALUNO))
+        if(c.moveToFirst()){
+            return c.getInt(c.getColumnIndex(ID_ALUNO))
+        }
+        else return 1
 
     }
 }

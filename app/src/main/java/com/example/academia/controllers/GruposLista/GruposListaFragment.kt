@@ -32,6 +32,14 @@ class GruposListaFragment(val selectingExercises: Boolean, val idTreino: Int, va
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         data = createList()
+        if(selectingExercises){
+            val builder = android.app.AlertDialog.Builder(context)
+            builder.setTitle("Atenção")
+            builder.setMessage("Para selecionar o exercício, clique no nome deste")
+            builder.setNeutralButton("OK"){_, _ ->}
+
+            builder.create().show()
+        }
         //adapter.notifyDataSetChanged()
     }
 
@@ -54,6 +62,7 @@ class GruposListaFragment(val selectingExercises: Boolean, val idTreino: Int, va
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        //container?.removeAllViews()
         return inflater.inflate(R.layout.fragment_grupos, container, false)
     }
 
@@ -92,7 +101,7 @@ class GruposListaFragment(val selectingExercises: Boolean, val idTreino: Int, va
                 }
                 val newTreino = activity as NewTreino
                 newTreino.callExercicioDetail(v.expandedGrupoListItem.text.toString(), idTreino, idAluno)
-                Toast.makeText(context!!, "BAUSGURIClicked: " + titleList[groupPosition] + " -> " + listData[titleList[groupPosition]]!!.get(childPosition), Toast.LENGTH_SHORT).show()
+                //Toast.makeText(context!!, "BAUSGURIClicked: " + titleList[groupPosition] + " -> " + listData[titleList[groupPosition]]!!.get(childPosition), Toast.LENGTH_SHORT).show()
                 false
             }
         }

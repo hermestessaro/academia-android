@@ -120,7 +120,6 @@ class AddExercicioDialogFragment : DialogFragment() {
                 val series: Int = Integer.parseInt(seriesET.text.toString())
                 val reps: Int = Integer.parseInt(repsET.text.toString())
                 val carga: Int = Integer.parseInt(cargaET.text.toString())
-                Toast.makeText(context, "usguri", Toast.LENGTH_LONG).show()
                 saveExercicio(series, reps, carga)
             }
 
